@@ -4,7 +4,11 @@
 
 ## Acartia
 
-This is the public repository for the Acartia data cooperative. Acartia is a decentralised and communitarian project aiming at pooling community science data in support of (killer) whale conservation first and ecosystem monitoring second. We welcome your help designing and developing this open source code that demonstrates the ecological, scientific, and societal advantages of a a web3 technologies (see our [contributing guidance](https://github.com/salish-sea/acartia/blob/main/CONTRIBUTING.md#contributing-code)).
+This is the public repository for the Acartia data cooperative. Acartia is a decentralized data cooperative aggregating marine animal locations, including in real time from community science projects in Washington State and throughout the range of endangered Southern Resident killer whales (SRKWs). 
+
+The aim of Acartia is to pool, curate, and share community science data in support of (killer) whale conservation first and ecosystem monitoring second. The current cooperating members are listed in the [Acartia About page](https://acartia.io/about). We welcome your help designing and developing this open source code that demonstrates the ecological, scientific, and societal advantages of a a web3 technologies (see our [contributing guidance](https://github.com/salish-sea/acartia/blob/main/CONTRIBUTING.md#contributing-code)).
+
+<img width="812" alt="Screenshot 2023-08-03 at 5 46 14 PM" src="https://github.com/salish-sea/acartia/assets/14044595/09530b6d-b204-4b11-bc37-be2bb3d080f8">
 
 **Phase 1 (2020-22)** developed a working prototype of [Acartia](https://acartia.io), a distributed open data cooperative sharing marine animal location data in real time across the range of the endangered orcas (from California to Alaska, USA). 
 
