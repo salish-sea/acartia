@@ -529,7 +529,7 @@ export const store = new Vuex.Store(
             console.log(e)
         }
       },
-      get_sightings({commit}) {
+      get_sightings() {
         return new Promise( (resolve,reject) => {
           let requestAuth = {}
           let endpoint
@@ -553,7 +553,6 @@ export const store = new Vuex.Store(
             // Add list of users into the store of user requests
             .then( sightings => {
               resolve(sightings.data)
-              commit('setSightings', sightings.data)
             })
             .catch(err => {
               console.error(err)
