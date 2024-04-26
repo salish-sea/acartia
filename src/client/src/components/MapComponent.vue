@@ -267,14 +267,14 @@ export default {
                   },
                   //minzoom: 14,
                   paint: {
-                    // Set size of circle pinpoint based on how large the sighting is (all made same size for now, was 0 4 5 12)
+                    // Set size of circle pinpoint based on how large the sighting is
                     'circle-radius': [
                       'interpolate',
-                      ['linear'],
-                      ['to-number', ['get', 'no_sighted']],
-                      0, 5,
-                      5, 5
-                    ],
+                       ['linear'], ['zoom'],
+                    6, 6,
+                    8, 10,
+                    10, 14
+                  ],
                     // Set colour of circle pinpoint based of number of sightings
                     'circle-color': [
                       'interpolate',
