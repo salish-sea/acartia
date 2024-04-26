@@ -28,18 +28,18 @@
             <h5 id="use-ssemmi-heading">How do you intend to use Acartia?</h5>
             <br>
             <fieldset>
-              <mdb-input type="checkbox" name="BrowseData" />
-              <label for="BrowseData">Browse Data</label>
+              <mdb-input type="checkbox" name="ProvideData" />
+              <label for="ProvideData">Provide Data</label>
             </fieldset>
             <br>
             <fieldset>
-              <mdb-input type="checkbox" name="BrowseData" />
-              <label for="ContributeData">Contribute Data</label>
+              <mdb-input type="checkbox" name="UtilizeData" />
+              <label for="UtilizeData">Utilize Data</label>
             </fieldset>
             <br>
             <fieldset>
-              <mdb-input type="checkbox" name="BrowseData" />
-              <label for="OtherUse">Other</label>
+              <mdb-input type="checkbox" name="Other" />
+              <label for="Other">Other</label>
             </fieldset>
             <br>
             <fieldset id="btn-signup-submit">
