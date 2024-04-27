@@ -1,17 +1,17 @@
 <template>
     <div>
-        <div id='mapContainer'></div>
+        <div id='mapContainer'>
         <div id='widget'>
           <div v-if="getParent !== 'Heatmap'">
-            <h2>Observation Age</h2>
+            <h2 class="header" >Observation Age</h2>
             <div class='widget-row colors'></div>
             <div class='widget-row labels'>
-                <div class='label'>	&#60; 1 day</div>
-                <div class='label'>	&#60; 2 days</div>
-                <div class='label'>	&#60; 3 days</div>
-                <div class='label'>	&#60; 4 days</div>
-                <div class='label'>	&#60; 5 days</div>
-                <div class='label'>&#62; 5 days</div>
+            <div class='label'><span class='day-container'>&#60; 1 day&#32;</span></div>
+            <div class='label'><span class='day-container'>&#60; 2 days</span></div>
+            <div class='label'><span class='day-container'>&#60; 3 days</span></div>
+            <div class='label'><span class='day-container'>&#60; 4 days</span></div>
+            <div class='label'><span class='day-container'>&#60; 5 days</span></div>
+            <div class='label'><span class='day-container'>&#62; 5 days</span></div>
             </div>
             <br>
             <div v-if="isAuth && getParent === 'Visualiser'" class='slider-class' id='sliderbar'>
@@ -21,7 +21,7 @@
             </div>
           </div>
           <div v-else-if="isAuth && getParent === 'Heatmap'">
-            <h2>Historical Sightings</h2>
+            <h2 class="header" >Historical Sightings</h2>
             <br>
             <div class='slider-class' id='sliderbar'>
               <p>Sightings: <label id='active-date'>January-March 2020</label></p>
@@ -35,6 +35,7 @@
             </div>
           </div>
         </div>
+    </div>
     </div>
 </template>
 
@@ -462,6 +463,7 @@ export default {
     height: 100%;
     margin: 0 auto;
     position: relative;
+    z-index:0;
 }
 
 #active-date {
@@ -469,14 +471,18 @@ export default {
 }
 
 #widget {
-    position: fixed;
+    position: relative;
     width: 30%;
-    top: 6vh;
-    left: 1vh;
+    top: 1vw;
+    left: 1vw;
     margin: 10px;
     padding: 10px 20px;
     background-color: white;
-    position: absolute;
+    z-index: 1;
+}
+
+.header {
+  font-size: 2.0vw;
 }
 
 .slider-class {
@@ -497,5 +503,9 @@ export default {
   width: 15%;
   display: inline-block;
   text-align: center;
+}
+
+.day-label {
+  font-size:calc(6px + 0.5vw);
 }
 </style>
