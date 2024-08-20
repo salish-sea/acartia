@@ -58,8 +58,7 @@ export default {
   },
 
   methods: {
-    sayMyName() {
-      //alert(this.name);
+    LoginMethod() {
       this.border = "2px solid #B22A2A";
       this.errorVisibility = "block";
     }
