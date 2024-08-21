@@ -63,56 +63,6 @@ export default {
                 "features": this.geoJSONSightings
             }
 
-            // Initialise months value to match integer date value in sightings from source/db
-            const months = [
-                '',
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December'
-            ]
-
-            const currentPage = this.getParent;
-            const isHome = (this.$route.path === '/home')
-            // On load event
-            map.on('load', function() {
-              const today = new Date();
-
-                // Initialise default value for year and month
-                let selectedYear = today.getFullYear()
-                let selectedMonth = today.getMonth() + 1
-                let selectedDay = today.getDate()
-
-              // Set the defaults
-              // update text in the UI
-              if (!isHome) {
-                const initText = (currentPage === 'Heatmap' ? months[selectedMonth-2]+ "-" + months[selectedMonth] + " " + selectedYear
-                  : "Sightings displayed for " +selectedDay + " "+ months[selectedMonth] + " " + selectedYear)
-                document.getElementById('active-date').innerText = initText
-
-                // Initialise current date in slider
-                if (currentPage === 'Visualiser') {
-                  let daySlider = document.getElementById('day-slider')
-                  let daySliderEpoch = today.getTime()
-
-                  // Get current day and last two weeks date
-                  let lastFourteenEpoch = new Date(dayjs(today).subtract(14, "day")).getTime()
-
-                  // Set maximun and minimum range of slider as date and 14 days past, respectively.
-                  daySlider.max = daySliderEpoch
-                  daySlider.min = lastFourteenEpoch
-                  daySlider.value = daySliderEpoch
-                } else {
-                  document.getElementById('year-list').value = selectedYear
-                  document.getElementById('month-slider').value = selectedMonth
                 }
               }
               if (currentPage === 'Heatmap') {
