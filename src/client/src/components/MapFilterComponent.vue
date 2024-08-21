@@ -13,7 +13,6 @@
 
     <!-- /* insert species legend */ -->
 
-
     <div class="filter-header-content">
       <h3 class="filter-header">Filter Sightings</h3>
       <p class="filter-header-text">Refine data points displayed on the map by selecting one or multiple filtering
@@ -493,7 +492,6 @@ export default {
 
 .hr {
   border-color: rgba(8, 13, 38, 0.15);
-  border-width: 4px;
 }
 
 #date-label {
