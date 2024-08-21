@@ -1,41 +1,4 @@
 <template>
-    <div>
-        <div id='mapContainer'></div>
-        <div id='widget'>
-          <div v-if="getParent !== 'Heatmap'">
-            <h2>Observation Age</h2>
-            <div class='widget-row colors'></div>
-            <div class='widget-row labels'>
-                <div class='label'>	&#60; 1 day</div>
-                <div class='label'>	&#60; 2 days</div>
-                <div class='label'>	&#60; 3 days</div>
-                <div class='label'>	&#60; 4 days</div>
-                <div class='label'>	&#60; 5 days</div>
-                <div class='label'>&#62; 5 days</div>
-            </div>
-            <br>
-            <div v-if="isAuth && getParent === 'Visualiser'" class='slider-class' id='sliderbar'>
-                <p><label id='active-date'>Loading date...</label></p>
-                <!-- Last 14 days slider -->
-                <input id='day-slider' class='widget-row' type="range" min="1" max="14" step="1" value="14" />
-            </div>
-          </div>
-          <div v-else-if="isAuth && getParent === 'Heatmap'">
-            <h2>Historical Sightings</h2>
-            <br>
-            <div class='slider-class' id='sliderbar'>
-              <p>Sightings: <label id='active-date'>January-March 2020</label></p>
-              <input id='month-slider' class='widget-row' type="range" min="3" max="12" step="1" value="0" />
-              <label for="year-list">Choose a year: </label>
-              <select id="year-list">
-                <option value="2020">2020</option>
-                <option value="2021" selected>2021</option>
-                <option value="2022">2022</option>
-              </select>
-            </div>
-          </div>
-        </div>
-    </div>
 </template>
 
 <script>
