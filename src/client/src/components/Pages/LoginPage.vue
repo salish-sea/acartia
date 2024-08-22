@@ -11,31 +11,31 @@
         <h1>Welcome back!</h1>
       </div>
       <!-- <form class='login--form' @submit.prevent="loginMethod"> -->
-      <div id="Error-Message" v-bind:style="{ display: errorVisibility }">
-        <p id="Error-Text">The email and/or password you entered did not match our records.</p>
+      <div id="ErrorMessage" v-bind:style="{ display: errorVisibility }">
+        <p>The email and/or password you entered did not match our records.</p>
       </div>
-      <div id="Text--Inputs">
+      <div id="TextInputs">
         <div class="bordered-label">
           <!--<label for="email">Email</label>-->
-          <input type="text" v-model.trim="loginData.email" v-bind:style="{ border: border }" name="email" class="txt" id="email" required />
+          <input type="text" v-model.trim="loginData.email" v-bind:style="{ border: inputBorder }" name="email" class="txt" id="email" required />
         </div>
         <div class="bordered-label">
           <!--<label>Password</label>-->
-          <input type="password" v-model.trim="loginData.password" v-bind:style="{ border: border}" name="password" class="txt" required/>
-          <span><img class="hide" src="../../assets/eye.svg"/></span>
+          <input :type="passwordFieldType" v-model.trim="loginData.password" v-bind:style="{ border: inputBorder}" name="password" class="txt" required/>
+          <img class="hide" src="../../assets/eye.svg" @click="togglePassword"/>
         </div>
-        <a id="forgot-password">Forgot password?</a>
+        <a id="ForgotPassword">Forgot password?</a>
       </div>
-      <div id="Log--In--Link">
-        <button @click="sayMyName" class='btn'>Log in</button>
+      <div id="LogInLink">
+        <button @click="loginMethod" class='btn'>Log in</button>
         <p id="InterestingName">Don't have an account? <a id="signup">Sign up</a></p> <!-- The spacing here isn't quite right -->
       </div>
-      <div id="Or--Login--With">
+      <div id="OrLoginWith">
         <hr width="60px">
         <p>or login with</p>
         <hr width="60px">
       </div>
-      <div id="Alternative-Login">
+      <div id="AlternativeLogin">
         <button class="alternative-btn"><img class="icon" src="../../assets/google.svg"/>Log in with Google</button>
         <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
       </div> 
@@ -51,18 +51,44 @@ export default {
   name: 'Login',
   data() {
     return {
-      border: "1px solid #3D3951",
+      // Password alert stuff
+      inputBorder: "1px solid #3D3951",
       errorVisibility: "none",
+      // Password visibility stuff
+      passwordFieldType: "password",
+
       loginData: {},
     }
   },
 
   methods: {
-    LoginMethod() {
-      this.border = "2px solid #B22A2A";
-      this.errorVisibility = "block";
-    }
+    // Untested
+    // I have no idea whats going on with the backend
+    loginMethod() {
+      this.$store.dispatch('auth_request', this.loginData)
+      .then( (loginMessage) => {
+        console.log(loginMessage);
+        this.$router.replace({name: 'DataExplorer'});
+      })
+      .catch( (loginMessage) => {
+        console.log(loginMessage);
+        this.inputBorder = "2px solid #B22A2A";
+        this.errorVisibility = "block";
+      })
+    },
+
+    togglePassword() {
+      // This might be a better way to acheive this?
+      // https://stackoverflow.com/questions/68602902/vuejs-toggle-password-visibilty-without-mutating-the-type-property
+      if (this.passwordFieldType === "password") {
+        this.passwordFieldType = "text";
+      } else {
+        this.passwordFieldType = "password";
+      }
+    },
   },
+
+
 }
 
 /*export default {
@@ -104,13 +130,6 @@ export default {
 
 <style scoped>
 
-.hide {
-  position: absolute;
-  top: 312px;
-  /*right: 485px;*/
-  left: 60%;
-}
-
 h1 {
   font-size: 32px;  
   font-weight: 600;
@@ -135,6 +154,12 @@ hr {
   margin: 10;
 }
 
+.hide {
+  position: relative;
+  top: -37px;
+  left: 140px;
+}
+
 .icon {
   margin-right: 5px;
 }
@@ -144,13 +169,14 @@ hr {
   margin: 0;
 }
 
-.bordered-label label { position: absolute;
+.bordered-label label {
+  position: absolute;
   top: 50%;
   left: 0.75rem;
   transform: translateY(-130%);
   background-color: white;
-  padding: 0 0.2rem;
   color: #3D3951; 
+  padding: 0 0.2rem;
   pointer-events: none;
   z-index: 1;
   white-space: nowrap;
@@ -162,16 +188,12 @@ hr {
   width: 327px;
   height: 48px;
   border-radius: 10px; 
-  box-shadow: none;
+  box-shadow: none !important;
   font-family: "Montserrat";
   font-weight: 400;
   font-size: 16px;
   margin-left: 0px;  
   text-transform: none;
-}
-
-.btn:hover {
-  box-shadow:none;
 }
 
 .alternative-btn {
@@ -190,11 +212,6 @@ hr {
 }
 
 .txt {
-  /*border: 1px solid #3D3951;*/
-
-  /*border-color: #3D3951;
-  border-width: 1px;*/
-
   border-radius: 4px;
   padding: 0.75rem 0.5rem;
   width: 327px;
@@ -215,7 +232,7 @@ hr {
   padding: 0px 24px 0px 24px;  
 }
 
-#Text--Inputs {
+#TextInputs {
   height: 192px;
   width: 100%;
   margin-top: 0px;
@@ -224,21 +241,21 @@ hr {
   
 }
 
-#forgot-password {
-  margin-top: 10px;
+#ForgotPassword {
+  margin-top: -12px; /* Necessary because of how I did the eyball thingy */
   margin-left: auto;
   font-family: "Montserrat";
   font-weight: 400;
   font-size: 16px;
   color: #007B83;
-
 }
 
-#Log--In--Link {
+#LogInLink {
+  margin-top: 10px;
   padding-top: 18px;
 }
 
-#Or--Login--With {
+#OrLoginWith {
   color: #6D6B7D;
   display: flex;
   flex-direction: row;
@@ -252,7 +269,7 @@ hr {
   color: #007B83;
 }
 
-#Alternative-Login {
+#AlternativeLogin {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -263,7 +280,7 @@ hr {
   margin-top: 12px;
 }
 
-#Error-Message {
+#ErrorMessage {
   background-color: #F9CDCD;
   color: #B22A2A;
   padding: 12px 16px;
@@ -275,7 +292,7 @@ hr {
 }
 
 /* this p has an ID but we aren't using it because idk */
-#Error-Message p { 
+#ErrorMessage p { 
   margin-bottom: 0;
 }
 
