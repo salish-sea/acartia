@@ -25,7 +25,7 @@
 
         <!-- Mobile Collapse Button   -->
         <div v-if="isMobile" class="species-dropdown" @click="toggleSidebar">
-          <h3 class="subheader ">Data Filters</h3>
+          <h3 class="mobile-subheader">Data Filters</h3>
 
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -124,7 +124,6 @@
           Reset Filters
         </button>
       </div>
-        <div class="additional-space"> </div>
     </div>
 
 
@@ -155,9 +154,7 @@
           <path d="M19 21l-7-7-7 7" />
         </svg>
 
-
       </div>
-
     </div>
   </div>
 </template>
@@ -165,6 +162,8 @@
 
 <script>
 import { legendColorMap } from '../mapUtils'
+
+const MOBILE_BREAKPOINT = 600
 
 export default {
   name: 'MapFilter',
@@ -182,6 +181,11 @@ export default {
     handleResize() {
       this.screenWidth = window.innerWidth
     },
+    closeSidebarOnMobile() {
+      if (this.screenWidth <  MOBILE_BREAKPOINT ){
+        this.showingSidebar = false
+      }
+    },
     toggleSidebar() {
       this.showingSidebar = !this.showingSidebar
     },
@@ -197,7 +201,7 @@ export default {
   },
   computed: {
     isMobile() {
-      return this.screenWidth <= 600
+      return this.screenWidth <= MOBILE_BREAKPOINT
     },
     noSightingsData() {
       return this.$store.state.filteredSightings.length === 0;
@@ -269,7 +273,8 @@ export default {
     //Monitor for screen width changes
     window.addEventListener('resize', this.handleResize)
   },
-  updated() {
+  created() {
+    this.closeSidebarOnMobile()
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize);
@@ -281,12 +286,6 @@ export default {
 
 
 <style scoped>
-.additional-space {
-  width: 100%;
-  height:50rem;
-  background-color: red;
-  border: 2px solid red;
-}
 .collapsable-subheader {
   color: var(--Neutrals-Gray-80, #3D3951);
   font-family: Mukta;
@@ -328,7 +327,7 @@ export default {
   background-color: white;
   position: fixed;
   top: 50%;
-  right: 25.5rem;
+  right: 410px;
   z-index: 99999;
 }
 
@@ -681,6 +680,17 @@ export default {
   padding-bottom: 0.5rem;
 }
 
+.mobile-subheader {
+  color: var(--Neutrals-Gray-80, #3D3951);
+  font-family: Mukta;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 105%;
+  text-align: left;
+  margin-top:10px;
+}
+
 .species-legend-content {
   width: 100%;
   max-height: initial
@@ -740,8 +750,8 @@ export default {
   padding: 2.25rem;
   align-items: center;
   gap: 1.0rem;
-
   height: 100%; /* Full height of the sidebar container */
+  width:430px;
   overflow-y: auto; /* Allow vertical scrolling */
   align-items: center;
   gap: 1.0rem;
