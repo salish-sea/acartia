@@ -11,6 +11,7 @@ import Visualiser from './components/Pages/VisualiserPage'
 import Heatmap from './components/Pages/HeatmapPage'
 import About from './components/Pages/AboutPage'
 import Home from './components/Pages/HomePage'
+import Profile from './components/Pages/ProfilePage.vue';
 import Contributions from './components/Pages/ContributionPage'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
@@ -57,6 +58,22 @@ const router = new Router({
       },
       redirect: {
         name: 'Home'
+      }
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile,
+      beforeEnter: (to, from, next) => {
+        // let hasToken = sessionStorage.getItem('userToken');
+        // let isAuthenticated = store.state.isAuthenticated === true;
+        let isAuthenticated = true; 
+        let hasToken = true; 
+        if (isAuthenticated && hasToken) {
+          next();
+        } else {
+          next('/login'); // Redirect to login if not authenticated
+        }
       }
     },
     {
