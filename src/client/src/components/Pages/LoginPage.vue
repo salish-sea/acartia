@@ -220,7 +220,7 @@ hr {
 }
 
 .login--section {
-  display: inline-flex;
+  display: flex;
   margin-left: auto;
   margin-right: auto;
   flex-direction: column;
