@@ -67,8 +67,8 @@ const router = new Router({
       beforeEnter: (to, from, next) => {
         // let hasToken = sessionStorage.getItem('userToken');
         // let isAuthenticated = store.state.isAuthenticated === true;
-        let isAuthenticated = true; 
-        let hasToken = true; 
+        let isAuthenticated = true;
+        let hasToken = true;
         if (isAuthenticated && hasToken) {
           next();
         } else {
@@ -323,7 +323,7 @@ export const store = new Vuex.Store(
         state.filteredSightings.map(sighting => {
           visibleSpecies.add(sighting.properties.type)
         })
-        return [visibleSpecies]
+        return [...visibleSpecies]
       }
     },
     actions: {
