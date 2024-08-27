@@ -6,7 +6,7 @@
         Acartia
       </a>
       <div class="navbar-links">
-        <a href="/map" :class="{'active': isActive('/map')}">Map</a>
+        <a href="/data-explorer" :class="{'active': isActive('/data-explorer')}">Map</a>
         <a href="/about" :class="{'active': isActive('/about')}">About</a>
         <a href="/partners" :class="{'active': isActive('/partners')}">Partners</a>
         <a href="/reports" :class="{'active': isActive('/reports')}">Reports</a>
@@ -93,6 +93,9 @@ export default {
 <style scoped>
 /* Navbar Container */
 #navbar-top {
+  position: sticky;
+  top:0;
+  z-index:9;
   background-color: #E6F7F9;
   padding: 10px 24px;
   display: flex;
