@@ -1,82 +1,318 @@
 <template>
     <div id="about-container">
-        <div id="about-desc">
-            <h1>About Acartia</h1>
-            <p>
-              Acartia is a decentralized data cooperative for sharing marine animal locations within the Salish Sea.
-              It is named for one of the smallest animals in Puget Sound -- microscopic copepods
-              -- but was built to recover one of the biggest  -- the endangered Southern Resident killer whales.
-            </p>
-            <p>
-              A demonstration of the democratizing power of Web 3.0 tech, it is capable of aggregating
-              real-time observations from a growing ecosystem of applications and sharing archived observations
-              from decades of monitoring effort.
-            </p>
-
+      <section id="hero">
+        <img src="@/assets/orca.svg" alt="Orca in the Sea" />
+      </section>
+  
+      <section id="about-content">
+        <div id="intro">
+          <h1>About Acartia</h1>
           <p>
-            The current data cooperative was created by <a href="https://typehuman.com">TypeHuman</a> as open source code with an open API first utilized
-            by <a href="https://conserve.io/">Conserve.io</a> via the Whale Alert and Ocean Alert mobile apps. Initial data providers and beta-testers of
-            mobile and web apps, as well as the cooperative itself, are two open community science networks in
-            Puget Sound: <a href="https://www.orcanetwork.org/">Orca Network</a> and <a href="https://www.orcasound.net/">Orcasound</a>. Phase one of the project has been coordinated and funded by
-            <a href="https://www.resolveconservation.com/">Resolve Conservation</a> and <a href="https://beamreach.blue/">Beam Reach</a>.
-          </p>
-
-          <p>
-            P.S.: Acartia is a common type of zooplankton, a copepod at the bottom of the Salish Sea food chain that is
-            topped by killer whales. We welcome collaborators interested in monitoring, modeling, and conserving the
-            Salish Sea --  from biological oceanographers to marine biologists to birders to marine mammal stewards.
-            Drop us an email, contribute via our Github repository, or sign up to provide or utilize data.
+            Welcome to Acartia! Acartia is a collaborative platform designed to share information about the whereabouts of marine animals in the Salish Sea. It's named after a tiny creature called a copepod found in Puget Sound. But its primary goal is to help protect the endangered Southern Resident killer whales. Dive into our platform to discover the whereabouts of marine life in this vibrant ecosystem.
           </p>
         </div>
-        <div id="about-links">
-            <mdb-row>
-                <mdb-btn outline="black" id="about-contact-btn" onclick="window.open('mailto:info@acartia.io');">Contact Us</mdb-btn>
-            </mdb-row>
-            <mdb-row>
-                <mdb-btn outline="black" id="about-contact-btn"><a href="https://github.com/Typehuman/SSEMMI">Github <i class="fab fa-github"></i></a></mdb-btn>
-            </mdb-row>
+  
+        <div id="faq">
+          <h2>Frequently Asked Questions</h2>
+          <div class="faq-items">
+            <div 
+              v-for="(faq, index) in faqs" 
+              :key="index" 
+              class="faq-item"
+            >
+              <button class="faq-question" @click="togglePanel(index)">
+                {{ faq.question }}
+                <span class="toggle-icon" :class="{ active: faq.open }">+</span>
+              </button>
+              <div 
+                class="faq-answer" 
+                v-show="faq.open"
+              >
+                <p>{{ faq.answer }}</p>
+              </div>
+            </div>
+          </div>
         </div>
+  
+        <div id="links">
+            <h2>Want to do more? Check out these links!</h2>
+            <div class="link-items">
+              <div class="link-item">
+                <div class="header">
+                  <div class="icon-text-container">
+                    <img src="@/assets/hand-icon.svg" alt="Hand Icon" class="icon" />
+                    <span>How to Contribute</span>
+                  </div>
+                  <i class="arrow-icon">→</i>
+                </div>
+                <p>New to uploading data? Click here to learn how you can provide data.</p>
+              </div>
+              <div class="link-item">
+                <div class="header">
+                  <div class="icon-text-container">
+                    <img src="@/assets/github-icon.svg" alt="GitHub Icon" class="icon" />
+                    <span>Github</span>
+                  </div>
+                  <i class="arrow-icon">→</i>
+                </div>
+                <p>Integrate your application with Acartia.</p>
+              </div>
+              <div class="link-item">
+                <div class="header">
+                  <div class="icon-text-container">
+                    <img src="@/assets/download-icon.svg" alt="Download Icon" class="icon" />
+                    <span>Export Data</span>
+                  </div>
+                  <i class="arrow-icon">→</i>
+                </div>
+                <p>Download Acartia sightings data here.</p>
+              </div>
+            </div>
+          </div>
+          
+      </section>
     </div>
-</template>
-
-<script>
-import { mdbRow, mdbBtn } from 'mdbvue'
-
-export default {
-    name: 'About',
-    components: {
-        mdbRow,
-        mdbBtn
+  </template>
+  
+  <script>
+  export default {
+    name: 'AboutPage',
+    data() {
+      return {
+        faqs: [
+          {
+            question: 'How does Acartia work?',
+            answer: 'Acartia aggregates data from multiple sources and shares it through our platform.',
+            open: false,
+          },
+          {
+            question: 'How does Acartia work?',
+            answer: 'Acartia aggregates data from multiple sources and shares it through our platform.',
+            open: false,
+          },
+          {
+            question: 'Who created Acartia?',
+            answer: 'Acartia was created by TypeHuman with the support of Conserve.io and other partners.',
+            open: false,
+          },
+          {
+            question: 'Who created Acartia?',
+            answer: 'Acartia was created by TypeHuman with the support of Conserve.io and other partners.',
+            open: false,
+          },
+          {
+            question: 'How does Acartia ensure the accuracy of data submissions?',
+            answer: 'We employ rigorous data validation techniques to ensure the accuracy of submissions.',
+            open: false,
+          },
+          {
+            question: 'How does Acartia ensure the accuracy of data submissions?',
+            answer: 'We employ rigorous data validation techniques to ensure the accuracy of submissions.',
+            open: false,
+          },
+          {
+            question: 'What role does Acartia play in education and outreach about marine life in the Salish Sea?',
+            answer: 'Acartia plays a crucial role in educating the public about marine life conservation.',
+            open: false,
+          },
+          {
+            question: 'What role does Acartia play in education and outreach about marine life in the Salish Sea?',
+            answer: 'Acartia plays a crucial role in educating the public about marine life conservation.',
+            open: false,
+          },
+          {
+            question: 'How can I get involved with Acartia?',
+            answer: 'You can get involved by contributing data, participating in outreach programs, and more.',
+            open: false,
+          },
+          {
+            question: 'How can I get involved with Acartia?',
+            answer: 'You can get involved by contributing data, participating in outreach programs, and more.',
+            open: false,
+          },
+        ],
+      };
     },
-}
-</script>
-
-<style>
+    methods: {
+        togglePanel(index) {
+      this.faqs = this.faqs.map((faq, i) => {
+        return {
+          ...faq,
+          open: i === index ? !faq.open : faq.open,
+        };
+      });
+    },
+    },
+  };
+  </script>
+  
+  <style scoped>
+  /* Global container for the about page */
 #about-container {
-    /* align-content: ; */
-}
-
-#about-desc {
-    text-align: left;
-    width: 50%;
-    padding: 5%;
-    margin: auto;
+    font-family: 'Montserrat', sans-serif;
+    color: #545F71;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0;
+  }
+  
+  /* Hero Section */
+  #hero {
+    width: 100vw; 
+    height: 206px;
     position: relative;
-    margin-left: 5%;
-    display: inline-table;
-}
-
-#about-links {
-    padding: 5%;
-    margin-left: 5%;
-    display: inline-table;
-}
-
-#about-links .row{
-    display: grid;
-}
-
-#about-contact-btn a {
-    color:black;
-}
-</style>
+    margin-left: calc(-50vw + 50%); 
+    left: 0; 
+  }
+  
+  #hero img {
+    width: 100%;
+    height: 100%; 
+    object-fit: cover;
+  }
+  
+  /* About Content Section */
+  #about-content {
+    background: #FFFFFF;
+    padding: 64px 0;
+    text-align: center;
+  }
+  
+  #intro h1 {
+    font-family: 'Mukta', sans-serif;
+    font-size: 44px;
+    font-weight: 600;
+  }
+  
+  #intro p {
+    max-width: 1080px;
+    margin: 24px auto 0;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  
+  /* FAQ Section */
+  #faq {
+    margin-top: 64px;
+  }
+  
+  #faq h2 {
+    font-family: 'Mukta', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+  }
+  
+  /* FAQ Items arranged in two columns */
+  .faq-items {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    max-width: 1128px;
+    margin: 24px auto;
+  }
+  
+  /* Individual FAQ item */
+  .faq-item {
+    flex: 1 1 calc(50% - 12px); 
+    min-width: 250px;
+    background: #FFFFFF;
+    border: 1px solid #DDE1E6;
+    border-radius: 5px;
+  }
+  
+  /* FAQ question button styling */
+  .faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #545F71;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 16px;
+    cursor: pointer;
+  }
+  
+  /* Toggle icon styling */
+  .toggle-icon {
+    font-size: 24px;
+    color: #545F71;
+    transition: transform 0.3s ease;
+  }
+  
+  .toggle-icon.active {
+    transform: rotate(45deg);
+  }
+  
+  /* FAQ answer styling */
+  .faq-answer {
+    padding: 16px;
+    font-size: 16px;
+    border-top: 1px solid #DDE1E6;
+  }
+  
+  /* Links Section */
+  #links {
+    margin-top: 64px;
+  }
+  
+  #links h2 {
+    font-family: 'Mukta', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+  }
+  
+  /* Link items container */
+  .link-items {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    max-width: 1128px;
+    margin: 24px auto;
+  }
+  
+  /* Individual link item */
+  .link-item {
+    flex: 1 1 calc(33.333% - 24px); 
+    min-width: 280px;
+    padding: 24px;
+    background: #EEF1F4;
+    border-radius: 12px;
+    text-align: left;
+  }
+  
+  /* Link item header with icon */
+  .link-item .header {
+    display: flex;
+    justify-content: space-between; /* Space between icon/text and arrow */
+    align-items: center;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  /* Container for icon and text */
+  .link-item .header .icon-text-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+  }
+  
+  /* Icon size */
+  .link-item .header .icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Arrow icon size */
+  .arrow-icon {
+    font-size: 24px;
+    margin-left: auto; /* Pushes the arrow to the far right */
+  }
+  
+  </style>
+  

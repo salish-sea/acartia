@@ -1,116 +1,261 @@
 <template>
   <div>
-    <div id="navbar-top">
-      <mdb-navbar color="black" dark>
-        <mdb-navbar-brand router to="/home">
-          Acartia
-        </mdb-navbar-brand>
-        <mdb-navbar-toggler>
-          <mdb-navbar-nav right>
-            <mdb-nav-item router to="/about" >About</mdb-nav-item>
-            <mdb-nav-item router to="/dashboard" v-if="isAuth" >Contribute</mdb-nav-item>
-            <mdb-nav-item router to="/integrate" v-if="isAuth" >How to Contribute</mdb-nav-item>
-            <mdb-dropdown tag="li" class="nav-item" v-if="isAuth">
-              <mdb-dropdown-toggle tag="a" navLink slot="toggle" >Browse</mdb-dropdown-toggle>
-              <mdb-dropdown-menu>
-                <mdb-dropdown-item router to="/data-explorer" v-if="isAuth" >Short-term</mdb-dropdown-item>
-                <mdb-dropdown-item router to="/historical" v-if="isAuth" >Historical</mdb-dropdown-item>
-              </mdb-dropdown-menu>
-            </mdb-dropdown>
-            <mdb-nav-item router to="/manage-users" v-if="isAuth & isAdmin" >Manage Users</mdb-nav-item>
-            <mdb-nav-item router to="/manage-data" v-if="isAuth" >Manage Data</mdb-nav-item>
-            <mdb-nav-item router to="/login" v-if="!isAuth">Login</mdb-nav-item>
-            <mdb-nav-item router to="/register" v-if="!isAuth">Sign Up</mdb-nav-item>
-            <mdb-nav-item @click="logoutMethod" href="/" v-if="isAuth" >Logout</mdb-nav-item>
-          </mdb-navbar-nav>
-        </mdb-navbar-toggler>
-      </mdb-navbar>
-    </div>
+    <nav id="navbar-top">
+      <a href="/home" class="navbar-brand">
+        <img src="@/assets/nav-bar-icon.svg" alt="Nav Bar Icon" class="nav-bar-icon" />
+        Acartia
+      </a>
+      <div class="navbar-links">
+        <a href="/map" :class="{'active': isActive('/map')}">Map</a>
+        <a href="/about" :class="{'active': isActive('/about')}">About</a>
+        <a href="/partners" :class="{'active': isActive('/partners')}">Partners</a>
+        <a href="/reports" :class="{'active': isActive('/reports')}">Reports</a>
+        <a href="/dashboard" v-if="isAuth" :class="{'active': isActive('/dashboard')}">Contribute</a>
+        <a href="/integrate" v-if="isAuth" :class="{'active': isActive('/integrate')}">How to Contribute</a>
+        <div @mouseover="showDropdown" @mouseleave="hideDropdown" v-if="isAuth" class="dropdown">
+          <a href="#" :class="{'active': isActive('/browse')}">Browse</a>
+          <div v-show="isDropdownOpen" class="dropdown-menu">
+            <a href="/data-explorer">Short-term</a>
+            <a href="/historical">Historical</a>
+          </div>
+        </div>
+        <a href="/manage-users" v-if="isAuth && isAdmin" :class="{'active': isActive('/manage-users')}">Manage Users</a>
+        <a href="/manage-data" v-if="isAuth" :class="{'active': isActive('/manage-data')}">Manage Data</a>
+      </div>
+      <div class="auth-links">
+        <a href="/profile" v-if="isAuth">Profile</a>
+        <a href="/login" v-if="!isAuth" class="login-button">Login</a>
+        <a href="/register" v-if="!isAuth" class="signup-button">Sign Up</a>
+        <a href="/" @click="logoutMethod" v-if="isAuth" class="login-button">Logout</a>
+      </div>
+    </nav>
     <div id="app">
-      <!-- Adding dependency for mapbox css for map visualisation -->
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
 
+
 <script>
-import axios from 'axios'
-import { mdbNavbar, mdbNavbarBrand, mdbNavbarToggler, mdbNavbarNav, mdbNavItem, mdbDropdown, mdbDropdownToggle, mdbDropdownMenu, mdbDropdownItem } from 'mdbvue';
+import axios from 'axios';
 
 export default {
-  components: {
-    mdbNavbar,
-    mdbNavbarBrand,
-    mdbNavbarToggler,
-    mdbNavbarNav,
-    mdbNavItem,
-    mdbDropdown,
-    mdbDropdownToggle,
-    mdbDropdownMenu,
-    mdbDropdownItem
+  data() {
+    return {
+      isDropdownOpen: false,
+    };
   },
   created() {
     axios.interceptors.response.use(undefined, (err) => {
-      return new Promise( (resolve, reject) => {
-        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-          // if get an unauthorized, logout the user
-          this.$store.dispatch('auth_logout')
-          // redirect to login
-          this.$router.push('/login')
-          resolve()
+      return new Promise((resolve, reject) => {
+        if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch('auth_logout');
+          this.$router.push('/login');
+          resolve();
         } else {
-          reject(err)
-          throw err
+          reject(err);
         }
-      })
-    })
+      });
+    });
   },
   methods: {
+    showDropdown() {
+      this.isDropdownOpen = true;
+    },
+    hideDropdown() {
+      this.isDropdownOpen = false;
+    },
+    goHome() {
+      this.$router.push('/home');
+    },
     logoutMethod() {
-      this.$store.dispatch('auth_logout')
-      .then( () => {
-        // Redirect to login
-        this.$router.push('/')
-        this.$router.go()
-      })
+      this.$store.dispatch('auth_logout').then(() => {
+        this.$router.push('/');
+        this.$router.go();
+      });
+    },
+    isActive(route) {
+      return this.$route.path === route;
     }
   },
   computed: {
     isAuth() {
-      return this.$store.state.isAuthenticated
+      return this.$store.state.isAuthenticated;
     },
     isAdmin() {
-      return this.$store.state.isAdmin
+      return this.$store.state.isAdmin;
     }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  color: #2c3e50;
-  /* margin-top: 60px; */
-  text-align: center;
-  clear: both;
+
+<style scoped>
+/* Navbar Container */
+#navbar-top {
+  background-color: #E6F7F9;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#title {
-  text-align: left;
-  font-weight: bold;
-  display: inline;
-  /* position: relative;
-  left: -50px; */
-  float: left;
+/* Navbar Brand */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  font-family: 'Mukta', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #00585D;
+  text-decoration: none;
 }
 
-#navbar-top li {
-  /* Adding space between each navbar items. "li" is used as mdb-nav-item will be compiled into list components */
-  padding-right: 10px;
-  padding-left: 10px;
+.nav-bar-icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
 }
 
-#dropdown-manage .dropdown-menu {
-  left: -50;
+/* Navbar Links */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
+.navbar-links a {
+  margin-right: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: #00585D;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #004049;
+}
+
+/* Active Link with Squiggly Underline */
+.navbar-links a.active {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #00AFBA; /* Customize the color as needed */
+}
+
+/* Auth Links with gap */
+.auth-links {
+  display: flex;
+  align-items: center;
+  margin-left: 40px;
+}
+
+.auth-links a {
+  margin-left: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: #00585D;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+  color: #004049;
+}
+
+/* Login Button Styling */
+.login-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  gap: 8px;
+  width: 120px;
+  height: 42px;
+  background: #00AFBA;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #008f9b;
+}
+
+/* Signup Button Styling (matching login) */
+.signup-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  gap: 8px;
+  width: 120px;
+  height: 42px;
+  background: #ffffff;
+  border-radius: 10px;
+  color: #00AFBA;
+  border: 1px solid #00AFBA;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #00AFBA;
+  color: white;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu a {
+  display: block;
+  color: #00585D;
+  text-decoration: none;
+  padding: 8px 16px;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f8f8f8;
+}
+
+.navbar-links .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  #navbar-top {
+    flex-direction: column;
+  }
+
+  .navbar-links {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .auth-links {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .navbar-links a, .auth-links a {
+    width: 100%;
+    text-align: left;
+    padding: 10px 0;
+  }
+}
 </style>
+
+
+
