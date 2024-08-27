@@ -19,8 +19,8 @@ import 'mdbvue/lib/css/mdb.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
-import { getNDaysAgo } from './utils'
-import dayjs from 'dayjs'
+import { getNDaysAgo } from './dateUtils'
+import { filterSightingData } from './mapUtils'
 
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
@@ -164,8 +164,8 @@ const router = new Router({
     },
     {
       // Visualiser page to view data visualisations
-      path: '/historical',
-      name: 'Historical',
+      path: '/heatmap',
+      name: 'Heatmap',
       component: Heatmap
     },
     {
@@ -196,8 +196,21 @@ export const store = new Vuex.Store(
         species: [],
       },
       map: null,
+      activeMapLayer: "ssemi-map-layer",
     },
     mutations: {
+      resetMapFilters(state) {
+        state.mapFilters = Object.assign({}, initFilterState)
+        state.filteredSightings = filterSightingData(state.sightings, state.mapFilters)
+
+        //Rerender map
+        if (state.map) {
+          state.map.getSource(state.activeMapLayer).setData({
+            "type": "FeatureCollection",
+            "features": state.filteredSightings
+          })
+        }
+      },
       setAuthentication(state, status) {
         state.isAuthenticated = status
       },
@@ -229,6 +242,13 @@ export const store = new Vuex.Store(
       setMap(state, map) {
         state.map = map
       },
+      setMapOptions(state, options) {
+        state.mapOptions = options
+      },
+      setActiveMapLayer(state, layer) {
+        state.activeMapLayer = layer
+        console.log("active layer: ", state.activeMapLayer)
+      },
       setFilterVerifiedOnly(state, verifiedStatus) {
         state.mapFilters.verifiedOnly = verifiedStatus
       },
@@ -245,91 +265,15 @@ export const store = new Vuex.Store(
         state.mapFilters.dateEnd = dateEnd
       },
       applyMapFilters(state) {
-        //reset filtered sightings to unfiltered before filtering
-        state.filteredSightings = state.sightings
+        state.filteredSightings = filterSightingData(state.sightings, state.mapFilters)
 
-
-        //filterByDate
-        let startDate = state.mapFilters.dateBegin
-        let endDate = state.mapFilters.dateEnd
-
-        let endIdx = state.filteredSightings.length - 1
-        let startIdx = 0
-
-        console.log("date start: ", startDate)
-        console.log("date end: ", endDate)
-
-
-        //Sliding window; find last idx in date range
-        for (let i = endIdx; i >= 0; i--) {
-          if (dayjs(state.filteredSightings[i].properties.created.slice(0, 10)).isSame(dayjs(endDate))) {
-            endIdx = i
-            break
-          }
-        }
-
-        //Sliding window; find first idx in date range
-        for (let i = endIdx; i >= 0; i--) {
-          if (dayjs(state.filteredSightings[i].properties.created.slice(0, 10)).isBefore(dayjs(startDate))) {
-            startIdx = i + 1
-            break
-          }
-        }
-
-        state.filteredSightings = state.filteredSightings.slice(startIdx, endIdx)
-        state.filteredSightings.forEach(sighting => console.log("remaining: ", sighting.properties.created))
-
-        //Filter by verification i.e. if true, remove unverfied data
-        if (state.mapFilters.verifiedOnly === true) {
-          state.filteredSightings = state.filteredSightings.filter(sighting => sighting.properties.verified)
-        }
-
-
-        //Filter by Species
-        if (state.mapFilters.species != ALL_SPECIES) {
-          state.filteredSightings = state.filteredSightings.filter(sighting => {
-            if (sighting.properties.type == state.mapFilters.species) {
-              return true
-            } else {
-              return false
-            }
-          })
-        }
-
-        //Filter by Contributor (field is data_source_witness from api, becomes witness after mutation)
-        if (state.mapFilters.contributor != ALL_CONTRIBUTORS) {
-          state.filteredSightings = state.filteredSightings.filter(sighting => {
-            if (sighting.properties.witness == state.mapFilters.contributor) {
-              return true
-            } else {
-              return false
-            }
-          })
-        }
-
-        //Trigger Map Repaint
-        if (state.map != null) {
-          state.map.getSource('ssemmi-map-layer').setData({
+        //Rerender map
+        if (state.map) {
+          state.map.getSource(state.activeMapLayer).setData({
             "type": "FeatureCollection",
             "features": state.filteredSightings
           })
         }
-      },
-      resetMapFilters(state) {
-        //Set filter to init state.
-        state.mapFilters = Object.assign({}, initFilterState)
-
-        //Reset sightings
-        state.filteredSightings = state.sightings
-
-        //Repaint map
-        state.map.getSource('ssemmi-map-layer').setData({
-          "type": "FeatureCollection",
-          "features": state.filteredSightings
-        })
-      },
-      setMapOptions(state, options) {
-        state.mapOptions = options
       },
     },
     getters: {
@@ -357,13 +301,14 @@ export const store = new Vuex.Store(
       getMapOptions: state => {
         return state.mapOptions
       },
+      getSpeciesLegendOptions: state => {
+        let visibleSpecies = new Set()
+        state.filteredSightings.map(sighting => {
+          visibleSpecies.add(sighting.properties.type)
+        })
+        return [visibleSpecies]
+      }
     },
-    //Vuex commit mutations only - mutations have to be synchronous
-    //in components $this.store.commit(mutation)
-    //
-    //Vuex dispatch actions - actions are asynchronous
-    //in components $this.store.dispatch(actions)
-    //in components $this.store.getters.getMapFilters
     actions: {
       // Check session data upon creation or refresh
       init_store({ commit }) {
