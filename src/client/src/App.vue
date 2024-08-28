@@ -1,32 +1,32 @@
 <template>
   <div>
     <nav id="navbar-top">
-      <a href="/home" class="navbar-brand">
+      <router-link to="/home" class="navbar-brand">
         <img src="@/assets/nav-bar-icon.svg" alt="Nav Bar Icon" class="nav-bar-icon" />
         Acartia
-      </a>
+      </router-link>
       <div class="navbar-links">
-        <a href="/data-explorer" :class="{'active': isActive('/data-explorer')}">Map</a>
-        <a href="/about" :class="{'active': isActive('/about')}">About</a>
-        <a href="/partners" :class="{'active': isActive('/partners')}">Partners</a>
-        <a href="/reports" :class="{'active': isActive('/reports')}">Reports</a>
-        <a href="/dashboard" v-if="isAuth" :class="{'active': isActive('/dashboard')}">Contribute</a>
-        <a href="/integrate" v-if="isAuth" :class="{'active': isActive('/integrate')}">How to Contribute</a>
+        <router-link to="/data-explorer" :class="{'active': isActive('/data-explorer')}">Map</router-link>
+        <router-link to="/about" :class="{'active': isActive('/about')}">About</router-link>
+        <router-link to="/partners" :class="{'active': isActive('/partners')}">Partners</router-link>
+        <router-link to="/reports" :class="{'active': isActive('/reports')}">Reports</router-link>
+        <router-link to="/dashboard" v-if="isAuth" :class="{'active': isActive('/dashboard')}">Contribute</router-link>
+        <router-link to="/integrate" v-if="isAuth" :class="{'active': isActive('/integrate')}">How to Contribute</router-link>
         <div @mouseover="showDropdown" @mouseleave="hideDropdown" v-if="isAuth" class="dropdown">
-          <a href="#" :class="{'active': isActive('/browse')}">Browse</a>
+          <a :class="{'active': isActive('/browse')}">Browse</a>
           <div v-show="isDropdownOpen" class="dropdown-menu">
-            <a href="/data-explorer">Short-term</a>
-            <a href="/historical">Historical</a>
+            <router-link to="/data-explorer">Short-term</router-link>
+            <router-link to="/historical">Historical</router-link>
           </div>
         </div>
-        <a href="/manage-users" v-if="isAuth && isAdmin" :class="{'active': isActive('/manage-users')}">Manage Users</a>
-        <a href="/manage-data" v-if="isAuth" :class="{'active': isActive('/manage-data')}">Manage Data</a>
+        <router-link to="/manage-users" v-if="isAuth && isAdmin" :class="{'active': isActive('/manage-users')}">Manage Users</router-link>
+        <router-link to="/manage-data" v-if="isAuth" :class="{'active': isActive('/manage-data')}">Manage Data</router-link>
       </div>
       <div class="auth-links">
-        <a href="/profile" v-if="isAuth">Profile</a>
-        <a href="/login" v-if="!isAuth" class="login-button">Login</a>
-        <a href="/register" v-if="!isAuth" class="signup-button">Sign Up</a>
-        <a href="/" @click="logoutMethod" v-if="isAuth" class="login-button">Logout</a>
+        <router-link to="/profile" v-if="isAuth">Profile</router-link>
+        <router-link to="/login" v-if="!isAuth" class="login-button">Login</router-link>
+        <router-link to="/register" v-if="!isAuth" class="signup-button">Sign Up</router-link>
+        <a @click="logoutMethod" v-if="isAuth" class="login-button">Logout</a>
       </div>
     </nav>
     <div id="app">
@@ -34,7 +34,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -48,7 +47,7 @@ export default {
   created() {
     axios.interceptors.response.use(undefined, (err) => {
       return new Promise((resolve, reject) => {
-        if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
+        if (err.response && err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
           this.$store.dispatch('auth_logout');
           this.$router.push('/login');
           resolve();
@@ -64,9 +63,6 @@ export default {
     },
     hideDropdown() {
       this.isDropdownOpen = false;
-    },
-    goHome() {
-      this.$router.push('/home');
     },
     logoutMethod() {
       this.$store.dispatch('auth_logout').then(() => {
@@ -89,13 +85,12 @@ export default {
 };
 </script>
 
-
 <style scoped>
 /* Navbar Container */
 #navbar-top {
   position: sticky;
-  top:0;
-  z-index:9;
+  top: 0;
+  z-index: 9;
   background-color: #E6F7F9;
   padding: 10px 24px;
   display: flex;
@@ -259,6 +254,3 @@ export default {
   }
 }
 </style>
-
-
-

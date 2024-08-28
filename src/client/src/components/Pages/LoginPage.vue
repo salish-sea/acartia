@@ -10,17 +10,14 @@
       <div id="Header">
         <h1>Welcome back!</h1>
       </div>
-      <!-- <form class='login--form' @submit.prevent="loginMethod"> -->
       <div id="ErrorMessage" v-bind:style="{ display: errorVisibility }">
         <p>The email and/or password you entered did not match our records.</p>
       </div>
       <div id="TextInputs">
         <div class="bordered-label">
-          <!--<label for="email">Email</label>-->
           <input type="text" v-model.trim="loginData.email" v-bind:style="{ border: inputBorder }" name="email" class="txt" id="email" required />
         </div>
         <div class="bordered-label">
-          <!--<label>Password</label>-->
           <input :type="passwordFieldType" v-model.trim="loginData.password" v-bind:style="{ border: inputBorder}" name="password" class="txt" required/>
           <img class="hide" src="../../assets/eye.svg" @click="togglePassword"/>
         </div>
@@ -28,7 +25,7 @@
       </div>
       <div id="LogInLink">
         <button @click="loginMethod" class='btn'>Log in</button>
-        <p id="InterestingName">Don't have an account? <a id="signup">Sign up</a></p> <!-- The spacing here isn't quite right -->
+        <p id="InterestingName">Don't have an account? <a id="signup">Sign up</a></p>
       </div>
       <div id="OrLoginWith">
         <hr width="60px">
@@ -39,14 +36,11 @@
         <button class="alternative-btn"><img class="icon" src="../../assets/google.svg"/>Log in with Google</button>
         <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
       </div> 
-      <!-- </form> -->
     </section>
   </div>
-  
 </template>
 
 <script>
-
 export default {
   name: 'Login',
   data() {
@@ -56,51 +50,13 @@ export default {
       errorVisibility: "none",
       // Password visibility stuff
       passwordFieldType: "password",
-
-      loginData: {},
-    }
-  },
-
-  methods: {
-    // Untested
-    // I have no idea whats going on with the backend
-    loginMethod() {
-      this.$store.dispatch('auth_request', this.loginData)
-      .then( (loginMessage) => {
-        console.log(loginMessage);
-        this.$router.replace({name: 'DataExplorer'});
-      })
-      .catch( (loginMessage) => {
-        console.log(loginMessage);
-        this.inputBorder = "2px solid #B22A2A";
-        this.errorVisibility = "block";
-      })
-    },
-
-    togglePassword() {
-      // This might be a better way to acheive this?
-      // https://stackoverflow.com/questions/68602902/vuejs-toggle-password-visibilty-without-mutating-the-type-property
-      if (this.passwordFieldType === "password") {
-        this.passwordFieldType = "text";
-      } else {
-        this.passwordFieldType = "password";
-      }
-    },
-  },
-
-
-}
-
-/*export default {
-  name: 'Login',
-  data() {
-    return {
       loginData: {},
       isLoggingIn: false,
       logMsgLogin: "",
       logMsgColour: "secondary"
     }
   },
+
   methods: {
     loginMethod() {
       // Hide login message before clicking on submit login details
@@ -109,27 +65,38 @@ export default {
       this.logMsgColour = "secondary"
 
       this.$store.dispatch('auth_request', this.loginData)
-      .then( (loginMessage) => {
-        console.log(loginMessage)
+      .then((loginMessage) => {
+        console.log(loginMessage);
         // Will change the log upon submit for login to be successful
-        this.logMsgLogin = loginMessage; this.logMsgColour = "success"
+        this.logMsgLogin = loginMessage;
+        this.logMsgColour = "success";
         // Redirect to page upon login --admins will be redirected to register
-        this.$router.replace({name: 'DataExplorer'})
+        this.$router.replace({ name: 'DataExplorer' });
       })
-      .catch( (loginMessage) => {
-        console.log(loginMessage)
+      .catch((loginMessage) => {
+        console.log(loginMessage);
         // Will change the log upon submit for login to be invalid
-        this.logMsgLogin = loginMessage
-        this.logMsgColour = "danger"
-      })
-    }
-  }
-}*/
+        this.logMsgLogin = loginMessage;
+        this.logMsgColour = "danger";
+        this.inputBorder = "2px solid #B22A2A";
+        this.errorVisibility = "block";
+      });
+    },
 
+    togglePassword() {
+      // This might be a better way to achieve this?
+      if (this.passwordFieldType === "password") {
+        this.passwordFieldType = "text";
+      } else {
+        this.passwordFieldType = "password";
+      }
+    },
+  },
+}
 </script>
 
 <style scoped>
-
+/* Styles remain unchanged */
 h1 {
   font-size: 32px;  
   font-weight: 600;
@@ -242,7 +209,7 @@ hr {
 }
 
 #ForgotPassword {
-  margin-top: -12px; /* Necessary because of how I did the eyball thingy */
+  margin-top: -12px;
   margin-left: auto;
   font-family: "Montserrat";
   font-weight: 400;
@@ -291,9 +258,7 @@ hr {
   border-radius: 12px;
 }
 
-/* this p has an ID but we aren't using it because idk */
 #ErrorMessage p { 
   margin-bottom: 0;
 }
-
 </style>
