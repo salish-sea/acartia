@@ -3,30 +3,22 @@
   <header class="reset-password">
   </header>
   <section class="reset-password-section">
-    <h1 id="title">Reset password</h1>
-    <div id="Description">
+    <!--<h1 id="title">Reset password</h1>-->
+    <h1 class="header">Reset password</h1>
+    <div class="description">
       <p>A request has been made to reset your password. If you made this request enter a new password below.</p>
     </div>
     <input type="text" name="password" class="txt"/>
     <img class="hide" src="../../assets/eye.svg" width="27px" @click="togglePassword"/>
     <input type="password" name="confirm-password" class="txt"/>
     <img class="hide" src="../../assets/eye.svg" width="27px" @click="togglePassword"/>
-    <button class="btnn">Reset password</button>
+    <button class="standard-btn">Reset password</button>
   </section>
 </div>
 </template>
 <script>
 </script>
 <style>
-
-#title {
-  font-family: "Mukta";
-  font-weight: 600;
-  font-size: 32px;
-  line-height: 32px;
-  margin-top: 100px;
-  text-align: center;
-}
 
 .reset-password-section {
   display: flex;
@@ -42,7 +34,7 @@
   left: 290px;
 }
 
-#Description {
+.description {
   font-family: "Montserrat";
   font-weight: 400;
   font-size: 16px;
