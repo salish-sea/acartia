@@ -18,7 +18,7 @@ For project context and updates, don't miss the [Acartia wiki](https://github.co
 **Salish Sea Ecosystem Monitoring and Modeling Infrastructure**
 
 Acartia is part of a transboundary (U.S./Canada) effort to build open infrastructure to understand, monitor, model, and conserve the marine ecosystem known as the Salish Sea. SSEMMI was initially proposed by members of the Puget Sound Ecosystem Monitoring Program's Marine Mammal Work Group ([PSEMP](https://https://www.psp.wa.gov/PSEMP-overview.php)/[MMWG](https://psemp.net/mmwg)).
-=======
+
 **NOTE:** development is active on a 2023 fork of this repo at the **[Acartia repository](https://github.com/salish-sea/acartia)**. For project context and updates, don't miss the [Acartia wiki](https://github.com/Typehuman/SSEMMI/wiki). There you will also find additional information for design-UXers, open source developers, devops leads, and system administrators.
 
 <br>
