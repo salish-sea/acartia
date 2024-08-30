@@ -12,6 +12,8 @@ import Visualiser from './components/Pages/VisualiserPage'
 import Heatmap from './components/Pages/HeatmapPage'
 import About from './components/Pages/AboutPage'
 import Home from './components/Pages/HomePage'
+import ResetPassword from './components/Pages/ResetPassword'
+import ForgotPassword from './components/Pages/ForgotPassword'
 import Contributions from './components/Pages/ContributionPage'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
@@ -20,6 +22,9 @@ import 'mdbvue/lib/css/mdb.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
+
+
+import TestBench from "./components/Pages/TestBench"
 
 Vue.config.productionTip = false
 
@@ -160,7 +165,23 @@ const router = new Router({
       path: '/manage-data',
       name: 'ManageData',
       component: ManageData
+    },
+    {
+      path: '/reset-password',
+      name: 'ResetPassword',
+      component: ResetPassword,
+    },
+    {
+      path: '/forgot-password',
+      name: 'ForgotPassword',
+      component: ForgotPassword,
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: TestBench,
     }
+
   ]
 })
 
