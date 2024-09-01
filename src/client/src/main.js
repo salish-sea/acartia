@@ -214,6 +214,7 @@ export const store = new Vuex.Store(
       userRequestList: [],
       sightings: [],
       filteredSightings: [],
+      lastSighting: {},
       mapFilters: Object.assign({}, initFilterState),
       mapOptions: {
         contributors: [],
@@ -234,6 +235,9 @@ export const store = new Vuex.Store(
             "features": state.filteredSightings
           })
         }
+      },
+      setLastSighting(state, sighting) {
+        state.lastSighting = sighting
       },
       setAuthentication(state, status) {
         state.isAuthenticated = status
@@ -315,6 +319,12 @@ export const store = new Vuex.Store(
       },
       getFilteredSightings: state => {
         return state.filteredSightings
+      },
+      getSightings: state => {
+        return state.sightings
+      },
+      getLastSighting: state => {
+        return state.lastSighting
       },
       getFilteredSightingsLength: state => {
         return state.filteredSightings.length
