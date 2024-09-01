@@ -12,6 +12,7 @@ import Heatmap from './components/Pages/HeatmapPage'
 import About from './components/Pages/AboutPage'
 import Home from './components/Pages/HomePage'
 import Profile from './components/Pages/ProfilePage.vue';
+import Reports from './components/Pages/ReportsPage.vue';
 import Contributions from './components/Pages/ContributionPage'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
@@ -139,6 +140,12 @@ const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      // Register page to create new users - admin only
+      path: '/reports',
+      name: 'Reports',
+      component: Reports
     },
     {
       // Register page to create new users - admin only
