@@ -78,19 +78,6 @@ export default {
 
 
 <style scoped>
-@media (max-width: 700px) {
-  .middle-row {
-    flex-direction: column;
-    background: blue;
-    gap: 10px;
-    /* Adjust gap if needed */
-  }
-
-  .component {
-    width: 100%;
-  }
-}
-
 .all-components-container {
   padding: 10px;
   background: #e8e8e8;
