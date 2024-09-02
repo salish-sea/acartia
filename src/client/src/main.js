@@ -24,6 +24,8 @@ import OrbitDB from 'orbit-db'
 import { getNDaysAgo } from './dateUtils'
 import { filterSightingData } from './mapUtils'
 
+import TestBench from './components/Pages/TestBench'
+
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
 
@@ -197,6 +199,11 @@ const router = new Router({
       path: '/manage-data',
       name: 'ManageData',
       component: ManageData
+    },
+    {
+      path: '/test-bench',
+      name: 'TestBench',
+      component: TestBench,
     }
   ]
 })
