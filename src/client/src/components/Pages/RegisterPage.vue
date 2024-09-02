@@ -5,101 +5,111 @@
     <section  class="register--section">
       <!-- UI for passing register details -->
       <div>
-        <form class='register--form' @submit="register">
-          <h1 id="register-heading">Register</h1>
-          <fieldset>
-            <mdb-input placeholder="Email:" name="Email" v-model.trim="registerUserData.initEmail" type="email" required/>
+        <form class='register--form' >
+          <!-- First Section - "Start" -->
+           <div class="start" v-if="currentStage == 'start' ">
+          <h1 class="mukta-regular" id="register-heading">Register</h1>
+          <fieldset class="bordered-label">
+            <input class="form-control" name="Name" type="name" required/>
+            <label class="mukta-extralight" for="Name">Your Name</label>
           </fieldset>
-          <fieldset>
-            <mdb-input placeholder="Confirm email:" v-model.trim="registerUserData.email" name="Confirm email" type="email" required/>
+          <fieldset class="bordered-label">
+            <input class="form-control" name="Email" v-model.trim="registerUserData.initEmail" type="email" required/>
+            <label class="mukta-extralight" for="Email">Email</label>
           </fieldset>
-          <fieldset>
-            <mdb-input placeholder="Password:" v-model.trim="registerUserData.initPassword" name="Password" type="password" required/>
+          <fieldset class="bordered-label">
+            <input class="form-control" v-model.trim="registerUserData.email" name="Confirm email" type="email" required/>
+            <label class="mukta-extralight" for="Confirm Email">Confirm Email</label>
           </fieldset>
-          <fieldset>
-            <mdb-input placeholder="Confirm Password:" v-model.trim="registerUserData.password" name="Confirm Password" type="password" required/>
+          <fieldset class="bordered-label">
+            <input class="form-control" v-model.trim="registerUserData.initPassword" name="Password" type="password" required/>
+            <label class="mukta-extralight" for="Password">Password</label>
+          </fieldset>
+          <fieldset class="bordered-label">
+            <input class="form-control" v-model.trim="registerUserData.password" name="Confirm Password" type="password" required/>
+            <label class="mukta-extralight" for="Confirm Password">Confirm Password</label>
           </fieldset>
           <fieldset>
             <br>
           </fieldset>
-          <!-- Checkbox to enquire purpose of signing up and use of application (pop up after signup submission) -->
-          <!-- NEED to implement data type to store in database -->
-          <div class='use-ssemmi-form align-items-center'>
-            <h5 id="use-ssemmi-heading">How do you intend to use Acartia?</h5>
-            <br>
-            <fieldset>
-              <mdb-input type="checkbox" name="ProvideData" />
-              <label for="ProvideData">Provide Data</label>
-            </fieldset>
-            <br>
-            <fieldset>
-              <mdb-input type="checkbox" name="UtilizeData" />
-              <label for="UtilizeData">Utilize Data</label>
-            </fieldset>
-            <br>
-            <fieldset>
-              <mdb-input type="checkbox" name="Other" />
-              <label for="Other">Other</label>
-            </fieldset>
-            <br>
-            <fieldset id="btn-signup-submit">
-              <mdb-btn type='submit' color="white" style="right: 0%">Sign Up</mdb-btn>
-            </fieldset>
+          <div>
+            <button class="montserrat-regular button-next" @click="HandleNext($event)">Next</button>
+            <p class="montserrat-light">Already have an account? Log in</p>
           </div>
+          <div class="line-container">
+              <hr class="line">
+              <p class="montserrat-light login-text">or login with</p>
+          </div>
+          <button class="button montserrat-light">Register with Google</button>
+          <button class="button montserrat-light">Register with LinkedIn</button>
+          </div>
+          <!-- Second Section - Intent -->
+           <div class="intent" v-if="currentStage == 'intent'">
+            <h1 class="mukta-regular" id="intent-heading">How do you intend to use Acartia?</h1>
+              <fieldset class="checkbox-group">
+                <div class="check-div">
+                  <div class="check-border">
+                    <input type="checkbox" id="browse-data" value="browse">
+                  </div>
+                  <label class="inter-regular" for="browse-data">Browse data</label>
+                </div>
+                <div class="check-div">
+                  <div class="check-border">
+                    <input type="checkbox" id="contribute-data" value="contribute">
+                  </div>
+                  <label class="inter-regular" for="contribute-data">Contribute data</label>
+                </div>
+                <div class="check-div">
+                  <div class="check-border">
+                    <input type="checkbox" id="other" value="other">
+                  </div>
+                  <label class="inter-regular" for="other">Other</label>
+                </div>
+              </fieldset>
+              <div>
+                <button class="montserrat-regular button-next" @click="HandleNext($event)">Next</button>
+              </div>
+           </div>
+           <!-- Third Section - Community Guidelines -->
+           <div class="guidelines" ></div>
         </form>
       </div>
     </section>
-    <!-- Component for explainer text -->
-    <section id="div-explainer">
-      <mdb-card>
-        <mdb-card-body>
-          <mdb-card-title>Community Guidelines</mdb-card-title>
-          <mdb-card-text align="left">
-            The goal of Acartia is to advance marine conservation and science across the Salish Sea and Cascadia by
-            sharing animal locations -- both historical and real-time data. Registration is free, access is open and
-            free, and the code underlying the decentralized data cooperative is open source.
-            <br />
-            <b>Users of this data cooperative agree to these community rules:</b>
-            <mdb-card-text align="left">
-            <ol>
-              <li>Shared data will only include animals observed in marine environments.</li>
-              <li>All data provided will align with the <a href="https://github.com/Typehuman/SSEMMI/blob/main/CONTRIBUTING.md">Acartia data scheme and standards</a>.</li>
-              <li>Any data use will heed our <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons BY license</a>. Proper attribution includes a link to acartia.io, acknowledgement of each data provider, and preservation of the provenance of each data point.</li>
-              <li>All data will be used with the intention of promoting marine conservation and responsible human interaction with marine wildlife, including adherence to U.S. and Canadian laws and the <a href="https://www.bewhalewise.org/">Be Whale Wise guidelines</a>.</li>
-              </ol>
-            </mdb-card-text>
-            <a href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons" aria-hidden="true"></i></a> Attribution should include a link to acartia.io and listing of providers of the data you use.
-          </mdb-card-text>
-        </mdb-card-body>
-      </mdb-card>
-    </section>
+   
   </div>
 </div>
 </template>
 
 <script>
-import { mdbInput, mdbBtn, mdbCard, mdbCardBody, mdbCardTitle, mdbCardText } from 'mdbvue';
 import axios from 'axios';
 
 export default {
   name: 'Register',
   components: {
-    mdbInput,
-    mdbBtn,
-    mdbCard,
-    mdbCardBody,
-    mdbCardTitle,
-    mdbCardText
+    
+    
   },
   data() {
     return {
       registerUserData: {},
       errors: [],
-      VUE_APP_MASTER_KEY: process.env.VUE_APP_MASTER_KEY
+      VUE_APP_MASTER_KEY: process.env.VUE_APP_MASTER_KEY,
+      currentStage: "start"
     };
   },
   methods: {
+    HandleNext(event){
+      event.preventDefault();
+      console.log("going to the next stage of the form...")
+      if (this.currentStage == "start"){
+        this.currentStage = "intent"
+      }
+      else if (this.currentStage == "intent"){
+        this.currentStage = "guidelines"
+      }
+    },
     register(event) {
+
       if (!this.registerUserData.email) {
         alert('Email required.')
         return false
@@ -145,51 +155,165 @@ export default {
 </script>
 
 <style scoped>
-  form {
-    float: left;
-    padding-left: 8%;
-    width: 40%;
-    margin: auto;
-    position: relative;
+@import url('https://fonts.googleapis.com/css2?family=Actor&family=Amiko&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Actor&family=Amiko&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mukta:wght@200;300;400;500;600;700;800&display=swap'); 
+/* Flexbox container to center the form */
+  .register--section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensures the form is vertically centered */
+  }
+
+  .register--form {
+    width: 100%;
+    max-width: 500px; /* Adjust this to your preferred width */
+    padding: 20px;
+    margin: 0 auto; /* Centers the form horizontally */
   }
 
   #register-heading {
-    text-align: justify;
-  }
-
-  #div-explainer {
-    width: 40%;
-    top: 6vh;
-    right: -30vh;
-    margin: 10px;
-    background-color: transparent;
-    display: inline-block;
-  }
-
-  #section-on-use {
-    width: 40%;
-    padding-left: 70px;
-    display: block;
+    text-align: center; /* Center the heading text */
   }
 
   .use-ssemmi-form label {
-    float: left;
-    clear: left;
-  }
-
-  #use-ssemmi-heading {
-    text-align: justify;
-    font-weight: 300;
-  }
-
-  #section-on-use ul {
-    /* margin: 0; */
-    list-style: none;
-    float: left;
+    display: block;
+    text-align: left;
+    margin-bottom: 10px;
   }
 
   #btn-signup-submit {
     padding-top: 40px;
     padding-bottom: 40px;
+    text-align: center; /* Center the submit button */
   }
+
+  .bordered-label {
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+  }
+
+  .form-control {
+    width: 327px;
+    height: 48px;
+    position: relative;
+    border: 1px solid #3D3951;
+    border-radius: 4px;
+    padding: 0.75rem 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .bordered-label label {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem; /* Adjust based on input padding */
+    transform: translateY(-145%);
+    background-color: white; /* Background color to cover input border */
+    padding: 0 0.25rem;
+    color: #3D3951;
+    pointer-events: none;
+    z-index: 1; /* Ensure label is on top */
+    white-space: nowrap; /* Prevent label from breaking into multiple lines */
+  }
+
+  .button-next {
+    width: 327px;
+    height: 48px;
+    background-color: #BFEBED;
+    border: none;
+    border-radius: 10px;
+    
+  }
+  .line {
+    width: 210px;
+    height: 0.1px;
+    background-color: #3D3951;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  
+  .check-div {
+    margin: 20px 0;
+    width: 400px;
+    display: flex;
+    align-items: flex-start;
+    transform: translateX(12%);
+   
+  }
+  .checkbox-group input[type="checkbox"] {
+    transform: scale(2.3) !important;
+    opacity: 0;
+  }
+  .checkbox-group input[type="checkbox"]:checked{
+    opacity: 100;
+  }
+
+  .check-border {
+    margin-right: 20px !important; /* Adds space between the checkbox and the label */
+    justify-content: center;
+    padding-top: 5px;
+    width: 30px !important;
+    height: 30px;
+    border: 3px solid #00AFBA;
+    border-radius: 5px;
+  }
+
+  .mukta-extralight {
+  font-family: "Mukta", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  }
+  .mukta-regular {
+  font-family: "Mukta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  }
+  .montserrat-regular {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  color: #6D6B7D;
+}
+.montserrat-light {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: #3D3951;
+}
+.line-container {
+  position: relative;
+  text-align: center;
+  margin: 40px 0;
+}
+.login-text {
+  display: inline-block;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 10px;
+  font-size: 14px;
+  color: #6D6B7D;
+  z-index: 1;
+}
+.button {
+  width: 327px;
+  height: 56px;
+  border: 1px solid #9E9CA8;
+  border-radius: 10px;
+  background-color: white;
+  margin: 10px;
+}
+
+  
 </style>
