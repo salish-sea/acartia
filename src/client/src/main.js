@@ -198,11 +198,6 @@ const router = new Router({
       name: 'ManageData',
       component: ManageData
     },
-    {
-      path: '/test-bench',
-      name: 'TestBench',
-      component: TestBench,
-    }
   ]
 })
 
