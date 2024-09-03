@@ -9,6 +9,7 @@ import Register from './components/Pages/RegisterPage'
 import ManageUsers from './components/Pages/ApprovalsPage'
 import Visualiser from './components/Pages/VisualiserPage'
 import Heatmap from './components/Pages/HeatmapPage'
+import Partners from './components/Pages/PartnersPage.vue'
 import About from './components/Pages/AboutPage'
 import Home from './components/Pages/HomePage'
 import Profile from './components/Pages/ProfilePage.vue';
@@ -197,6 +198,12 @@ const router = new Router({
       path: '/manage-data',
       name: 'ManageData',
       component: ManageData
+    },
+    {
+      // Data import and export page
+      path: '/partners',
+      name: 'Partners',
+      component: Partners
     },
   ]
 })
