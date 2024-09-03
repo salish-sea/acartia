@@ -81,7 +81,7 @@ p {
   font-size: 16px;
   line-height: 22.4px;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15px !important;
   color: #545F71;
 }
 
