@@ -43,7 +43,7 @@ export default {
 </script>
 <style>
 
-h2 {
+.list-title h2 {
   display: inline;
   margin: 0;
   color: #3d3951;
@@ -89,6 +89,7 @@ hr {
 .list-content {
   margin-top: 16px;
 }
+
 
 .list-text {
   font-family: "Montserrat";
