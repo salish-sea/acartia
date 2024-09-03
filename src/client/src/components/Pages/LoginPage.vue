@@ -1,53 +1,62 @@
 // LOGIN PAGE
 
 <template>
-<div class="login-container">
-  <div class="login">
+  <div>
     <!-- Title and header on the UI -->
     <header class="login--header">
-      <h1>Acartia</h1>
-      <span>LOGIN</span>
     </header>
     <section class="login--section">
       <!-- UI for passing login details -->
-      <form class='login--form' @submit.prevent="loginMethod">
-        <fieldset>
-          <input type="text" v-model.trim="loginData.email" placeholder='Email' name="email" required />
-        </fieldset>
-        <fieldset>
-          <input type="password" v-model.trim="loginData.password" placeholder='Password' name="password" required/>
-        </fieldset>
-        <fieldset>
-          <button type='submit' class='btn'>Submit</button>
-        </fieldset>
-      </form>
-      <br />
-      <mdb-container>
-        <mdb-alert :color="logMsgColour" v-if="isLoggingIn">{{logMsgLogin}}</mdb-alert>
-      </mdb-container>
-      <!-- <h3 id="logForLogin" class="animated bounce infinite slower" v-if="isLoggingIn">{{logMsgLogin}}</h3> -->
+      <div id="Header">
+        <h1>Welcome back!</h1>
+      </div>
+      <div id="ErrorMessage" v-bind:style="{ display: errorVisibility }">
+        <p>The email and/or password you entered did not match our records.</p>
+      </div>
+      <div id="TextInputs">
+        <div class="bordered-label">
+          <input type="text" v-model.trim="loginData.email" v-bind:style="{ border: inputBorder }" name="email" class="txt" id="email" required />
+        </div>
+        <div class="bordered-label">
+          <input :type="passwordFieldType" v-model.trim="loginData.password" v-bind:style="{ border: inputBorder}" name="password" class="txt" required/>
+          <img class="hide" src="../../assets/eye.svg" @click="togglePassword"/>
+        </div>
+        <a id="ForgotPassword">Forgot password?</a>
+      </div>
+      <div id="LogInLink">
+        <button @click="loginMethod" class='btn'>Log in</button>
+        <p id="InterestingName">Don't have an account? <a id="signup">Sign up</a></p>
+      </div>
+      <div id="OrLoginWith">
+        <hr width="60px">
+        <p>or login with</p>
+        <hr width="60px">
+      </div>
+      <div id="AlternativeLogin">
+        <button class="alternative-btn"><img class="icon" src="../../assets/google.svg"/>Log in with Google</button>
+        <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
+      </div> 
     </section>
   </div>
-</div>
 </template>
 
 <script>
-import { mdbContainer, mdbAlert } from 'mdbvue'
-
 export default {
   name: 'Login',
-  components: {
-    mdbContainer,
-    mdbAlert
-  },
   data() {
     return {
+      // Password alert stuff
+      inputBorder: "1px solid #3D3951",
+      errorVisibility: "none",
+      // Password visibility stuff
+      passwordFieldType: "password",
       loginData: {},
       isLoggingIn: false,
       logMsgLogin: "",
       logMsgColour: "secondary"
     }
   },
+
   methods: {
     loginMethod() {
       // Hide login message before clicking on submit login details
@@ -56,113 +65,200 @@ export default {
       this.logMsgColour = "secondary"
 
       this.$store.dispatch('auth_request', this.loginData)
-      .then( (loginMessage) => {
-        console.log(loginMessage)
+      .then((loginMessage) => {
+        console.log(loginMessage);
         // Will change the log upon submit for login to be successful
-        this.logMsgLogin = loginMessage
-        this.logMsgColour = "success"
+        this.logMsgLogin = loginMessage;
+        this.logMsgColour = "success";
         // Redirect to page upon login --admins will be redirected to register
-        this.$router.replace({name: 'DataExplorer'})
+        this.$router.replace({ name: 'DataExplorer' });
       })
-      .catch( (loginMessage) => {
-        console.log(loginMessage)
+      .catch((loginMessage) => {
+        console.log(loginMessage);
         // Will change the log upon submit for login to be invalid
-        this.logMsgLogin = loginMessage
-        this.logMsgColour = "danger"
-      })
-    }
-  }
+        this.logMsgLogin = loginMessage;
+        this.logMsgColour = "danger";
+        this.inputBorder = "2px solid #B22A2A";
+        this.errorVisibility = "block";
+      });
+    },
+
+    togglePassword() {
+      // This might be a better way to achieve this?
+      if (this.passwordFieldType === "password") {
+        this.passwordFieldType = "text";
+      } else {
+        this.passwordFieldType = "password";
+      }
+    },
+  },
 }
 </script>
 
 <style scoped>
-  * {
+/* Styles remain unchanged */
+h1 {
+  font-size: 32px;  
+  font-weight: 600;
+  font-family: "Mukta";
+  line-height: 32px;
   margin: 0;
+}
+
+a {
+  color: #007B83;
+  font-family: "Montserrat";
+  font-weight: 400;
+}
+
+p {
+  font-family: "Montserrat";
+  font-weight: 400;
+}
+
+hr {
+  background-color: #6D6B7D;
+  margin: 10;
+}
+
+.hide {
+  position: relative;
+  top: -37px;
+  left: 140px;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.bordered-label {
   padding: 0;
-  font-family: 'Source Sans Pro', sans-serif;
-  line-height: 1.5;
+  margin: 0;
 }
 
-body {
-  background: #607D8B;
-}
-
-body, input, button {
-  font-size: 1.2rem;
-}
-
-fieldset {
-  border: none;
-}
-
-.login-container {
-  background: none;
-  width: 400px;
-  top: 150px;
-  text-align: center;
-  box-shadow: 0 1rem 1rem 0 rgba(0, 0, 0, .15);
-  position: relative;
-  margin: auto;
-}
-
-.login {
+.bordered-label label {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  transform: translateY(-130%);
+  background-color: white;
+  color: #3D3951; 
+  padding: 0 0.2rem;
+  pointer-events: none;
   z-index: 1;
-  position: relative;
-  background: white;
-  padding: .75rem 1.5rem 1.5rem;
-  box-sizing: border-box;
-}
-
-.login--header {
-  margin-bottom: 1rem;
-}
-
-.login--header span {
-  font-size: 1rem;
+  white-space: nowrap;
 }
 
 .btn {
-  background: white;
-  box-shadow: inset 0 0 2px 0 #EEEEEE;
-  outline: none;
-  border: 1px solid darkblue;
-  padding: .3rem 1rem .4rem;
-  cursor: pointer;
-  border-radius: .25rem;
-  margin-top: 1rem;
-  color: darkblue;
+  background-color: #BFEBED;
+  color: #6D6B7D;
+  width: 327px;
+  height: 48px;
+  border-radius: 10px; 
+  box-shadow: none !important;
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-size: 16px;
+  margin-left: 0px;  
+  text-transform: none;
 }
 
-.btn:active {
-  box-shadow: inset 2px 2px 2px 0 #E0E0E0;
+.alternative-btn {
+  border: solid 1px;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-size: 16px;
+  background-color: white;
+  border-color: #9E9CA8;
+  color: #3D3951;
+  margin-top: 6px;
+  margin-bottom:8px;
+  height: 56px;
 }
 
-input {
+.txt {
+  border-radius: 4px;
+  padding: 0.75rem 0.5rem;
+  width: 327px;
+  height: 52px;
+  margin-top: 24px;
+}
+
+.login--section {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: column;
+  width: 327px;
+}
+
+#Header {
+  margin-top: 110px;
+  padding: 0px 24px 0px 24px;  
+}
+
+#TextInputs {
+  height: 192px;
   width: 100%;
-  border: groove;
-  text-align: center;
-  outline: none;
-  padding: .5rem 1rem;
-  box-sizing: border-box;
-  background: none;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  
 }
 
-.line {
-  transform: translate(0, -1rem);
-  stroke-width: .5;
+#ForgotPassword {
+  margin-top: -12px;
+  margin-left: auto;
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-size: 16px;
+  color: #007B83;
 }
 
-.line--default {
-  stroke: #ccc;
-  transition: all .2s ease-out;
+#LogInLink {
+  margin-top: 10px;
+  padding-top: 18px;
 }
 
-input:focus + svg > .line--default {
-  stroke: #3F51B5;
+#OrLoginWith {
+  color: #6D6B7D;
+  display: flex;
+  flex-direction: row;
+  padding: 3px, 0px;
+  justify-content: center;
+  font-size: 14px;
+  margin-top: 20px;
 }
 
-input:focus:invalid + svg > .line--default {
-  stroke: #FF5722;
+#signup {
+  color: #007B83;
 }
 
+#AlternativeLogin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#InterestingName {
+  margin-top: 12px;
+}
+
+#ErrorMessage {
+  background-color: #F9CDCD;
+  color: #B22A2A;
+  padding: 12px 16px;
+  margin-top: 20px;
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 12px;
+}
+
+#ErrorMessage p { 
+  margin-bottom: 0;
+}
 </style>

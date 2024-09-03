@@ -58,7 +58,19 @@
                 </a>
             </mdb-row>
         </div> 
+
     </div>
+    <div class="page-links">
+      <mdb-row>
+        <mdb-btn outline="black" class="contact-btn"
+          onclick="window.open('mailto:info@acartia.io');">Questions?</mdb-btn>
+      </mdb-row>
+      <mdb-row>
+        <mdb-btn outline="black" class="contact-btn"><a href="https://github.com/Typehuman/SSEMMI">Github <i
+              class="fab fa-github"></i></a></mdb-btn>
+      </mdb-row>
+    </div>
+  </div>
 </template>
 
 <script>
