@@ -105,7 +105,7 @@ hr {
 .hide {
   position: relative;
   top: -37px;
-  left: 140px;
+  left: 295px;
 }
 
 
