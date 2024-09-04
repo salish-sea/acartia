@@ -33,7 +33,6 @@
   line-height: 32px;
   color: #3D3951; 
   text-align: center;
-
   margin-top: 100px;
 }
 
@@ -74,5 +73,4 @@
 
   margin-top: 16px;
 }
-
 </style>

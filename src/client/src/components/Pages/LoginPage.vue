@@ -28,22 +28,18 @@
 
       <button @click="loginMethod" class='standard-btn'>Log in</button>
       <p>Don't have an account? <a id="signup">Sign up</a></p> <!-- The spacing here isn't quite right -->
-
       <div id="OrLoginWith">
         <hr width="60px">
         <p>or login with</p>
         <hr width="60px">
       </div>
-
       <button class="alternative-btn"><img class="icon" src="../../assets/google.svg"/>Log in with Google</button>
       <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
     </section>
   </div>
-  
 </template>
 
 <script>
-
 export default {
   name: 'Login',
   data() {
@@ -53,13 +49,11 @@ export default {
       errorVisibility: "none",
       // Password visibility stuff
       passwordFieldType: "password",
-
       loginData: {},
     }
   },
 
   methods: {
-    // Untested
     // I have no idea whats going on with the backend
     loginMethod() {
       this.$store.dispatch('auth_request', this.loginData)
@@ -84,8 +78,6 @@ export default {
       }
     },
   },
-
-
 }
 
 </script>
@@ -115,6 +107,7 @@ hr {
   top: -37px;
   left: 140px;
 }
+
 
 .icon {
   margin-right: 5px;
@@ -206,7 +199,5 @@ hr {
   justify-content: center;
   margin-top: 10px;
 }
-
-
 
 </style>
