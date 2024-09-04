@@ -1,28 +1,21 @@
 <template>
-  <div>
-    <header class="forgot-password-header">
-    </header>
-    <section class="forgot-password-section">
-      <h1 class="header">Forgot password?</h1>
-      <div class="info">
-        <p>Enter your email and we'll send you a link to reset your password.</p>
-      </div>
-      <input type="text" name="email" class="txt" />
-      <button class="btnn">Request a reset link</button>
-      <a id="Link">Return to login</a>
-    </section>
-  </div>
+<div>
+  <header class="forgot-password-header">
+  </header>
+  <section class="forgot-password-section">
+    <h1 class="header">Forgot password?</h1>
+    <div class="description">
+      <p>Enter your email and we'll send you a link to reset your password.</p>
+    </div>
+    <input type="text" name="email" class="txt"/>
+    <button class="standard-btn">Request a reset link</button>
+    <a class="link">Return to login</a>
+  </section>
+</div>
 </template>
 <script>
 </script>
-<style scoped>
-p {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 22.4px;
-}
-
-
+<style>
 
 .forgot-password-section {
   width: 327px;
@@ -38,8 +31,8 @@ p {
   font-weight: 600;
   font-size: 32px;
   line-height: 32px;
-  color: #3D3951;
-
+  color: #3D3951; 
+  text-align: center;
   margin-top: 100px;
 }
 
@@ -53,7 +46,7 @@ p {
   margin-top: 15px;
 }
 
-.btnn {
+.standard-btn {
   width: 327px;
   height: 48px;
   border-radius: 10px;
@@ -63,6 +56,7 @@ p {
   color: #6D6B7D;
   background-color: #BFEBED;
   text-transform: none;
+  font-family: "Montserrat";
   font-weight: 400;
   font-size: 16px;
   outline: none !important;
@@ -70,12 +64,9 @@ p {
   margin-top: 40px;
 }
 
-.info {
-  margin-top: 20px;
-}
-
-#Link {
-  color: #007B83;
+.link {
+  color: #007B83 !important;
+  font-family: "Montserrat";
   font-size: 16px;
   font-weight: 400;
   line-height: 22.4px;

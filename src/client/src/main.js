@@ -12,6 +12,8 @@ import Heatmap from './components/Pages/HeatmapPage'
 import Partners from './components/Pages/PartnersPage.vue'
 import About from './components/Pages/AboutPage'
 import Home from './components/Pages/HomePage'
+import ResetPassword from './components/Pages/ResetPassword'
+import ForgotPassword from './components/Pages/ForgotPassword'
 import Profile from './components/Pages/ProfilePage.vue';
 import Reports from './components/Pages/ReportsPage.vue';
 import Contributions from './components/Pages/ContributionPage'
@@ -198,6 +200,16 @@ const router = new Router({
       path: '/manage-data',
       name: 'ManageData',
       component: ManageData
+    },
+    {
+      path: '/reset-password',
+      name: 'ResetPassword',
+      component: ResetPassword,
+    },
+    {
+      path: '/forgot-password',
+      name: 'ForgotPassword',
+      component: ForgotPassword,
     },
     {
       // Data import and export page
