@@ -1,42 +1,46 @@
 // INFO POP UP COMPONENT
 
 <template>
-  <div id="pop-up" :style="{ display: popUpVisibility }">
-    <div id="title-container">
-      <h1>How to use the Acartia map</h1>
-      <a id="close-button" @click="close"><img src="../assets/cross.svg"/></a>
+  <div>
+    <img class="info-icon" src="../assets/info-icon.svg" @click="toggleInfo"/>
+    <div v-if="this.showPopUp" id="dark-overlay">
+      <div id="pop-up">
+        <div id="title-container">
+          <h1>How to use the Acartia map</h1>
+          <a id="close-button" @click="toggleInfo"><img src="../assets/cross.svg"/></a>
+        </div>
+        <p>
+          Explore the map, and to expore a data point, click on it to uncover
+          more details including the date of the observation, the species spotted, 
+          how many times it was seen, and the submitter.
+        </p>
+        <ul>
+          <InfoListItem title="Browse Data Points" img_src="BrowseDataPoints.svg">
+            Click on icons on the map to uncover details of the data point, 
+            including the date of observation, the species spotted,
+            how many times it was seen and the submitter.
+          </InfoListItem>
+
+          <InfoListItem title="Filter through data points" img_src="FilterThroughDataPoints.svg">
+            Using the panel on the right hand side, you can filter the data points displayed on the map.
+            These filters allow you to browse specific days with the date filter, track particular species using 
+            the species filter, delve into species groups with the pod filter, select preferred contributions by
+            filtering their names, and ensure accuracy by toggling the verification badge filter. 
+          </InfoListItem>
+
+          <InfoListItem title="Customise your map view" img_src="CustomizeYourMapView.svg">
+            Using the layers panel on the bottom left of the map, you can choose your preferred map type:
+            satellite or terrain. Add overlays for shipping lanes, hydrophones, and buoy markers.
+          </InfoListItem>
+
+          <InfoListItem title="Contribute your data to be displayed on the map" img_src="ContributeYourDataToBeDisplayedOnTheMap.svg">
+            Feeling inspired to share your own observations on the map? You can become a contributor!
+            Click on "Contribute" to submit your data following our simple guidelines. Join us in making
+            Acartia great!
+          </InfoListItem>
+        </ul>
+      </div>
     </div>
-    
-    <p>
-      Explore the map, and to expore a data point, click on it to uncover
-      more details including the date of the observation, the species spotted, 
-      how many times it was seen, and the submitter.
-    </p>
-    <ul>
-      <InfoListItem title="Browse Data Points" img_src="BrowseDataPoints.svg">
-        Click on icons on the map to uncover details of the data point, 
-        including the date of observation, the species spotted,
-        how many times it was seen and the submitter.
-      </InfoListItem>
-
-      <InfoListItem title="Filter through data points" img_src="FilterThroughDataPoints.svg">
-        Using the panel on the right hand side, you can filter the data points displayed on the map.
-        These filters allow you to browse specific days with the date filter, track particular species using 
-        the species filter, delve into species groups with the pod filter, select preferred contributions by
-        filtering their names, and ensure accuracy by toggling the verification badge filter. 
-      </InfoListItem>
-
-      <InfoListItem title="Customise your map view" img_src="CustomizeYourMapView.svg">
-        Using the layers panel on the bottom left of the map, you can choose your preferred map type:
-        satellite or terrain. Add overlays for shipping lanes, hydrophones, and buoy markers.
-      </InfoListItem>
-
-      <InfoListItem title="Contribute your data to be displayed on the map" img_src="ContributeYourDataToBeDisplayedOnTheMap.svg">
-        Feeling inspired to share your own observations on the map? You can become a contributor!
-        Click on "Contribute" to submit your data following our simple guidelines. Join us in making
-        Acartia great!
-      </InfoListItem>
-    </ul>
   </div>
 </template>
 <script>
@@ -50,12 +54,12 @@ export default {
 
   data() {
     return {
-      popUpVisibility: "block",
+      showPopUp: false,
     }
   },
   methods: {
-    close() {
-      this.popUpVisibility = "none";
+    toggleInfo() {
+      this.showPopUp = !this.showPopUp;
     }
   },
 }
@@ -89,9 +93,36 @@ ul {
   padding:0; 
 }
 
+.info-icon {
+  position: fixed;
+  top: 100px;
+  left: 24px;
+  z-index: 99999;
+  background-color: white;
+  border-radius: 50%;
+}
+
+/* Temporary fix until it is decided how to handle mobile screens */
+@media screen and (max-width: 600px) {
+  .info-icon {
+    display: none;
+  }
+}
+
+/*
+  currently when the height of the pop up exceeds 75% of the height of the
+  screen the pop up becomes scrollable.
+  another solution could be simply to limit the number of list items
+  allowed to be expanded to be one (expand one, the other one retracts)
+
+  TBD - tom
+*/
+
 #pop-up {
   background-color: white;
   width: 900px;
+  max-height: 75%;
+  overflow-y: scroll;
   padding: 48px;
   border-radius: 20px;
   margin: auto;
@@ -100,10 +131,6 @@ ul {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   z-index: 99999;
-
-  /*border-width: 1px;
-  border-color: black;
-  border-style: solid;*/
 }
 
 #close-button {
@@ -116,19 +143,13 @@ ul {
 #title-container {
   text-align: center;
 }
-</style>
 
-<!--
-TODO:  (delete this comment when finished)
-[x] Header 
-[x] subtext paragraph
-[x] List item implementation
-[x] "Browse Data Points" list item
-[x] "Filter" List item
-[x] "Customize" List item
-[x] "Contribute" List item
-[x] pop up positioning & styling
-[x] X (close) button
-[ ] center space the div
-[ ] insert into map page
--->
+#dark-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 99998;
+}
+</style>
