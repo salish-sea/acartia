@@ -13,26 +13,22 @@
         <p>The email and/or password you entered did not match our records.</p>
       </div>
 
-      <div id="TextInputs">
-        <div class="standard-text-input">
-          <!--<label for="email">Email</label>-->
-          <input type="text" v-model.trim="loginData.email" v-bind:style="{ border: inputBorder }" name="email" class="txt" id="email" required />
-        </div>
-        <div class="password-input">
-          <!--<label>Password</label>-->
-          <input :type="passwordFieldType" v-model.trim="loginData.password" v-bind:style="{ border: inputBorder}" name="password" class="txt" required/>
-          <img class="hide" src="../../assets/eye.svg" @click="togglePassword"/>
-        </div>
-        <a id="ForgotPassword" class="link">Forgot password?</a>
-      </div>
+      <TextInput v-model.trim="loginData.email" label="Email" inputType="text" :borderStyle="inputBorder"/>
+      <TextInput v-model.trim="loginData.password" label="Password" :inputType="passwordFieldType" :borderStyle="inputBorder"/>
+
+      <a id="ForgotPassword" class="link">Forgot password?</a>
 
       <button @click="loginMethod" class='standard-btn'>Log in</button>
-      <p>Don't have an account? <a id="signup">Sign up</a></p> <!-- The spacing here isn't quite right -->
+      <div id="NoAccount">
+        <p>Don't have an account? <a id="signup">Sign up</a></p> 
+      </div>
+
       <div id="OrLoginWith">
         <hr width="60px">
         <p>or login with</p>
         <hr width="60px">
       </div>
+
       <button class="alternative-btn"><img class="icon" src="../../assets/google.svg"/>Log in with Google</button>
       <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
     </section>
@@ -40,8 +36,13 @@
 </template>
 
 <script>
+import TextInput from "../TextInput.vue"
+
 export default {
   name: 'Login',
+  components: {
+    TextInput,
+  },
   data() {
     return {
       // Password alert stuff
@@ -67,16 +68,6 @@ export default {
         this.errorVisibility = "block";
       })
     },
-
-    togglePassword() {
-      // This might be a better way to acheive this?
-      // https://stackoverflow.com/questions/68602902/vuejs-toggle-password-visibilty-without-mutating-the-type-property
-      if (this.passwordFieldType === "password") {
-        this.passwordFieldType = "text";
-      } else {
-        this.passwordFieldType = "password";
-      }
-    },
   },
 }
 
@@ -87,6 +78,7 @@ export default {
 p {
   font-family: "Montserrat";
   font-weight: 400;
+  margin-top: 0 !important; /* css in this project is cooked */
 }
 
 hr {
@@ -102,29 +94,8 @@ hr {
   width: 327px;
 }
 
-.hide {
-  position: relative;
-  top: -37px;
-  left: 295px;
-}
-
-
 .icon {
   margin-right: 5px;
-}
-
-.btn {
-  background-color: #BFEBED;
-  color: #6D6B7D;
-  width: 327px;
-  height: 48px;
-  border-radius: 10px; 
-  box-shadow: none !important;
-  font-family: "Montserrat";
-  font-weight: 400;
-  font-size: 16px;
-  margin-left: 0px;  
-  text-transform: none;
 }
 
 .alternative-btn {
@@ -142,14 +113,6 @@ hr {
   height: 56px;
 }
 
-.txt {
-  border-radius: 4px;
-  padding: 0.75rem 0.5rem;
-  width: 327px;
-  height: 52px;
-  margin-top: 24px;
-}
-
 .error-message {
   background-color: #F9CDCD;
   color: #B22A2A;
@@ -165,21 +128,14 @@ hr {
   margin-bottom: 0;
 }
 
-#TextInputs {
-  height: 192px;
-  width: 100%;
-  margin-top: 0px;
-  display: flex;
-  flex-direction: column;
-  
-}
-
 #ForgotPassword {
   /*margin-top: -12px;*/ /* Necessary because of how I did the eyball thingy */
+  margin-top: -14px;
   margin-left: auto;
 }
 
 #signup {
+  margin-left: 12px;
   color: #007B83;
 }
 
@@ -191,6 +147,7 @@ hr {
   justify-content: center;
   font-size: 14px;
   margin-top: 20px;
+  margin-bottom: 14px;
 }
 
 #AlternativeLogin {
@@ -198,6 +155,13 @@ hr {
   flex-direction: column;
   justify-content: center;
   margin-top: 10px;
+}
+
+#NoAccount {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;;
+  margin-top: 16px;
 }
 
 </style>

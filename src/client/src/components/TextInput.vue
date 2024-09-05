@@ -4,27 +4,42 @@
   <div class="text-input-div">
     <label class="input-label"><span class="label-text">{{ label }}</span></label>
     <input 
-      type="text" 
+      :type="inputType" 
       class="text-input" 
       v-bind:value="value" 
       v-on:input="$emit('input', $event.target.value)"
       :style="{ border: borderStyle }"/>
+      <img v-if="label==='Password'" width="25px" height="24px" class="hide" src="../assets/eye.svg" @click="togglePassword"/>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['label', 'borderStyle', 'value'],
+  props: ['label', 'inputTypeProp', 'borderStyle', 'value'],
+  data() {
+    return {
+      inputType: this.inputTypeProp,
+    }
+  },
+  methods: {
+    togglePassword() {
+      if (this.inputType === "password") {
+        this.inputType = "text";
+      } else {
+        this.inputType = "password";
+      }
+    }
+  }
 }
 </script>
 
-<style>
+<style scoped>
 
 .text-input-div {
   display: flex;
   flex-direction: column;
   width: 327px;
-  margin: auto;
+  margin: 0;
 }
 
 .input-label {
@@ -52,6 +67,12 @@ export default {
   padding: 4px 16px 4px 16px;
   border-radius: 4px;
   margin: 0;
+}
+
+.hide {
+  position: relative;
+  top: -37px;
+  left: 295px;
 }
 
 </style>

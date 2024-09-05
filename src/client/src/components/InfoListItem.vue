@@ -4,7 +4,7 @@
 <template>
   <li @click="hideShowContent">
     <div class="list-title">
-      <h2>{{ title }}</h2>
+      <h2 class="list-h2">{{ title }}</h2>
       <!--<hr width="14px" >-->
       <img class="expand-indicator" :src="require(`@/assets/${contentVisibilityIndicator}.svg`)"/>
     </div>
@@ -43,7 +43,7 @@ export default {
 </script>
 <style>
 
-.list-title h2 {
+.list-h2 {
   display: inline;
   margin: 0;
   color: #3d3951;
