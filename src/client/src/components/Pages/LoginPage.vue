@@ -15,11 +15,11 @@
       <TextInput v-model.trim="loginData.email" label="Email" inputType="text" :hideShowButton="false" :borderStyle="inputBorder"/>
       <TextInput v-model.trim="loginData.password" label="Password" inputTypeProp="password" :hideShowButton="true" :borderStyle="inputBorder"/>
 
-      <a id="ForgotPassword" class="link">Forgot password?</a>
+      <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
 
       <button @click="loginMethod" class='standard-btn'>Log in</button>
       <div id="NoAccount">
-        <p>Don't have an account? <a id="signup">Sign up</a></p> 
+        <p>Don't have an account? <a id="signup" href="/register">Sign up</a></p> 
       </div>
 
       <div id="OrLoginWith">
@@ -95,6 +95,52 @@ hr {
   margin-right: 5px;
 }
 
+.standard-btn {
+  width: 327px;
+  height: 48px;
+  border-radius: 10px;
+  border-width: 0;
+  padding: 10px 24px 10px 24px;
+  box-shadow: none !important;
+  color: #6D6B7D;
+  background-color: #BFEBED;
+  text-transform: none;
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-size: 16px;
+  outline: none !important;
+
+  margin-top: 40px;
+}
+
+.forgot-password-section {
+  width: 327px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: "Montserrat";
+}
+
+.header {
+  font-family: "Mukta";
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 32px;
+  color: #3D3951; 
+  text-align: center;
+  margin-top: 100px;
+}
+
+.link {
+  color: #007B83 !important;
+  font-family: "Montserrat";
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 22.4px;
+  margin-top: 16px;
+}
+
 .alternative-btn {
   border: solid 1px;
   border-radius: 10px;
@@ -118,6 +164,7 @@ hr {
 
 #signup {
   margin-left: 12px;
+  font-weight: 300;
   color: #007B83;
 }
 

@@ -18,7 +18,7 @@
 </template>
 <script>
 </script>
-<style>
+<style scoped>
 
 .reset-password-section {
   display: flex;

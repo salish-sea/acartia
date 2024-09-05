@@ -7,15 +7,29 @@
     <div class="description">
       <p>Enter your email and we'll send you a link to reset your password.</p>
     </div>
-    <input type="text" name="email" class="txt"/>
+    <TextInput v-model.trim="email" label="Email" inputType="text" :hideShowButton="false" :borderStyle="inputBorder"/>
     <button class="standard-btn">Request a reset link</button>
-    <a class="link">Return to login</a>
+    <a class="link" href="/login">Return to login</a>
   </section>
 </div>
 </template>
 <script>
+import TextInput from '../TextInput.vue'
+
+export default {
+  name: "ForgotPassword",
+  components: {
+    TextInput,
+  },
+  data() {
+    return {
+      inputBorder: "1px solid #3D3951",
+      email: null,
+    }
+  }
+}
 </script>
-<style>
+<style scoped>
 
 .forgot-password-section {
   width: 327px;
@@ -68,9 +82,22 @@
   color: #007B83 !important;
   font-family: "Montserrat";
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 22.4px;
-
   margin-top: 16px;
+  text-align: center;
+}
+
+.description {
+  font-family: "Montserrat";
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22.4px;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.description p {
+  margin-bottom: 5px;
 }
 </style>
