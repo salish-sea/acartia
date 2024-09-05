@@ -41,15 +41,15 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 
 .list-h2 {
   display: inline;
   margin: 0;
   color: #3d3951;
-  font-family: "Mukta";
-  font-weight: 500;
-  font-size: 24px;
+  font-family: "Mukta" !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
   line-height: 25.2px;
   user-select: none;
 }
