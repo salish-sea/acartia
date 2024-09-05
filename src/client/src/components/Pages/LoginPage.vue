@@ -9,12 +9,11 @@
       <!-- UI for passing login details -->
       <h1 class="header">Welcome back!</h1>
 
-      <div class="error-message" v-bind:style="{ display: errorVisibility }">
-        <p>The email and/or password you entered did not match our records.</p>
-      </div>
+     <!-- TODO: the error message should be received from the backend instead of hardcoded --> 
+      <ErrorMessage v-bind:style="{ display: errorVisibility}">The email and/or password you entered did not match our records.</ErrorMessage>
 
-      <TextInput v-model.trim="loginData.email" label="Email" inputType="text" :borderStyle="inputBorder"/>
-      <TextInput v-model.trim="loginData.password" label="Password" :inputType="passwordFieldType" :borderStyle="inputBorder"/>
+      <TextInput v-model.trim="loginData.email" label="Email" inputType="text" :hideShowButton="false" :borderStyle="inputBorder"/>
+      <TextInput v-model.trim="loginData.password" label="Password" inputTypeProp="password" :hideShowButton="true" :borderStyle="inputBorder"/>
 
       <a id="ForgotPassword" class="link">Forgot password?</a>
 
@@ -37,25 +36,23 @@
 
 <script>
 import TextInput from "../TextInput.vue"
+import ErrorMessage from "../ErrorMessage.vue"
 
 export default {
   name: 'Login',
   components: {
     TextInput,
+    ErrorMessage,
   },
   data() {
     return {
-      // Password alert stuff
       inputBorder: "1px solid #3D3951",
       errorVisibility: "none",
-      // Password visibility stuff
-      passwordFieldType: "password",
       loginData: {},
     }
   },
 
   methods: {
-    // I have no idea whats going on with the backend
     loginMethod() {
       this.$store.dispatch('auth_request', this.loginData)
       .then( (loginMessage) => {
@@ -113,21 +110,6 @@ hr {
   height: 56px;
 }
 
-.error-message {
-  background-color: #F9CDCD;
-  color: #B22A2A;
-  padding: 12px 16px;
-  margin-top: 20px;
-  font-family: "Montserrat";
-  font-weight: 400;
-  font-size: 14px;
-  border-radius: 12px;
-}
-
-.error-message p { 
-  margin-bottom: 0;
-}
-
 #ForgotPassword {
   /*margin-top: -12px;*/ /* Necessary because of how I did the eyball thingy */
   margin-top: -14px;
@@ -148,13 +130,6 @@ hr {
   font-size: 14px;
   margin-top: 20px;
   margin-bottom: 14px;
-}
-
-#AlternativeLogin {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 10px;
 }
 
 #NoAccount {

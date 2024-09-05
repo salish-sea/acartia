@@ -9,18 +9,26 @@
       v-bind:value="value" 
       v-on:input="$emit('input', $event.target.value)"
       :style="{ border: borderStyle }"/>
-      <img v-if="label==='Password'" width="25px" height="24px" class="hide" src="../assets/eye.svg" @click="togglePassword"/>
+      <img v-if="hideShowButton" width="25px" height="24px" class="hide" src="../assets/eye.svg" @click="togglePassword"/>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['label', 'inputTypeProp', 'borderStyle', 'value'],
+  props: {
+    label: String,
+    inputTypeProp: String,
+    borderStyle: String,
+    value: String,
+    hideShowButton: Boolean,
+  },
+
   data() {
     return {
       inputType: this.inputTypeProp,
     }
   },
+
   methods: {
     togglePassword() {
       if (this.inputType === "password") {
