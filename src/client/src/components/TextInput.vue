@@ -2,13 +2,14 @@
 
 <template>
   <div class="text-input-div">
-    <label class="input-label"><span class="label-text">{{ label }}</span></label>
+    <label class="input-label" ><span class="label-text" :style="{ color: isError ? '#B22A2A' : '3D3951' }">{{ label }}</span></label>
     <input 
       :type="inputType" 
       class="text-input" 
       v-bind:value="value" 
       v-on:input="$emit('input', $event.target.value)"
-      :style="{ border: borderStyle }"/>
+      :style="{ border: isError ? '2px solid #B22A2A' : '1px solid #3D3951' }"
+    />
       <img v-if="hideShowButton" width="25px" height="24px" class="hide" src="../assets/eye.svg" @click="togglePassword"/>
   </div>
 </template>
@@ -18,9 +19,9 @@ export default {
   props: {
     label: String,
     inputTypeProp: String,
-    borderStyle: String,
     value: String,
     hideShowButton: Boolean,
+    isError: Boolean,
   },
 
   data() {
@@ -63,8 +64,8 @@ export default {
   background-color: white;
   padding-left: 3px;
   padding-right: 3px;
-  color: #3D3951;
   font-family: "Montserrat";
+  font-weight: 400;
   font-size: 12px;
   line-height: 16.8px;
 }

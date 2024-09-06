@@ -1,26 +1,39 @@
 // LOGIN PAGE
 
 <template>
+
   <div>
-    <!-- Title and header on the UI -->
-    <header class="login--header">
-    </header>
     <section class="login--section">
       <h1 class="header">Welcome back!</h1>
 
      <!-- TODO: the error message should be received from the backend instead of hardcoded --> 
-      <ErrorMessage v-bind:style="{ display: errorVisibility}">The email and/or password you entered did not match our records.</ErrorMessage>
+      <ErrorMessage v-if="isError">The email and/or password you entered did not match our records.</ErrorMessage>
 
-      <TextInput v-model.trim="loginData.email" label="Email" inputType="text" :hideShowButton="false" :borderStyle="inputBorder"/>
-      <TextInput v-model.trim="loginData.password" label="Password" inputTypeProp="password" :hideShowButton="true" :borderStyle="inputBorder"/>
+      <TextInput 
+        v-model.trim="loginData.email" 
+        label="Email" 
+        inputType="text" 
+        :hideShowButton="false" 
+        :borderStyle="inputBorder" 
+        :isError="isError"
+      />
+      <TextInput 
+        v-model.trim="loginData.password" 
+        label="Password" 
+        inputTypeProp="password" 
+        :hideShowButton="true" 
+        :borderStyle="inputBorder" 
+        :isError="isError"
+      />
 
       <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
 
       <button 
-      @click="loginMethod" 
-      class="standard-btn" 
-      :style="{backgroundColor : isLoading ?  '#80D7DD' : '#BFEBED'}" 
-      :disabled="isLoading">
+        @click="loginMethod" 
+        class="standard-btn" 
+        :style="{backgroundColor : isLoading ?  '#80D7DD' : '#BFEBED'}" 
+        :disabled="isLoading"
+      >
         {{ isLoading ? "Loading..." : "Log in" }}
       </button>
 
@@ -38,9 +51,11 @@
       <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
     </section>
   </div>
+
 </template>
 
 <script>
+
 import TextInput from "../TextInput.vue"
 import ErrorMessage from "../ErrorMessage.vue"
 
@@ -52,10 +67,9 @@ export default {
   },
   data() {
     return {
-      inputBorder: "1px solid #3D3951",
-      errorVisibility: "none",
       loginData: {},
       isLoading: false,
+      isError: false,
     }
   },
   methods: {
@@ -68,6 +82,7 @@ export default {
         this.$router.replace({name: 'DataExplorer'});
       })
       .catch( (loginMessage) => {
+        this.isError = true;
         console.log(loginMessage);
         this.inputBorder = "2px solid #B22A2A";
         this.errorVisibility = "block";
@@ -101,7 +116,9 @@ hr {
 }
 
 .icon {
-  margin-right: 5px;
+  width: 32px;
+  height: 32px;
+  margin-right: 9px;
 }
 
 .standard-btn {
@@ -170,7 +187,6 @@ hr {
 }
 
 #ForgotPassword {
-  /*margin-top: -12px;*/ /* Necessary because of how I did the eyball thingy */
   margin-top: -14px;
   margin-left: auto;
 }
