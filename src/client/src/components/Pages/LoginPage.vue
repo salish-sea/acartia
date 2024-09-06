@@ -6,7 +6,6 @@
     <header class="login--header">
     </header>
     <section class="login--section">
-      <!-- UI for passing login details -->
       <h1 class="header">Welcome back!</h1>
 
      <!-- TODO: the error message should be received from the backend instead of hardcoded --> 
@@ -17,7 +16,14 @@
 
       <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
 
-      <button @click="loginMethod" class='standard-btn'>Log in</button>
+      <button 
+      @click="loginMethod" 
+      class="standard-btn" 
+      :style="{backgroundColor : isLoading ?  '#80D7DD' : '#BFEBED'}" 
+      :disabled="isLoading">
+        {{ isLoading ? "Loading..." : "Log in" }}
+      </button>
+
       <div id="NoAccount">
         <p>Don't have an account? <a id="signup" href="/register">Sign up</a></p> 
       </div>
@@ -49,20 +55,23 @@ export default {
       inputBorder: "1px solid #3D3951",
       errorVisibility: "none",
       loginData: {},
+      isLoading: false,
     }
   },
-
   methods: {
     loginMethod() {
+      this.isLoading = true;
       this.$store.dispatch('auth_request', this.loginData)
       .then( (loginMessage) => {
         console.log(loginMessage);
+        this.isLoading = false;
         this.$router.replace({name: 'DataExplorer'});
       })
       .catch( (loginMessage) => {
         console.log(loginMessage);
         this.inputBorder = "2px solid #B22A2A";
         this.errorVisibility = "block";
+        this.isLoading = false;
       })
     },
   },
@@ -111,6 +120,10 @@ hr {
   outline: none !important;
 
   margin-top: 40px;
+}
+
+.loading-btn {
+  background-color: red;
 }
 
 .forgot-password-section {
