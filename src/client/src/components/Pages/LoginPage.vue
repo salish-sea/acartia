@@ -14,7 +14,6 @@
         label="Email" 
         inputType="text" 
         :hideShowButton="false" 
-        :borderStyle="inputBorder" 
         :isError="isError"
       />
       <TextInput 
@@ -22,7 +21,6 @@
         label="Password" 
         inputTypeProp="password" 
         :hideShowButton="true" 
-        :borderStyle="inputBorder" 
         :isError="isError"
       />
 
