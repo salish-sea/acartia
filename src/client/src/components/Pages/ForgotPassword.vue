@@ -4,26 +4,32 @@
   </header>
   <section class="forgot-password-section">
     <h1 class="header">Forgot password?</h1>
-    <div class="info">
+    <div class="description">
       <p>Enter your email and we'll send you a link to reset your password.</p>
     </div>
-    <input type="text" name="email" class="txt"/>
-    <button class="btnn">Request a reset link</button>
-    <a id="Link">Return to login</a>
+    <TextInput v-model.trim="email" label="Email" inputType="text" :hideShowButton="false" :borderStyle="inputBorder"/>
+    <button class="standard-btn">Request a reset link</button>
+    <a class="link" href="/login">Return to login</a>
   </section>
 </div>
 </template>
 <script>
-</script>
-<style>
+import TextInput from '../TextInput.vue'
 
-p {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 22.4px;
+export default {
+  name: "ForgotPassword",
+  components: {
+    TextInput,
+  },
+  data() {
+    return {
+      inputBorder: "1px solid #3D3951",
+      email: null,
+    }
+  }
 }
-
-
+</script>
+<style scoped>
 
 .forgot-password-section {
   width: 327px;
@@ -40,7 +46,7 @@ p {
   font-size: 32px;
   line-height: 32px;
   color: #3D3951; 
-
+  text-align: center;
   margin-top: 100px;
 }
 
@@ -54,7 +60,7 @@ p {
   margin-top: 15px;
 }
 
-.btnn {
+.standard-btn {
   width: 327px;
   height: 48px;
   border-radius: 10px;
@@ -64,6 +70,7 @@ p {
   color: #6D6B7D;
   background-color: #BFEBED;
   text-transform: none;
+  font-family: "Montserrat";
   font-weight: 400;
   font-size: 16px;
   outline: none !important;
@@ -71,17 +78,26 @@ p {
   margin-top: 40px;
 }
 
-.info {
+.link {
+  color: #007B83 !important;
+  font-family: "Montserrat";
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 22.4px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.description {
+  font-family: "Montserrat";
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22.4px;
+  text-align: left;
   margin-top: 20px;
 }
 
-#Link {
-  color: #007B83;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 22.4px;
-
-  margin-top: 16px;
+.description p {
+  margin-bottom: 5px;
 }
-
 </style>

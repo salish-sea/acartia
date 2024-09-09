@@ -9,9 +9,13 @@ import Register from './components/Pages/RegisterPage'
 import ManageUsers from './components/Pages/ApprovalsPage'
 import Visualiser from './components/Pages/VisualiserPage'
 import Heatmap from './components/Pages/HeatmapPage'
+import Partners from './components/Pages/PartnersPage.vue'
 import About from './components/Pages/AboutPage'
 import Home from './components/Pages/HomePage'
+import ResetPassword from './components/Pages/ResetPassword'
+import ForgotPassword from './components/Pages/ForgotPassword'
 import Profile from './components/Pages/ProfilePage.vue';
+import Reports from './components/Pages/ReportsPage.vue';
 import Contributions from './components/Pages/ContributionPage'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
@@ -144,6 +148,12 @@ const router = new Router({
     },
     {
       // Register page to create new users - admin only
+      path: '/reports',
+      name: 'Reports',
+      component: Reports
+    },
+    {
+      // Register page to create new users - admin only
       path: '/about',
       name: 'About',
       component: About
@@ -194,10 +204,21 @@ const router = new Router({
       component: ManageData
     },
     {
-      path: '/test-bench',
-      name: 'TestBench',
-      component: TestBench,
-    }
+      path: '/reset-password',
+      name: 'ResetPassword',
+      component: ResetPassword,
+    },
+    {
+      path: '/forgot-password',
+      name: 'ForgotPassword',
+      component: ForgotPassword,
+    },
+    {
+      // Data import and export page
+      path: '/partners',
+      name: 'Partners',
+      component: Partners
+    },
   ]
 })
 
@@ -214,6 +235,7 @@ export const store = new Vuex.Store(
       userRequestList: [],
       sightings: [],
       filteredSightings: [],
+      lastSighting: {},
       mapFilters: Object.assign({}, initFilterState),
       mapOptions: {
         contributors: [],
@@ -234,6 +256,9 @@ export const store = new Vuex.Store(
             "features": state.filteredSightings
           })
         }
+      },
+      setLastSighting(state, sighting) {
+        state.lastSighting = sighting
       },
       setAuthentication(state, status) {
         state.isAuthenticated = status
@@ -315,6 +340,12 @@ export const store = new Vuex.Store(
       },
       getFilteredSightings: state => {
         return state.filteredSightings
+      },
+      getSightings: state => {
+        return state.sightings
+      },
+      getLastSighting: state => {
+        return state.lastSighting
       },
       getFilteredSightingsLength: state => {
         return state.filteredSightings.length

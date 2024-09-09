@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <!-- Opened Sidebar -->
     <div v-if="showingSidebar" class="sidebar">
       <div class="species-legend-content">
@@ -41,7 +41,7 @@
       <!-- Filter Options -->
       <div class="filter-header-content">
         <h3 class="filter-header">Filter Sightings</h3>
-        <p class="filter-header-text" >Refine data points displayed on the map by selecting one or multiple filtering
+        <p class="filter-header-text">Refine data points displayed on the map by selecting one or multiple filtering
           options, as specified below.</p>
       </div>
 
@@ -182,7 +182,7 @@ export default {
       this.screenWidth = window.innerWidth
     },
     closeSidebarOnMobile() {
-      if (this.screenWidth <  MOBILE_BREAKPOINT ){
+      if (this.screenWidth < MOBILE_BREAKPOINT) {
         this.showingSidebar = false
       }
     },
@@ -550,13 +550,11 @@ export default {
   border-radius: 0.375rem;
   background: var(--Neutrals-White, #FFF);
   color: var(--Neutrals-Gray-80, #3D3951);
-  /* Body 1 */
   font-family: Montserrat;
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 140%;
-  /* 1.4rem */
 }
 
 .contributor-content-label {
@@ -645,13 +643,11 @@ export default {
 
 .date-label {
   color: var(--Neutrals-Gray-60, #6D6B7D);
-  /* Caption 1 */
   font-family: Montserrat;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 500;
   line-height: 140%;
-  /* 1.05rem */
 }
 
 .date-content {
@@ -688,7 +684,7 @@ export default {
   font-weight: 500;
   line-height: 105%;
   text-align: left;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
 .species-legend-content {
@@ -750,19 +746,18 @@ export default {
   padding: 2.25rem;
   align-items: center;
   gap: 1.0rem;
-  height: 100%; /* Full height of the sidebar container */
-  width:430px;
-  overflow-y: auto; /* Allow vertical scrolling */
+  height: 100%;
+  width: 430px;
+  overflow-y: auto;
   align-items: center;
   gap: 1.0rem;
-  box-sizing: border-box; /* Include padding in height calculation */
+  box-sizing: border-box;
 }
 
 /* Media query for filters to occupy full screen on small/mobile screens */
 @media (max-width: 600px) {
   .sidebar {
     width: 100%;
-    /* TODO: Change to allow navbar */
     height: 100vh;
     right: 0;
     top: 55;
@@ -770,18 +765,12 @@ export default {
   }
 }
 
-.border {
-  border: "5px black solid"
-}
-
 .filter-header {
-  /* 1.575rem */
   font-family: Mukta;
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 500;
   line-height: 105%;
-  /* 1.575rem */
   text-align: left;
 }
 

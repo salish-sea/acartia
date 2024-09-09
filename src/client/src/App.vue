@@ -6,27 +6,50 @@
         Acartia
       </router-link>
       <div class="navbar-links">
-        <router-link to="/data-explorer" :class="{'active': isActive('/data-explorer')}">Map</router-link>
+        <div class="dropdown">
+          <button class="dropbtn" :class="{'active': isActive('/data-explorer') || isActive('/heatmap') || isActive('/home')}">
+            Map
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <router-link to="/data-explorer">Data Explorer</router-link>
+            <router-link to="/heatmap">Heatmap</router-link>
+          </div>
+        </div>
         <router-link to="/about" :class="{'active': isActive('/about')}">About</router-link>
         <router-link to="/partners" :class="{'active': isActive('/partners')}">Partners</router-link>
         <router-link to="/reports" :class="{'active': isActive('/reports')}">Reports</router-link>
-        <router-link to="/dashboard" v-if="isAuth" :class="{'active': isActive('/dashboard')}">Contribute</router-link>
-        <router-link to="/integrate" v-if="isAuth" :class="{'active': isActive('/integrate')}">How to Contribute</router-link>
-        <div @mouseover="showDropdown" @mouseleave="hideDropdown" v-if="isAuth" class="dropdown">
-          <a :class="{'active': isActive('/browse')}">Browse</a>
-          <div v-show="isDropdownOpen" class="dropdown-menu">
-            <router-link to="/data-explorer">Short-term</router-link>
-            <router-link to="/historical">Historical</router-link>
+        <div class="dropdown" v-if="isAuth">
+          <button class="dropbtn">
+            Contribute
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <router-link to="/integrate" v-if="isAuth">How To Contribute</router-link>
+            <router-link to="/upload">Upload File</router-link>
+            <router-link to="/import-data">Import Data Manually</router-link>
+            <router-link to="/export-data">Export Data</router-link>
+            <router-link to="/github">Github</router-link>
+            <router-link to="/contact-us">Contact Us</router-link>
           </div>
         </div>
-        <router-link to="/manage-users" v-if="isAuth && isAdmin" :class="{'active': isActive('/manage-users')}">Manage Users</router-link>
-        <router-link to="/manage-data" v-if="isAuth" :class="{'active': isActive('/manage-data')}">Manage Data</router-link>
       </div>
       <div class="auth-links">
-        <router-link to="/profile" v-if="isAuth">Profile</router-link>
+        <div class="dropdown" v-if="isAuth">
+          <button class="dropbtn">
+            <img src="@/assets/nav-profile-icon.svg" class="profile-icon" alt="profile icon">
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <router-link to="/profile">Contributor Profile</router-link>
+            <router-link to="/user-report">User Report</router-link>
+            <router-link to="/create-token">Create Token</router-link>
+            <router-link to="/update-profile">Update Profile</router-link>
+            <a @click="logoutMethod">Log Out</a>
+          </div>
+        </div>
         <router-link to="/login" v-if="!isAuth" class="login-button">Login</router-link>
         <router-link to="/register" v-if="!isAuth" class="signup-button">Sign Up</router-link>
-        <a @click="logoutMethod" v-if="isAuth" class="login-button">Logout</a>
       </div>
     </nav>
     <div id="app">
@@ -41,7 +64,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      isDropdownOpen: false,
+      isDropdownOpen: null,
     };
   },
   created() {
@@ -58,12 +81,6 @@ export default {
     });
   },
   methods: {
-    showDropdown() {
-      this.isDropdownOpen = true;
-    },
-    hideDropdown() {
-      this.isDropdownOpen = false;
-    },
     logoutMethod() {
       this.$store.dispatch('auth_logout').then(() => {
         this.$router.push('/');
@@ -90,7 +107,7 @@ export default {
 #navbar-top {
   position: sticky;
   top: 0;
-  z-index: 9;
+  z-index: 999;
   background-color: #E6F7F9;
   padding: 10px 24px;
   display: flex;
@@ -116,6 +133,25 @@ export default {
   margin-right: 12px;
 }
 
+/* Arrow Icon */
+.arrow-icon {
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown.open .arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* Profile Icon */
+.profile-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
 /* Navbar Links */
 .navbar-links {
   display: flex;
@@ -136,11 +172,63 @@ export default {
   color: #004049;
 }
 
+/* Dropdown Styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: inherit;
+  color: #00585D;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  margin: 0;
+}
+
+.dropbtn:hover {
+  background-color: #ddd;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #BCCCDB;
+  border-radius: 0px 0px 16px 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  padding: 0;
+  width: 250px;
+  z-index: 999;
+  right: 0; 
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 12px 20px; 
+  font-family: 'Inter', sans-serif;
+  font-size: 18px; 
+  color: #0C0826;
+  border-bottom: 0.5px solid #000000;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 /* Active Link with Squiggly Underline */
 .navbar-links a.active {
   text-decoration-line: underline;
   text-decoration-style: wavy;
-  text-decoration-color: #00AFBA; /* Customize the color as needed */
+  text-decoration-color: #00AFBA;
 }
 
 /* Auth Links with gap */
@@ -203,29 +291,6 @@ export default {
 .signup-button:hover {
   background-color: #00AFBA;
   color: white;
-}
-
-/* Dropdown Menu */
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.dropdown-menu a {
-  display: block;
-  color: #00585D;
-  text-decoration: none;
-  padding: 8px 16px;
-}
-
-.dropdown-menu a:hover {
-  background-color: #f8f8f8;
-}
-
-.navbar-links .dropdown:hover .dropdown-menu {
-  display: block;
 }
 
 /* Responsive Styles */

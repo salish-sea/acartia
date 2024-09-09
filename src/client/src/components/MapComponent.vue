@@ -10,7 +10,7 @@ import MapFilterComponent from './MapFilterComponent.vue'
 import mapboxgl from 'mapbox-gl';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { getPopupHtmlString, legendColorMap } from '../mapUtils'
+import { generateMatchExpression, sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData, getPopupHtmlString, legendColorMap } from '../mapUtils'
 
 dayjs.extend(customParseFormat)
 
@@ -37,8 +37,6 @@ export default {
       // Grab access token for Mapbox
       mapboxgl.accessToken = this.mapboxKey
 
-      //TODO: use styles on the map????
-
       // Initialise mapbox container
       const map = new mapboxgl.Map({
         container: 'mapContainer',
@@ -63,16 +61,6 @@ export default {
       }
 
       const currentPage = this.getParent;
-
-      // Function to generate the mapboxgl match expression
-      function generateMatchExpression(colorMappings) {
-        const matchExpression = ['match', ['get', 'type']];
-        for (const [type, color] of Object.entries(colorMappings)) {
-          matchExpression.push(type, color);
-        }
-        matchExpression.push('#000000'); // Set default to black if type doesn't match any
-        return matchExpression;
-      }
 
       // On load event
       map.on('load', function () {
@@ -176,8 +164,6 @@ export default {
       })
 
 
-
-
       // Click listener to display extra information upon clicking on a sightings point
       map.on('click', 'ssemmi-map-layer', function (e) {
         let coordinates = e.features[0].geometry.coordinates.slice();
@@ -199,112 +185,29 @@ export default {
       this.$store.commit("setMap", map)
     },
     loadSightings() {
-      // Call the method to retreive data
-      let dataPoints = []
-      let speciesList = new Set()
-      let contributorList = new Set()
-
       this.$store.dispatch("get_sightings")
         .then((currSights) => {
-          Object.values(currSights).forEach((value) => {
-            //get curr date
-            // Create new array instance of two numbers for mapbox marker coordinate
-            if (value && value.created) {
-              // Check if the fields for the sighting is valid or compatible
-              let filtered_long = (isNaN(value.longitude)) ? 1 : value.longitude
-              let filtered_lat = (isNaN(value.latitude)) ? 1 : value.latitude
-              let filtered_sightings = (isNaN(value.no_sighted)) ? 1 : value.no_sighted
-              let filtered_date = dayjs('2011-01-01 20:00:00')
-              let days_ago = 0
-              let f_day = 1
-              let f_month = 1
-              let f_year = 2011
-              let f_epoch_date = new Date().getTime()
+          //sort data first then grab reference to the most recent sighting for the reports page
+          let dataPoints = sortApiDataChronologically(currSights)
+          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 1])
+          console.log("last", lastSighting);
+          this.$store.commit("setLastSighting", lastSighting)
 
-              if (filtered_date.isValid()) {
-                filtered_date = dayjs(value.created.substr(0, 10).split(' ')[0], ['YYYY-MM-DD', 'MM/DD/YY', 'DD/MM/YY', 'D/M/YY'])
-                f_day = filtered_date.date()
-                f_month = filtered_date.month() + 1
-                f_year = filtered_date.year()
-                days_ago = dayjs().diff(filtered_date, 'day')
-                f_epoch_date = new Date(filtered_date).getTime()
-              }
+          dataPoints = transformApiDataToMappableData(dataPoints)
+          let { speciesList, contributorList } = getSpeciesAndContributors(dataPoints)
 
-              const sightingEntry = {
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [filtered_long, filtered_lat]
-                },
-                "properties": {
-                  "entity": value.data_source_entity,
-                  "ssemmi_id": value.ssemmi_id,
-                  "created": value.created,
-                  "type": value.type,
-                  "day": f_day,
-                  "month": f_month,
-                  "year": f_year,
-                  "epoch_date": f_epoch_date,
-                  "no_sighted": filtered_sightings,
-                  "days_ago": days_ago.toString(),
-                  "witness": value.data_source_witness,
-                  "comments": value.data_source_comments,
-                  "ssemmi_date_added": value.ssemmi_date_added,
-                  "verified": value.trusted,
-                  "sightingRef": value.entry_id,
-                }
-              }
-
-              dataPoints.push(sightingEntry)
-            }
-          })
-
-          //Sort data chronologically. Required as filtering by date uses a sliding window.
-          dataPoints.sort((a, b) => {
-            if (dayjs(a.properties.created.slice(0, 19)).isBefore(dayjs(b.properties.created.slice(0, 19)))) {
-              return -1
-            } else {
-              return 1
-            }
-          })
-
-          //Collect species and contributors
-          dataPoints.forEach(sighting => {
-            speciesList.add(sighting.properties.type)
-            contributorList.add(sighting.properties.witness)
-          })
-
-          //Sort species and contributors alphabetically, disregarding case
-          speciesList = [...speciesList]
-          speciesList = speciesList.filter(species => {
-            if (!species) {
-              return false
-            } else {
-              return true
-            }
-          }).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-
-          contributorList = [...contributorList]
-          contributorList = contributorList.filter(contributor => {
-            if (!contributor) {
-              return false
-            } else {
-              return true
-            }
-          }).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-
-          //Store sightings and filter options in store
+          //Commit filter options to store
           this.$store.commit("setMapOptions", {
             contributors: contributorList,
             species: speciesList
           })
 
+          //Commit sightings to store
           this.$store.commit("setSightings", dataPoints)
 
           //Apply default filters on first render.
           //Reduces initial page load by only mapping previous 7 days of data.
           this.$store.commit("applyMapFilters")
-
           this.mapSightings()
           this.$store.commit("setActiveMapLayer", this.getActiveMapLayer)
         })
@@ -338,7 +241,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #mapContainer {
   width: 100%;
   height: 100%;
