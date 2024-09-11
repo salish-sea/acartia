@@ -720,7 +720,13 @@ export const store = new Vuex.Store(
               reject()
             })
         })
+      },
+
+      forgot_password() {
+        //return Promise.reject("The email you entered did not match our records");  
+        return Promise.resolve("success!");
       }
+
     },
   }
 )
