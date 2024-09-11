@@ -1,39 +1,40 @@
 // LOGIN PAGE
 
 <template>
-
   <div>
     <section class="login--section">
       <h1 class="header">Welcome back!</h1>
 
      <!-- TODO: the error message should be received from the backend instead of hardcoded --> 
       <ErrorMessage v-if="isError">The email and/or password you entered did not match our records.</ErrorMessage>
+      <form>
+        <TextInput 
+          v-model.trim="loginData.email" 
+          label="Email" 
+          inputType="text" 
+          :hideShowButton="false" 
+          :isError="isError"
+        />
+        <TextInput 
+          v-model.trim="loginData.password" 
+          label="Password" 
+          inputTypeProp="password" 
+          :hideShowButton="true" 
+          :isError="isError"
+        />
 
-      <TextInput 
-        v-model.trim="loginData.email" 
-        label="Email" 
-        inputType="text" 
-        :hideShowButton="false" 
-        :isError="isError"
-      />
-      <TextInput 
-        v-model.trim="loginData.password" 
-        label="Password" 
-        inputTypeProp="password" 
-        :hideShowButton="true" 
-        :isError="isError"
-      />
+        <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
 
-      <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
-
-      <button 
-        @click="loginMethod" 
-        class="standard-btn" 
-        :style="{backgroundColor : isLoading ?  '#80D7DD' : '#BFEBED'}" 
-        :disabled="isLoading"
-      >
-        {{ isLoading ? "Loading..." : "Log in" }}
-      </button>
+        <button 
+          @click="loginMethod" 
+          class="standard-btn" 
+          :style="{backgroundColor : isLoading ?  '#80D7DD' : '#BFEBED'}" 
+          :disabled="isLoading"
+        >
+          {{ isLoading ? "Loading..." : "Log in" }}
+        </button>
+      </form>
+      
 
       <div id="NoAccount">
         <p>Don't have an account? <a id="signup" href="/register">Sign up</a></p> 
@@ -49,7 +50,6 @@
       <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
     </section>
   </div>
-
 </template>
 
 <script>
@@ -152,7 +152,7 @@ hr {
 
 .header {
   font-family: "Mukta";
-  font-weight: 600;
+  font-weight: 400;
   font-size: 32px;
   line-height: 32px;
   color: #3D3951; 
@@ -185,8 +185,10 @@ hr {
 }
 
 #ForgotPassword {
-  margin-top: -14px;
-  margin-left: auto;
+  margin-top: -14px !important;
+  margin-left: auto !important;
+  display: block; /* necessary when wrapped inside a form element apparently */
+  text-align:right;
 }
 
 #signup {
