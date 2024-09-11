@@ -4,27 +4,81 @@
   </header>
   <section class="forgot-password-section">
     <h1 class="header">Forgot password?</h1>
+
+    <ErrorMessage v-if="isError">{{ errorMessage }}</ErrorMessage>
+
     <div class="description">
       <p>Enter your email and we'll send you a link to reset your password.</p>
     </div>
-    <TextInput v-model.trim="email" label="Email" inputType="text" :hideShowButton="false" :borderStyle="inputBorder"/>
-    <button class="standard-btn">Request a reset link</button>
+
+    <TextInput 
+      v-if="!isSubmitted"
+      v-model.trim="loginData.email" 
+      label="Email" 
+      inputTypeProp="text" 
+      :hideShowButton="false" 
+      :isError="isError"
+    />
+
+    <button class="standard-btn" :disabled="isLoading" @click="buttonAction" :style="{ backgroundColor: isLoading ? '#80D7DD' : '#BFEBED' }">
+      {{ buttonText }}
+    </button>
     <a class="link" href="/login">Return to login</a>
   </section>
 </div>
 </template>
 <script>
 import TextInput from '../TextInput.vue'
+import ErrorMessage from '../ErrorMessage.vue'
 
 export default {
   name: "ForgotPassword",
   components: {
     TextInput,
+    ErrorMessage,
   },
   data() {
     return {
-      inputBorder: "1px solid #3D3951",
-      email: null,
+      loginData: {},
+      errorMessage: "",
+      isLoading: false,
+      isError: false,
+      isSubmitted: false,
+    }
+  },
+  methods: {
+    submitEmail() {
+      this.isLoading = true;
+      this.$store.dispatch('forgot_password')
+      .then( (message) => {
+        console.log(message);
+        setTimeout(() => this.isLoading = false, 900);
+        setTimeout(() => this.isSubmitted = true, 900);
+        //this.isLoading = false;
+        //this.isSubmitted = true;
+      })
+      .catch( (message) => {
+        console.log(message);
+        setTimeout(() => this.isLoading = false, 900);
+        setTimeout(() => this.isError = true, 900);
+        console.log(message);
+        this.errorMessage = message;
+        //this.isError = true;
+        //this.isLoading = false;
+      })
+    },
+  },
+  computed: {
+    buttonText() {
+      let ret = "Request a reset link";
+      if (this.isLoading)
+        ret = "Loading...";
+      else if (this.isSubmitted)
+        ret = "Resend reset link";
+      return ret;
+    },
+    buttonAction() {
+      return this.isSubmitted ? () => this.isSubmitted = false : this.submitEmail;
     }
   }
 }
