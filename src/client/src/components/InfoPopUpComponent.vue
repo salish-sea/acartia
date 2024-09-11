@@ -3,7 +3,7 @@
 <template>
   <div>
     <img class="info-icon" src="../assets/info-icon.svg" @click="toggleInfo"/>
-    <div v-if="this.showPopUp" id="dark-overlay">
+    <div v-if="this.showPopUp" id="dark-overlay" >
       <div id="pop-up">
         <div id="title-container">
           <h1>How to use the Acartia map</h1>
@@ -97,7 +97,7 @@ ul {
   position: fixed;
   top: 100px;
   left: 24px;
-  z-index: 99999;
+  z-index: 99998;
   background-color: white;
   border-radius: 50%;
 }
