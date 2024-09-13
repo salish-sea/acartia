@@ -14,7 +14,7 @@
         </div>
 
         <!-- Species Legend -->
-        <div v-if="showingLegend" class="speciesLegend ">
+        <div v-if="showingLegend && !isMobile" class="speciesLegend ">
           <p v-if="noSightingsData" class="filter-header-text">No available data</p>
 
           <div v-for="option in speciesLegendOptions" :key="option" :value="option" class="legend-entry">
