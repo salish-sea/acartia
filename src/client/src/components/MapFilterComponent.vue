@@ -74,8 +74,8 @@
 
       <!-- Collapse Button -->
       <div class="collapse-btn-open" @click="toggleSidebar">
-        <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="chevron-open" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 18l6-6-6-6" />
         </svg>
       </div>
@@ -133,8 +133,8 @@
 
       <!-- Collapse Button -->
       <div class="collapse-btn-closed" @click="toggleSidebar">
-        <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="chevron-closed" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </div>
@@ -316,8 +316,14 @@ export default {
   cursor: pointer;
 }
 
-.chevron {
-  margin-top: 0.4rem;
+.chevron-open {
+  margin-top: 0.3rem;
+  margin-left: 0.4rem;
+}
+
+.chevron-closed {
+  margin-top: 0.3rem;
+  margin-left: 0.2rem;
 }
 
 .collapse-btn-open {
@@ -326,7 +332,7 @@ export default {
   border-radius: 100%;
   background-color: white;
   position: fixed;
-  top: 50%;
+  top: 45%;
   right: 410px;
   z-index: 99999;
 }
@@ -356,7 +362,7 @@ export default {
   width: 40px;
   background-color: white;
   position: fixed;
-  top: 50%;
+  top: 45%;
   right: 1.6rem;
   z-index: 99999;
 }
