@@ -26,6 +26,7 @@ import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
 import { getNDaysAgo } from './dateUtils'
 import { filterSightingData } from './mapUtils'
+import { sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData } from './mapUtils'
 
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
@@ -235,20 +236,29 @@ export const store = new Vuex.Store(
       filteredSightings: [],
       lastSighting: {},
       mapFilters: Object.assign({}, initFilterState),
+      tableFilters: Object.assign({}, initFilterState),
       mapOptions: {
         contributors: [],
         species: [],
       },
       map: null,
       activeMapLayer: "ssemi-map-layer",
+      loading: false,
+      error: null
     },
     mutations: {
+      setLoading(state, isLoading) {
+        state.loading = isLoading;
+      },
+      setError(state, error) {
+        state.error = error;
+      },
       resetMapFilters(state) {
         state.mapFilters = Object.assign({}, initFilterState)
         state.filteredSightings = filterSightingData(state.sightings, state.mapFilters)
 
         //Rerender map
-        if (state.map) {
+        if (state.map && state.map.getSource(state.activeMapLayer)) {
           state.map.getSource(state.activeMapLayer).setData({
             "type": "FeatureCollection",
             "features": state.filteredSightings
@@ -315,15 +325,30 @@ export const store = new Vuex.Store(
         state.filteredSightings = filterSightingData(state.sightings, state.mapFilters)
 
         //Rerender map
-        if (state.map) {
+        if (state.map && state.map.getSource(state.activeMapLayer)) {
           state.map.getSource(state.activeMapLayer).setData({
             "type": "FeatureCollection",
             "features": state.filteredSightings
           })
         }
       },
+      setTableFilterSpecies(state, species) {
+        state.tableFilters.species = species
+      },
+      setTableFilterContributor(state, contributor) {
+        state.tableFilters.contributor = contributor
+      },
+      setTableFilterDateBegin(state, dateBegin) {
+        state.tableFilters.dateBegin = dateBegin
+      },
+      setTableFilterDateEnd(state, dateEnd) {
+        state.tableFilters.dateEnd = dateEnd
+      },
     },
     getters: {
+      getUserAuthStatus: state => {
+        return state.isAuthenticated
+      },
       getUserToken: state => {
         return state.token
       },
@@ -363,6 +388,56 @@ export const store = new Vuex.Store(
       }
     },
     actions: {
+      async fill_store({ commit }) {
+        commit('setLoading', true);
+        try {
+          let requestAuth = {}
+          let endpoint
+          // Check if user has access token
+          if (store.state.userDetails.token) {
+            endpoint = '/v1/sightings'
+            // Format the token into header for requesting sightings requests
+            requestAuth.headers = {
+              'Authorization': 'Bearer ' + process.env.VUE_APP_MASTER_KEY,
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          } else {
+            endpoint = '/v1/sightings/current'
+            requestAuth.headers = {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+
+          // Pass headers of admin to retreive user requests
+          let sightings = await axios.get(`${process.env.VUE_APP_WEB_SERVER_URL}${endpoint}`, requestAuth)
+
+          //sort data first then grab reference to the most recent sighting for the reports page
+          let dataPoints = sortApiDataChronologically(sightings.data)
+          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 1])
+          commit("setLastSighting", lastSighting)
+
+          dataPoints = transformApiDataToMappableData(dataPoints)
+          let { speciesList, contributorList } = getSpeciesAndContributors(dataPoints)
+
+          //Commit filter options to store
+          commit("setMapOptions", {
+            contributors: contributorList,
+            species: speciesList
+          })
+
+          //Commit sightings to store
+          commit("setSightings", dataPoints)
+
+          //Apply default filters on first render.
+          //Reduces initial page load by only mapping previous 7 days of data.
+          commit("applyMapFilters")
+
+        } catch (error) {
+          commit('setError', error);
+        } finally {
+          commit('setLoading', false);
+        }
+      },
       // Check session data upon creation or refresh
       init_store({ commit }) {
         const userToken = sessionStorage.getItem('userToken')
