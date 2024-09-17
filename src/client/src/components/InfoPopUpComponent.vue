@@ -3,11 +3,11 @@
 <template>
   <div>
     <img class="info-icon" src="../assets/info-icon.svg" @click="toggleInfo"/>
-    <div v-if="this.showPopUp" id="dark-overlay">
+    <div v-if="this.showPopUp" id="dark-overlay" >
       <div id="pop-up">
         <div id="title-container">
-          <h1>How to use the Acartia map</h1>
           <a id="close-button" @click="toggleInfo"><img src="../assets/cross.svg"/></a>
+          <h1>How to use the Acartia map</h1>
         </div>
         <p>
           Explore the map, and to expore a data point, click on it to uncover
@@ -97,26 +97,10 @@ ul {
   position: fixed;
   top: 100px;
   left: 24px;
-  z-index: 99999;
+  z-index: 99998;
   background-color: white;
   border-radius: 50%;
 }
-
-/* Temporary fix until it is decided how to handle mobile screens */
-@media screen and (max-width: 600px) {
-  .info-icon {
-    display: none;
-  }
-}
-
-/*
-  currently when the height of the pop up exceeds 75% of the height of the
-  screen the pop up becomes scrollable.
-  another solution could be simply to limit the number of list items
-  allowed to be expanded to be one (expand one, the other one retracts)
-
-  TBD - tom
-*/
 
 #pop-up {
   background-color: white;
@@ -152,4 +136,12 @@ ul {
   background-color: rgba(0, 0, 0, 0.25);
   z-index: 99998;
 }
+
+@media (max-width: 900px) {
+  #pop-up {
+    width: 100%;
+    max-height: 100%;
+  }
+}
+
 </style>

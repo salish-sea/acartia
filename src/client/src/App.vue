@@ -1,10 +1,17 @@
 <template>
   <div>
     <nav id="navbar-top">
-      <router-link to="/home" class="navbar-brand">
-        <img src="@/assets/nav-bar-icon.svg" alt="Nav Bar Icon" class="nav-bar-icon" />
-        Acartia
-      </router-link>
+
+      <div class="nav-icons-group">
+        <router-link to="/home" class="navbar-brand">
+          <img src="@/assets/nav-bar-icon.svg" alt="Nav Bar Icon" class="nav-bar-icon" />
+          <span class="nav-bar-icon-text">ACARTIA</span>
+        </router-link>
+
+        <input class="responsive-menu" id="responsive-menu" type="checkbox" v-model="checkk"/>
+        <label class="hamburgie" for="responsive-menu"><span class="hamb-line"></span></label>
+      </div>
+
       <div class="navbar-links">
         <div class="dropdown">
           <button class="dropbtn" :class="{'active': isActive('/data-explorer') || isActive('/heatmap') || isActive('/home')}">
@@ -65,6 +72,7 @@ export default {
   data() {
     return {
       isDropdownOpen: null,
+      checkk: false,
     };
   },
   created() {
@@ -111,13 +119,15 @@ export default {
   background-color: #E6F7F9;
   padding: 10px 24px;
   display: flex;
-  align-items: center;
+  align-items: space-between;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Navbar Brand */
 .navbar-brand {
+  justify-content: left;
+
   display: flex;
   align-items: center;
   font-family: 'Mukta', sans-serif;
@@ -293,6 +303,64 @@ export default {
   color: white;
 }
 
+
+.nav-icons-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Hamburger menu */
+.hamburgie {
+  display: none;
+  cursor: pointer;
+  margin: 0;
+}
+.hamb-line {
+  background: #00585D;
+  display: block;
+  height: 2px;
+  position: relative;
+  width: 32px;
+}
+.hamb-line::before,
+.hamb-line::after {
+  background: #00585D;
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%
+}
+.hamb-line::before {
+  top: 10px;
+}
+.hamb-line::after{
+  top: -10px;
+}
+.responsive-menu {
+  display: none;
+}
+
+.responsive-menu:checked {
+  max-height: 100%;
+}
+.responsive-menu:checked ~ .hamburgie .hamb-line {
+  background: transparent;
+}
+.responsive-menu:checked ~ .hamburgie .hamb-line::before {
+  transform: rotate(-45deg);
+  top: 0;
+}
+.responsive-menu:checked ~ .hamburgie .hamb-line::after {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   #navbar-top {
@@ -300,22 +368,58 @@ export default {
   }
 
   .navbar-links {
+    display: none;
     margin-left: 0;
     margin-top: 10px;
     width: 100%;
+    flex-direction: column;
+  }
+
+  .dropdown {
+    width: 100%;
+  }
+
+  .dropdown button {
+    padding: 10px 0px;
   }
 
   .auth-links {
-    margin-left: 0;
-    margin-top: 10px;
-    width: 100%;
-    justify-content: flex-end;
+    display: none;
+    flex-direction: column; 
+    margin: 0;
   }
 
-  .navbar-links a, .auth-links a {
+  .auth-links a {
     width: 100%;
     text-align: left;
+    margin: 0;
+
+    display: block;
+    background: none;
+    border: #00585D;
+  }
+
+  .navbar-links a {
+    width: 100%;
+    text-align: left;
+    margin: 0;
     padding: 10px 0;
+  }
+
+  .nav-bar-icon-text {
+    display: none;
+  }
+
+  .hamburgie {
+    display: block;
+  }
+
+  #navbar-top:has(.responsive-menu:checked) {
+    border-radius:  0px 0px 20px 20px;
+  }
+
+  #navbar-top:has(.responsive-menu:checked) .navbar-links, #navbar-top:has(.responsive-menu:checked) .auth-links {
+    display: flex;
   }
 }
 </style>
