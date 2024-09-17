@@ -17,6 +17,7 @@ import ForgotPassword from './components/Pages/ForgotPassword'
 import Profile from './components/Pages/ProfilePage.vue';
 import Reports from './components/Pages/ReportsPage.vue';
 import Contributions from './components/Pages/ContributionPage'
+import Contribute from './components/Pages/ContributePage'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
 import 'bootstrap-css-only/css/bootstrap.min.css'
@@ -203,6 +204,7 @@ const router = new Router({
       component: ManageData
     },
     {
+      //Partners page
       path: '/reset-password',
       name: 'ResetPassword',
       component: ResetPassword,
@@ -217,6 +219,12 @@ const router = new Router({
       path: '/partners',
       name: 'Partners',
       component: Partners
+    },
+    {
+      //Contribute page
+      path: '/contribute',
+      name: 'Contribute',
+      component: Contribute
     },
   ]
 })
