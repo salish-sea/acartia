@@ -1,5 +1,9 @@
 <template>
+
+
   <div class="all-components-container">
+
+    <LoadingSpinner v-if="isLoading" />
 
     <div class="top-row">
       <div class="component width-9 ">
@@ -32,13 +36,14 @@
 </template>
 
 <script>
-import { transformApiDataToMappableData, getSpeciesAndContributors, sortApiDataChronologically } from '../../mapUtils'
+import { mapActions } from 'vuex';
 import PrimaryChart from './ReportComponents/PrimaryChart.vue';
 import LastSighting from './ReportComponents/LastSighting.vue';
 import TopContributors from './ReportComponents/TopContributors.vue';
 import Stats from './ReportComponents/Stats.vue';
 import SecondaryChart from './ReportComponents/SecondaryChart.vue';
 import TableSightings from './ReportComponents/TableSightings.vue';
+import LoadingSpinner from './ReportComponents/LoadingSpinner.vue';
 
 export default {
   name: 'ReportsPage',
@@ -50,26 +55,22 @@ export default {
     Stats,
     SecondaryChart,
 
-    TableSightings
+    TableSightings,
+
+    LoadingSpinner
   },
-  created() {
-    if (this.$store.getters.getSightings.length == 0) {
-      this.$store.dispatch("get_sightings")
-        .then((currSights) => {
-          let dataPoints = sortApiDataChronologically(currSights)
-          let lastSighting = dataPoints[dataPoints.length - 1]
-          this.$store.commit("setLastSighting", lastSighting)
-
-          dataPoints = transformApiDataToMappableData(dataPoints)
-          let { speciesList, contributorList } = getSpeciesAndContributors(dataPoints)
-
-          this.$store.commit("setMapOptions", {
-            contributors: contributorList,
-            species: speciesList
-          })
-
-          this.$store.commit("setSightings", dataPoints)
-        })
+  methods: {
+    ...mapActions(['fill_store']),
+  },
+  computed: {
+    isLoading() {
+      return this.$store.state.loading
+    }
+  },
+  async created() {
+    if (this.$store.state.sightings.length === 0) {
+      console.log("GETTING sighintgs because of report page")
+      await this.fill_store()
     }
   },
 }

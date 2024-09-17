@@ -4,7 +4,8 @@
 
 <script>
 import mapboxgl from 'mapbox-gl';
-import { generateMatchExpression, sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData, legendColorMap } from '../../../mapUtils'
+import { generateMatchExpression, transformApiDataToMappableData, legendColorMap } from '../../../mapUtils'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Map',
@@ -13,12 +14,15 @@ export default {
   data() {
     return {
       mapboxKey: process.env.VUE_APP_MAPBOX_KEY,
+      map: null,
     }
   },
   created() {
-    this.loadSightings()
+    this.mapSightings
   },
   methods: {
+    //TODO: wait for loading state before loading map.
+    //Try rerendering in inwatcher on last sighting state.
     mapSightings() {
       // Grab access token for Mapbox
       mapboxgl.accessToken = this.mapboxKey
@@ -27,13 +31,20 @@ export default {
       const map = new mapboxgl.Map({
         container: 'lastSightingContainer',
         style: 'mapbox://styles/mapbox/light-v10',
-        center: [this.lastSighting.longitude, this.lastSighting.latitude],
+        center: [this.getLastSighting.longitude, this.getLastSighting.latitude],
         zoom: 7.0
       });
 
+      //Save reference to map for rerendering
+      this.map = map
+
+      if (this.$store.state.loading) {
+        return
+      }
+
       let geoData = {
         "type": "FeatureCollection",
-        "features": transformApiDataToMappableData([this.lastSighting])
+        "features": transformApiDataToMappableData([this.getLastSighting])
       }
 
       // On load event
@@ -61,43 +72,14 @@ export default {
         })
       })
     },
-    loadSightings() {
-      this.$store.dispatch("get_sightings")
-        .then((currSights) => {
-          //sort data first then grab reference to the most recent sighting for the reports page
-          let dataPoints = sortApiDataChronologically(currSights)
-          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 1])
-          this.$store.commit("setLastSighting", lastSighting)
-
-          dataPoints = transformApiDataToMappableData(dataPoints)
-          let { speciesList, contributorList } = getSpeciesAndContributors(dataPoints)
-
-          //Commit filter options to store
-          this.$store.commit("setMapOptions", {
-            contributors: contributorList,
-            species: speciesList
-          })
-
-          //Commit sightings to store
-          this.$store.commit("setSightings", dataPoints)
-
-          //Apply default filters on first render.
-          //Reduces initial page load by only mapping previous 7 days of data.
-          this.$store.commit("applyMapFilters")
-          this.mapSightings()
-          this.$store.commit("setActiveMapLayer", this.getActiveMapLayer)
-        })
-    },
   },
   computed: {
-    filteredSightings() {
-      return this.$store.getters.getFilteredSightings
-    },
+    ...mapGetters(['getLastSighting']),
     lastSighting() {
       return this.$store.getters.getLastSighting
-    }
+    },
   },
-  updated() {
+  mounted() {
     this.mapSightings()
   }
 }

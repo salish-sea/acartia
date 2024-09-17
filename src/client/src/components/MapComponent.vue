@@ -10,10 +10,10 @@ import MapFilterComponent from './MapFilterComponent.vue'
 import mapboxgl from 'mapbox-gl';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { generateMatchExpression, sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData, getPopupHtmlString, legendColorMap } from '../mapUtils'
+import { generateMatchExpression, getPopupHtmlString, legendColorMap } from '../mapUtils'
+import { mapActions } from 'vuex';
 
 dayjs.extend(customParseFormat)
-
 
 export default {
   name: 'Map',
@@ -26,13 +26,16 @@ export default {
       mapView: null,
     }
   },
-  created() {
-    this.loadSightings()
-  },
-  updated() {
-    this.loadSightings()
+  async mounted() {
+    if (this.sightings.length === 0) {
+      console.log("empty sightings on the map page")
+      await this.fill_store()
+    }
+
+    this.mapSightings()
   },
   methods: {
+    ...mapActions(['fill_store']),
     mapSightings() {
       // Grab access token for Mapbox
       mapboxgl.accessToken = this.mapboxKey
@@ -184,36 +187,11 @@ export default {
       //Save reference to the map for rerendering
       this.$store.commit("setMap", map)
     },
-    loadSightings() {
-      this.$store.dispatch("get_sightings")
-        .then((currSights) => {
-          //sort data first then grab reference to the most recent sighting for the reports page
-          let dataPoints = sortApiDataChronologically(currSights)
-          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 1])
-          console.log("last", lastSighting);
-          this.$store.commit("setLastSighting", lastSighting)
-
-          dataPoints = transformApiDataToMappableData(dataPoints)
-          let { speciesList, contributorList } = getSpeciesAndContributors(dataPoints)
-
-          //Commit filter options to store
-          this.$store.commit("setMapOptions", {
-            contributors: contributorList,
-            species: speciesList
-          })
-
-          //Commit sightings to store
-          this.$store.commit("setSightings", dataPoints)
-
-          //Apply default filters on first render.
-          //Reduces initial page load by only mapping previous 7 days of data.
-          this.$store.commit("applyMapFilters")
-          this.mapSightings()
-          this.$store.commit("setActiveMapLayer", this.getActiveMapLayer)
-        })
-    },
   },
   computed: {
+    sightings() {
+      return this.$store.state.sightings
+    },
     isAuth() {
       return this.$store.state.isAuthenticated
     },

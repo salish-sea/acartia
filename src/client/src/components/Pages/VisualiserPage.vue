@@ -1,14 +1,19 @@
 <template>
-    <Map />
+    <div>
+        <Info/>
+        <Map />
+    </div>
 </template>
 
 <script>
 import Map from '../MapComponent'
+import Info from '../InfoPopUpComponent'
 
 export default {
     name: 'Visualiser',
     components: {
-        Map
+        Map,
+        Info
     },
 }
 </script>
