@@ -100,4 +100,8 @@ hr {
   text-align: left;
 }
 
+.list-image-container img {
+  width: 100%;
+}
+
 </style>
