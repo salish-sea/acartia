@@ -29,6 +29,8 @@ import { getNDaysAgo } from './dateUtils'
 import { filterSightingData } from './mapUtils'
 import { sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData } from './mapUtils'
 
+import TestBench from './components/Pages/TestBench'
+
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
 
