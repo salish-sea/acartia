@@ -29,8 +29,6 @@ import { getNDaysAgo } from './dateUtils'
 import { filterSightingData } from './mapUtils'
 import { sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData } from './mapUtils'
 
-import TestBench from './components/Pages/TestBench'
-
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
 
@@ -808,7 +806,7 @@ export const store = new Vuex.Store(
       },
 
       forgot_password() {
-        //return Promise.reject("The email you entered did not match our records");  
+        //return Promise.reject("The email you entered did not match our records");
         return Promise.resolve("success!");
       }
 
