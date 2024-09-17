@@ -1,13 +1,14 @@
 <template>
     <div id="about-container">
-        <div class="page-desc">
+        <div class="partner-desc">
             <h2>Our Partners</h2>
-            <p id="left">
-                Our partners provide the essential data showcased on our platform, offering a comprehensive resource for marine enthusiasts, researchers, and conservationists globally.
-            </p>
-            <p id="middle">
+            <div id="left">
+                <span>Our partners provide the essential data showcased on our platform, offering a</span> 
+                <span>comprehensive resource for marine enthusiasts, researchers, and conservationists globally.</span>
+            </div>
+            <div id="middle">
                 Click on each partners icon to see more information about the company
-            </p>
+            </div>
         </div>
         
         <div class="partners">
@@ -41,11 +42,12 @@
                     </div>
                 </mdb-row>
             </mdb-container>
-        </div>
-
-        <div class="page-links">
             <mdb-row>
-                <a href="/dashboard" class="link2">See our partners data contrbution</a>
+                <mdb-col col="12">
+                    <div class="page-links">
+                        <a href="https://github.com" class="link2">See our partners data contributions<img src="@/assets/right-arrow.svg" alt="Right Arrow" class="rightarrow"/></a>
+                    </div>
+                </mdb-col>
             </mdb-row>
         </div>
     </div>
@@ -67,14 +69,14 @@ import {mdbContainer, mdbRow, mdbCol} from 'mdbvue';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
 
-.page-desc {
+.partner-desc {
     text-align: center;
-    width: 50%;
-    padding: 5%;
-    margin: auto;
     position: relative;
-    margin-left: 5%;
-    display: inline-table;
+    width: 743px;
+    height: auto;
+    margin: auto;
+    top: 54px;
+    padding-bottom: 108px;
 }
 
 #container{
@@ -85,11 +87,13 @@ import {mdbContainer, mdbRow, mdbCol} from 'mdbvue';
     margin-left: 25%;
 }
 
-h2 {
+.partner-desc h2 {
     font-family: 'Mukta';
     font-size: 44px !important;
     font-weight: 600 !important;
-    line-height: 44px;
+    line-height: 44px !important;
+    text-align: center !important;
+    color: rgba(61, 57, 81, 1);
 }
 
 #left {
@@ -97,6 +101,12 @@ h2 {
     font-family: 'Montserrat';
     font-weight: 400;
     font-size: 16px;
+    line-height: 22.4px;
+    margin-top: 24px;
+}
+
+#left span {
+    display: block;
 }
 
 #middle {
@@ -104,6 +114,8 @@ h2 {
     font-family: 'Montserrat';
     font-weight: 400;
     font-size: 16px;
+    line-height: 22.4px;
+    margin-top: 24px;
 }
 
 a:link {
@@ -132,29 +144,35 @@ a:active {
 .icon1 {
     margin-top: 20%;
     margin-bottom: 10%;
+    text-align: center;
 }
 
 .icon2 {
     margin-top: 37%;
+    text-align: center;
 }
 
 .icon3 {
     margin-top: 50%;
+    text-align: center;
 }
 
 .icon4 {
     margin-top: 50%;
     margin-bottom: 10%;
+    text-align: center;
 }
 
 .icon5 {
     margin-top: 30%;
     font-weight: 500;
+    text-align: center;
 }
 
 .icon6 {
     margin-top: 15%;
     font-weight: 500;
+    text-align: center;
 }
 
 .sm {
@@ -167,6 +185,7 @@ a:active {
 .rounded-xl {
     border-radius: 16px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    border-style: hidden !important;
 }
 
 #orcasound {
@@ -206,21 +225,24 @@ a:active {
     padding-top: 15%;
 }
 
+.page-links {
+    padding: 10px 12px 10px 12px;
+    margin-bottom: 54px;
+}
+
 .link2 {
     font-weight: 500;
     font-family: 'Montserrat';
     font-size: 16px;
     line-height: 22.4px;
     display: inline-block;
-    text-align: center;
-    margin-left: 45%;
+    margin-left: 42%;
 }
 
-.righticon {
+.rightarrow {
     position: relative;
-    top: -20px;
-    right: -290px;
     display: inline-block;
-    line-height: 22.4px;
+    margin-left: 8px;
+    padding-bottom: 2px;
 }
 </style>
