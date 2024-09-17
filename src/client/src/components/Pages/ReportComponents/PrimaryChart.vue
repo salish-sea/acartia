@@ -6,13 +6,38 @@
 
 <script>
 import * as d3 from 'd3'
+import { mapGetters } from 'vuex'
+import { getSightingCountsForPrimaryChart } from '../../../dateUtils.js'
 
 export default {
   name: 'PrimaryChart',
+  computed: {
+    ...mapGetters(['getSightings']),
+    primaryChartData() {
+      return getSightingCountsForPrimaryChart(this.$store.getters.getSightings)
+    },
+    isAuth() {
+      return this.$store.getters.getUserAuthStatus
+    }
+  },
+  watch: {
+    getSightings: {
+      //Update graph when data changes
+      handler(newData) {
+        if (newData && newData.length) {
+          this.primaryChart();
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     primaryChart() {
       // set the margins of the graph
       var margin = { top: 70, right: 30, bottom: 50, left: 50 };  // Increase the top margin to make space for the title
+
+      // Remove existing SVG if it exists
+      d3.select("#primaryChart").select("svg").remove();
 
       // Select the div and set up the SVG with 100% width and height
       var svg = d3.select("#primaryChart")
@@ -33,29 +58,20 @@ export default {
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .style("font-weight", "bold")
-        .text("Reports Per Month (Year Table)");
-
-      // Dummy data
-      var data = [
-        { month: 'Jan', "2021": 300, "2022": 350, "2023": 400, "2024": 450 },
-        { month: 'Feb', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Mar', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Apr', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'May', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Jun', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Jul', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Aug', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Sep', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Oct', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Nov', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-        { month: 'Dec', "2021": Math.random() * 300, "2022": Math.random() * 300, "2023": Math.random() * 300, "2024": Math.random() * 300 },
-      ];
+        .text("Sightings Per Month (Year Table)");
 
       // List of subgroups = year
       var subgroups = ["2021", "2022", "2023", "2024"];
 
       // List of groups = months
-      var groups = data.map(d => d.month);
+      var groups = this.primaryChartData.map(d => d.month);
+
+      // Determine the maximum value in the data
+      var maxValue = d3.max(this.primaryChartData, function (d) {
+        return d3.max(subgroups, function (key) {
+          return d[key] || 0;
+        });
+      });
 
       // Add X axis
       var x = d3.scaleBand()
@@ -68,12 +84,12 @@ export default {
 
       // Add Y axis
       var y = d3.scaleLinear()
-        .domain([0, 300])
+        .domain([0, maxValue])
         .range([height, 0]);
       svg.append("g")
-        .call(d3.axisLeft(y).tickValues([0, 50, 100, 150, 200, 250, 300]));
+        .call(d3.axisLeft(y).tickValues(d3.range(0, maxValue + 1, Math.max(1, Math.round(maxValue / 6)))));
 
-      // Another scale for subgroup position?
+      // Another scale for subgroup position
       var xSubgroup = d3.scaleBand()
         .domain(subgroups)
         .range([0, x.bandwidth()])
@@ -82,17 +98,22 @@ export default {
       // color palette = one color per subgroup
       var color = d3.scaleOrdinal()
         .domain(subgroups)
-        .range(['#BEBEFF', '#9D9DFE', '#7C7CFE  ', '#6363CB ']);
+        .range(['#BEBEFF', '#9D9DFE', '#7C7CFE', '#6363CB']);
 
       // Tooltip
       var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
-        .style("opacity", 0);
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .style("background-color", "white")
+        .style("border", "1px solid #ccc")
+        .style("padding", "5px")
+        .style("border-radius", "3px");
 
       // Show the bars
       svg.append("g")
         .selectAll("g")
-        .data(data)
+        .data(this.primaryChartData)
         .enter()
         .append("g")
         .attr("transform", function (d) {
@@ -101,7 +122,7 @@ export default {
         .selectAll("rect")
         .data(function (d) {
           return subgroups.map(function (key) {
-            return { key: key, value: d[key] };
+            return { key: key, value: d[key], month: d.month };
           });
         })
         .enter().append("rect")
@@ -120,15 +141,17 @@ export default {
         })
         .on("mouseover", function (event, d) {
           tooltip.transition()
-            .duration(200)
             .style("opacity", .9);
-          tooltip.html("Year: " + d.key + "<br/>Value: " + Math.round(d.value))
-            .style("left", (event.pageX) + "px")
+          tooltip.html(
+            `<strong>Month:</strong> ${d.month}<br/>
+           <strong>Year:</strong> ${d.key}<br/>
+           <strong>Value:</strong> ${Math.round(d.value)}`
+          )
+            .style("left", (event.pageX + 5) + "px")
             .style("top", (event.pageY - 28) + "px");
         })
         .on("mouseout", function () {
           tooltip.transition()
-            .duration(500)
             .style("opacity", 0);
         });
 
@@ -159,14 +182,14 @@ export default {
         .text(function (d) {
           return d;
         });
-
     },
   },
   mounted() {
     this.primaryChart()
   },
+  updated() {
+  },
 }
-
 </script>
 
 
