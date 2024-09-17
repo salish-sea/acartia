@@ -37,7 +37,7 @@
                         <option value="behaviour3">behaviour 3</option>
                         <option value="behaviour4">behaviour 4</option>
                     </select>
-                    <label for="notes">Additional notes</label>
+                    <label for="notes">Additional notes </label>
                     <textarea name="notes" rows="10" cols="30"></textarea>
                 </form>
             </div>
