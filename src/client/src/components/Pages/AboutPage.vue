@@ -33,7 +33,7 @@
       <div id="links">
         <h2>Want to do more? Check out these links!</h2>
         <div class="link-items">
-          <div class="link-item">
+          <div class="link-item" @click="linkToContributions">
             <div class="header">
               <div class="icon-text-container">
                 <img src="@/assets/hand-icon.svg" alt="Hand Icon" class="icon" />
@@ -43,7 +43,7 @@
             </div>
             <p>New to uploading data? Click here to learn how you can provide data.</p>
           </div>
-          <div class="link-item">
+          <div class="link-item" @click="linkToGithub">
             <div class="header">
               <div class="icon-text-container">
                 <img src="@/assets/github-icon.svg" alt="GitHub Icon" class="icon" />
@@ -53,7 +53,7 @@
             </div>
             <p>Integrate your application with Acartia.</p>
           </div>
-          <div class="link-item">
+          <div class="link-item" @click="linkToExportData">
             <div class="header">
               <div class="icon-text-container">
                 <img src="@/assets/download-icon.svg" alt="Download Icon" class="icon" />
@@ -106,7 +106,6 @@ export default {
   },
   methods: {
     togglePanel(index) {
-      console.log("opening", index)
       this.faqs = this.faqs.map((faq, i) => {
         return {
           ...faq,
@@ -114,6 +113,9 @@ export default {
         };
       });
     },
+    linkToContributions() { },
+    linkToGithub() { },
+    linkToExportData() { },
   },
 };
 </script>
@@ -256,6 +258,11 @@ export default {
   background: #EEF1F4;
   border-radius: 12px;
   text-align: left;
+  cursor: pointer;
+}
+
+.link-item:hover {
+  background: #D4D9DE;
 }
 
 /* Link item header with icon */
