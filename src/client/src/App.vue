@@ -272,7 +272,7 @@ export default {
   background-color: #e6f7f9;
   padding: 20px 24px;
   display: flex;
-  align-items: center;
+  align-items: space-between;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
@@ -280,6 +280,8 @@ export default {
 
 /* Navbar Brand */
 .navbar-brand {
+  justify-content: left;
+
   display: flex;
   align-items: center;
   font-family: "Mukta", sans-serif;
@@ -659,6 +661,22 @@ export default {
     filter: brightness(0) saturate(100%) invert(7%) sepia(13%) saturate(3485%)
       hue-rotate(176deg) brightness(94%) contrast(90%);
     display: block !important;
+  }
+
+  .nav-bar-icon-text {
+    display: none;
+  }
+
+  .hamburgie {
+    display: block;
+  }
+
+  #navbar-top:has(.responsive-menu:checked) {
+    border-radius:  0px 0px 20px 20px;
+  }
+
+  #navbar-top:has(.responsive-menu:checked) .navbar-links, #navbar-top:has(.responsive-menu:checked) .auth-links {
+    display: flex;
   }
 }
 </style>

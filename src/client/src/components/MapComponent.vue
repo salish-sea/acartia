@@ -10,10 +10,10 @@ import MapFilterComponent from './MapFilterComponent.vue'
 import mapboxgl from 'mapbox-gl';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { generateMatchExpression, sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData, getPopupHtmlString, legendColorMap } from '../mapUtils'
+import { generateMatchExpression, getPopupHtmlString, legendColorMap } from '../mapUtils'
+import { mapActions } from 'vuex';
 
 dayjs.extend(customParseFormat)
-
 
 export default {
   name: 'Map',
@@ -26,13 +26,28 @@ export default {
       mapView: null,
     }
   },
-  created() {
-    this.loadSightings()
-  },
-  updated() {
-    this.loadSightings()
+  async mounted() {
+    if (this.sightings.length === 0) {
+      await this.fill_store()
+    }
+    this.mapSightings()
   },
   methods: {
+    ...mapActions(['fill_store']),
+    getActiveMapLayer() {
+      let activeComponent = this.getParent
+
+      if (activeComponent === "Visualiser") {
+        return "ssemmi-map-layer"
+      } else if (activeComponent === "Heatmap") {
+        return "ssemmi-heat-layer"
+      } else if (activeComponent === "Home") {
+        return "ssemmi-map-layer"
+      } else {
+        console.log("Map rendered on incorrect page")
+        return ""
+      }
+    },
     mapSightings() {
       // Grab access token for Mapbox
       mapboxgl.accessToken = this.mapboxKey
@@ -54,6 +69,7 @@ export default {
       this.mapView = map
       // Resize map to fit into screen width
       this.mapView.resize()
+      console.log("data: ", this.filteredSightings)
 
       let geoData = {
         "type": "FeatureCollection",
@@ -61,6 +77,8 @@ export default {
       }
 
       const currentPage = this.getParent;
+
+      this.$store.commit("setActiveMapLayer", this.getActiveMapLayer())
 
       // On load event
       map.on('load', function () {
@@ -74,66 +92,30 @@ export default {
             },
             minZoom: 0,
             paint: {
-              // increase weight as diameter breast height increases
-              'heatmap-weight': [
-                'interpolate',
-                ['linear'],
-                ['get', 'no_sighted'],
-                1,
-                2,
-                3,
-                4
-              ],
-              // Increase the heatmap color weight weight by zoom level
-              // heatmap-intensity is a multiplier on top of heatmap-weight
-              'heatmap-intensity': [
-                'interpolate',
-                ['linear'],
-                ['zoom'],
-                3,
-                1,
-                4,
-                3
-              ],
-              // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-              // Begin color ramp at 0-stop with a 0-transparancy color
-              // to create a blur-like effect.
               'heatmap-color': [
                 'interpolate',
                 ['linear'],
                 ['heatmap-density'],
-                0,
-                'rgba(33,102,172,.1)',
-                0.2,
-                'rgb(103,169,207)',
-                0.4,
-                'rgb(209,229,240)',
-                0.6,
-                'rgb(253,219,199)',
-                0.8,
-                'rgb(233,156,119)',
-                1,
-                'rgb(227,67,86)'
+                0, 'rgba(33,102,172,0)',
+                0.2, 'rgba(103,169,207,1)',
+                0.4, 'rgba(209,229,240,1)',
+                0.6, 'rgba(253,219,199,1)',
+                0.8, 'rgba(239,138,98,1)',
+                1, 'rgba(178,24,43,1)'
               ],
-              // Adjust the heatmap radius by zoom level
               'heatmap-radius': [
                 'interpolate',
                 ['linear'],
                 ['zoom'],
-                10,
-                20,
-                30,
-                50
+                0, 15,
+                15, 50
               ],
-              // Transition from heatmap to circle layer by zoom level
               'heatmap-opacity': [
                 'interpolate',
                 ['linear'],
                 ['zoom'],
-                6,
-                1,
-                9,
-                1
+                14, 1,
+                15, 0
               ]
             }
           }
@@ -184,55 +166,16 @@ export default {
       //Save reference to the map for rerendering
       this.$store.commit("setMap", map)
     },
-    loadSightings() {
-      this.$store.dispatch("get_sightings")
-        .then((currSights) => {
-          //sort data first then grab reference to the most recent sighting for the reports page
-          let dataPoints = sortApiDataChronologically(currSights)
-          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 1])
-          console.log("last", lastSighting);
-          this.$store.commit("setLastSighting", lastSighting)
-
-          dataPoints = transformApiDataToMappableData(dataPoints)
-          let { speciesList, contributorList } = getSpeciesAndContributors(dataPoints)
-
-          //Commit filter options to store
-          this.$store.commit("setMapOptions", {
-            contributors: contributorList,
-            species: speciesList
-          })
-
-          //Commit sightings to store
-          this.$store.commit("setSightings", dataPoints)
-
-          //Apply default filters on first render.
-          //Reduces initial page load by only mapping previous 7 days of data.
-          this.$store.commit("applyMapFilters")
-          this.mapSightings()
-          this.$store.commit("setActiveMapLayer", this.getActiveMapLayer)
-        })
-    },
   },
   computed: {
+    sightings() {
+      return this.$store.state.sightings
+    },
     isAuth() {
       return this.$store.state.isAuthenticated
     },
     getParent() {
       return this.$parent.$options.name
-    },
-    getActiveMapLayer() {
-      let activeComponent = this.getParent
-
-      if (activeComponent === "Visualiser") {
-        return "ssemmi-map-layer"
-      } else if (activeComponent === "Heatmap") {
-        return "ssemmi-heat-layer"
-      } else if (activeComponent === "Home") {
-        return "ssemmi-map-layer"
-      } else {
-        console.log("Map rendered on incorrect page")
-        return ""
-      }
     },
     filteredSightings() {
       return this.$store.getters.getFilteredSightings

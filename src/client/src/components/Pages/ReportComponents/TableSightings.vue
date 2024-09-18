@@ -83,6 +83,38 @@ export default {
     }
   },
   computed: {
+    contributor: {
+      get() {
+        return this.$store.state.tableFilters.contributor
+      },
+      set(value) {
+        this.$store.commit('setTableFilterContributor', value)
+      },
+    },
+    species: {
+      get() {
+        return this.$store.state.tableFilters.species
+      },
+      set(value) {
+        this.$store.commit('setTableFilterSpecies', value)
+      },
+    },
+    dateBegin: {
+      get() {
+        return this.$store.state.tableFilters.dateBegin
+      },
+      set(value) {
+        this.$store.commit('setTableFilterDateBegin', value)
+      },
+    },
+    dateEnd: {
+      get() {
+        return this.$store.state.tableFilters.dateEnd
+      },
+      set(value) {
+        this.$store.commit('setTableFilterDateEnd', value)
+      },
+    },
     tableSightings() {
       if (this.viewingMore) {
         return this.$store.getters.getSightings
@@ -90,6 +122,7 @@ export default {
         return this.$store.getters.getSightings.slice(0, 5)
       }
     },
+    //same as the map options saved in the store. Reusable filed for the table.
     contributorOptions: {
       get() {
         return this.$store.state.mapOptions.contributors

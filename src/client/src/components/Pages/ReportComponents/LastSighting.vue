@@ -48,7 +48,7 @@ export default {
       return this.$store.getters.getLastSighting?.type
     },
     mostRecentSightingProfileName() {
-      return this.$store.getters.getLastSighting?.profile.name
+      return this.$store.getters.getLastSighting?.profile?.name
     },
     mostRecentSightingDate() {
       return this.$store.getters.getLastSighting?.created

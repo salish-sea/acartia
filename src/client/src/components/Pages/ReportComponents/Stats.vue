@@ -13,7 +13,7 @@
       </div>
     </div>
     <p class="fw-bold">Last Data Update</p>
-    <p>{{ mostRecentSightingDate.slice(0, 10) }}</p>
+    <p>{{ mostRecentSightingDate }}</p>
     <div class="slider">
       <div class="divider-active"></div>
       <div class="divider"></div>
@@ -28,7 +28,11 @@ export default {
   name: 'Stats',
   computed: {
     mostRecentSightingDate() {
-      return this.$store.getters.getLastSighting?.created
+      let date = this.$store.getters.getLastSighting?.created
+      if (date) {
+        date = date.slice(0, 10)
+      }
+      return date
     },
     speciesCount() {
       return this.$store.getters.getMapOptions?.species?.length

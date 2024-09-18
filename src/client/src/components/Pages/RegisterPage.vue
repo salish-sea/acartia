@@ -2,10 +2,19 @@
 <div>
   <!-- Title and header on the UI -->
   <div style="padding: 5%">
+    <div class="back-button-div">
+        <button class="back-button" @click="HandleBack" v-if="currentStage == 'intent' || currentStage == 'guidelines'"> 
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="20" fill="#080D26" fill-opacity="0.05"/>
+          <path d="M18.3333 25.8327L12.5 19.9993M12.5 19.9993L18.3333 14.166M12.5 19.9993L27.5 19.9993" stroke="#3D3951" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+    </div>
     <section  class="register--section">
       <!-- UI for passing register details -->
+      
       <div>
-        <form class='register--form' >
+        <form class='register--form' @submit="register">
           <!-- First Section - "Start" -->
            <div class="start" v-if="currentStage == 'start' ">
           <h1 class="mukta-regular" id="register-heading">Register</h1>
@@ -34,7 +43,7 @@
           </fieldset>
           <div>
             <button class="montserrat-regular button-next" @click="HandleNext($event)">Next</button>
-            <p class="montserrat-light">Already have an account? Log in</p>
+            <p class="montserrat-light">Already have an account? <a href="/login">Log in</a></p>
           </div>
           <div class="line-container">
               <hr class="line">
@@ -47,19 +56,19 @@
            <div class="intent" v-if="currentStage == 'intent'">
             <h1 class="mukta-regular" id="intent-heading">How do you intend to use Acartia?</h1>
               <fieldset class="checkbox-group">
-                <div class="check-div">
+                <div class="check-div check-intent">
                   <div class="check-border">
                     <input type="checkbox" id="browse-data" value="browse">
                   </div>
                   <label class="inter-regular" for="browse-data">Browse data</label>
                 </div>
-                <div class="check-div">
+                <div class="check-div check-intent">
                   <div class="check-border">
                     <input type="checkbox" id="contribute-data" value="contribute">
                   </div>
                   <label class="inter-regular" for="contribute-data">Contribute data</label>
                 </div>
-                <div class="check-div">
+                <div class="check-div check-intent">
                   <div class="check-border">
                     <input type="checkbox" id="other" value="other">
                   </div>
@@ -71,11 +80,38 @@
               </div>
            </div>
            <!-- Third Section - Community Guidelines -->
-           <div class="guidelines" ></div>
+           <div class="guidelines" v-if="currentStage=='guidelines'">
+              <h1 class="mukta-regular" id="intent-heading">Community Guidelines</h1>
+              <div class="guidelineBorder">
+                <p class="montserrat-light">
+                The goal of Acartia is to advance marine conservation and science across  the Salish Sea and Cascadia by sharing animal locations -- both  historical and real-time data. Registration is free, access is open and  free, and the code underlying the decentralized data cooperative is open  source.
+                Users of this data cooperative agree to these community rules:<br>
+                1. Shared data will only include animals observed in marine environments.<br>
+                2. All data provided will align with the Acartia data scheme and standards.<br>
+                3. Any data use will heed our Creative Commons BY license.  Proper attribution includes a link to acartia.io, acknowledgement of  each data provider, and preservation of the provenance of each data  point.<br>
+                4. All data will be  used with the intention of promoting marine conservation and responsible  human interaction with marine wildlife, including adherence to U.S. and  Canadian laws and the Be Whale Wise guidelines.<br>
+                (CC) Attribution should include a link to acartia.io and listing of providers of the data you use.
+                </p>
+              </div>
+              <fieldset class="checkbox-group guideCheck">
+                <div class="check-div">
+                  <div class="check-border">
+                    <input type="checkbox" id="understood" value="understood">
+                  </div>
+                  <label class="inter-regular" for="understood">I have read and understood the community guidelines</label>
+                </div>
+                <div class="check-div">
+                  <div class="check-border">
+                    <input type="checkbox" id="emails" value="emails">
+                  </div>
+                  <label class="inter-regular" for="emails">I agree to receive emails from the Acartia newsletter</label>
+                </div>
+              </fieldset>
+              <button class="montserrat-regular button-next" type="submit">Sign up</button>
+           </div>
         </form>
       </div>
     </section>
-   
   </div>
 </div>
 </template>
@@ -108,6 +144,16 @@ export default {
         this.currentStage = "guidelines"
       }
     },
+
+    HandleBack(){
+      if (this.currentStage == "guidelines"){
+        this.currentStage = "intent"
+      }
+      else if (this.currentStage == "intent"){
+        this.currentStage = "start"
+      }
+    },
+
     register(event) {
 
       if (!this.registerUserData.email) {
@@ -167,7 +213,6 @@ export default {
 
   .register--form {
     width: 100%;
-    max-width: 500px; /* Adjust this to your preferred width */
     padding: 20px;
     margin: 0 auto; /* Centers the form horizontally */
   }
@@ -241,11 +286,13 @@ export default {
   
   .check-div {
     margin: 20px 0;
-    width: 400px;
     display: flex;
     align-items: flex-start;
     transform: translateX(12%);
    
+  }
+  .check-intent {
+    width: 400px;
   }
   .checkbox-group input[type="checkbox"] {
     transform: scale(2.3) !important;
@@ -315,5 +362,42 @@ export default {
   margin: 10px;
 }
 
-  
+.guidelineBorder {
+  margin: 0 auto; /* Center the box */
+  padding: 20px; /* Add padding for better text spacing */
+  border: 1px solid #3D3951;
+  border-radius: 6px;
+  text-align: left;
+}
+.start {
+  max-width: 500px;
+}
+.intent {
+  max-width: 500px;
+}
+.guidelines{
+  justify-content: center;
+  max-width: 928px;
+}
+.guideCheck {
+  align-items: flex-start;
+}
+a {
+  color: #007B83;
+}
+.back-button {
+  background-color: white;
+  border: none;
+  transform: translateX(-35vw);
+}
+.back-button:focus{
+  outline: none;
+}
+.intent{
+  transform: translateY(-50%);
+}
+.guidelines{
+  transform: translateY(-10%)
+}
+
 </style>
