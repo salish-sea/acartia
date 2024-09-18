@@ -1,31 +1,26 @@
 <template>
-<div>
-  <header class="forgot-password-header">
-  </header>
-  <section class="forgot-password-section">
-    <h1 class="header">Forgot password?</h1>
+  <div>
+    <header class="forgot-password-header">
+    </header>
+    <section class="forgot-password-section">
+      <h1 class="header">Forgot password?</h1>
 
-    <ErrorMessage v-if="isError">{{ errorMessage }}</ErrorMessage>
+      <ErrorMessage v-if="isError">{{ errorMessage }}</ErrorMessage>
 
-    <div class="description">
-      <p>Enter your email and we'll send you a link to reset your password.</p>
-    </div>
+      <div class="description">
+        <p>Enter your email and we'll send you a link to reset your password.</p>
+      </div>
 
-    <TextInput 
-      v-if="!isSubmitted"
-      v-model.trim="loginData.email" 
-      label="Email" 
-      inputTypeProp="text" 
-      :hideShowButton="false" 
-      :isError="isError"
-    />
+      <TextInput v-if="!isSubmitted" v-model.trim="loginData.email" label="Email" inputTypeProp="text"
+        :hideShowButton="false" :isError="isError" />
 
-    <button class="standard-btn" :disabled="isLoading" @click="buttonAction" :style="{ backgroundColor: isLoading ? '#80D7DD' : '#BFEBED' }">
-      {{ buttonText }}
-    </button>
-    <a class="link" href="/login">Return to login</a>
-  </section>
-</div>
+      <button class="standard-btn" :disabled="isLoading" @click="buttonAction"
+        :style="{ backgroundColor: isLoading ? '#80D7DD' : '#BFEBED' }">
+        {{ buttonText }}
+      </button>
+      <a class="link" href="/login">Return to login</a>
+    </section>
+  </div>
 </template>
 <script>
 import TextInput from '../TextInput.vue'
@@ -50,22 +45,21 @@ export default {
     submitEmail() {
       this.isLoading = true;
       this.$store.dispatch('forgot_password')
-      .then( (message) => {
-        console.log(message);
-        setTimeout(() => this.isLoading = false, 900);
-        setTimeout(() => this.isSubmitted = true, 900);
-        //this.isLoading = false;
-        //this.isSubmitted = true;
-      })
-      .catch( (message) => {
-        console.log(message);
-        setTimeout(() => this.isLoading = false, 900);
-        setTimeout(() => this.isError = true, 900);
-        console.log(message);
-        this.errorMessage = message;
-        //this.isError = true;
-        //this.isLoading = false;
-      })
+        .then((message) => {
+          console.log(message);
+          setTimeout(() => this.isLoading = false, 900);
+          setTimeout(() => this.isSubmitted = true, 900);
+          //this.isLoading = false;
+          //this.isSubmitted = true;
+        })
+        .catch((message) => {
+          setTimeout(() => this.isLoading = false, 900);
+          setTimeout(() => this.isError = true, 900);
+          console.log(message);
+          this.errorMessage = message;
+          //this.isError = true;
+          //this.isLoading = false;
+        })
     },
   },
   computed: {
@@ -84,7 +78,6 @@ export default {
 }
 </script>
 <style scoped>
-
 .forgot-password-section {
   width: 327px;
   margin-left: auto;
@@ -99,7 +92,7 @@ export default {
   font-weight: 600;
   font-size: 32px;
   line-height: 32px;
-  color: #3D3951; 
+  color: #3D3951;
   text-align: center;
   margin-top: 100px;
 }
