@@ -312,7 +312,6 @@ export const store = new Vuex.Store(
       },
       setActiveMapLayer(state, layer) {
         state.activeMapLayer = layer
-        console.log("active layer: ", state.activeMapLayer)
       },
       setFilterVerifiedOnly(state, verifiedStatus) {
         state.mapFilters.verifiedOnly = verifiedStatus
@@ -460,7 +459,6 @@ export const store = new Vuex.Store(
           const requestOpts = {
             'access_token': process.env.VUE_APP_MASTER_KEY
           }
-          console.log(process.env.VUE_APP_WEB_SERVER_URL)
           //Header post method to authenticate login by passing login details
           axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/auth/`, requestOpts, {
             auth: {
@@ -484,7 +482,6 @@ export const store = new Vuex.Store(
               }
               sessionStorage.setItem('userToken', user.data.token)
               // Login success
-              console.log(`Login successful, Hello ${user.data.user.name}`)
 
               resolve("Login successful!")
             })
@@ -544,7 +541,6 @@ export const store = new Vuex.Store(
             axios.get(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/requests`, requestAuth)
               // Add list of users into the store of user requests
               .then(users => {
-                // console.log(users.data)
                 commit('setUserRequestList', users.data)
                 resolve(users)
               })
@@ -576,7 +572,6 @@ export const store = new Vuex.Store(
             axios.get(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users`, requestAuth)
               // Add list of users into the store of users
               .then(users => {
-                // console.log(users.data)
                 commit('setUserList', users.data)
                 resolve(users)
               })
@@ -607,7 +602,6 @@ export const store = new Vuex.Store(
           axios.get(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/${store.state.userDetails.user.id}/tokens`, requestAuth)
             // Add list of users into the store of users
             .then(tokens => {
-              // console.log(users.data)
               commit('setTokenList', tokens.data)
               resolve(tokens)
             })
@@ -627,7 +621,6 @@ export const store = new Vuex.Store(
             }
           }
 
-          console.log(tokenName)
           //Header post method to authenticate login by passing login details
           axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/${store.state.userDetails.user.id}/tokens`,
             {
@@ -661,7 +654,6 @@ export const store = new Vuex.Store(
             }
           }
 
-          console.log(formData)
           //Header post method to authenticate login by passing login details
           axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/${store.state.userDetails.user.id}/profile`,
             formData,
@@ -705,11 +697,9 @@ export const store = new Vuex.Store(
 
           // Create IPFS instance with optional config
           const ipfs = await IPFS.create(ipfsOptions)
-          console.log(ipfs)
 
           // Create OrbitDB instance
           const orbitdb = await OrbitDB.createInstance(ipfs)
-          console.log(orbitdb)
 
           // Connect to the peer id of the backend orbitdb database (NOTE: this will be an env variable)
           await orbitdb._ipfs.swarm.connect('/ip4/127.0.0.1/tcp/4003/ws/p2p/QmWdwcHK2ih8VzP9jacLPKGBdmxzZf1F3Nvo9pqj5Q4QcN')
@@ -719,10 +709,9 @@ export const store = new Vuex.Store(
 
           // Emit log message when db has synced with another peer
           db2.events.on('replicated', (address) => {
-            console.log(`Replicated ${address}`)
+            console.log(address)
             const getData = db2.get('')
             // Set data from synchronisation into store
-            console.log("tf is this: ", getData)
             commit('setSightings', getData)
           })
 
