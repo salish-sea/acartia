@@ -69,7 +69,6 @@ export default {
   },
   async created() {
     if (this.$store.state.sightings.length === 0) {
-      console.log("GETTING sighintgs because of report page")
       await this.fill_store()
     }
   },

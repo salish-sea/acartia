@@ -69,7 +69,6 @@ export default {
       this.mapView = map
       // Resize map to fit into screen width
       this.mapView.resize()
-      console.log("data: ", this.filteredSightings)
 
       let geoData = {
         "type": "FeatureCollection",
