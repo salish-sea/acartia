@@ -113,8 +113,13 @@ export default {
         };
       });
     },
-    linkToContributions() { },
-    linkToGithub() { },
+    linkToContributions() {
+      this.$router.push('/integrate')
+      this.$router.go()
+    },
+    linkToGithub() {
+      window.open('https://github.com/salish-sea/acartia', '_blank');
+    },
     linkToExportData() { },
   },
 };
