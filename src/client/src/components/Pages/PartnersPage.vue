@@ -104,7 +104,6 @@ export default {
 }
 
 #left {
-  text-align: left;
   text-align: center;
   font-family: 'Montserrat';
   font-weight: 400;
