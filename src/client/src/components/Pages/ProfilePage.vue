@@ -4,7 +4,7 @@
     <aside :class="{ 'secondary-navigation': true, collapsed: !isMenuVisible }">
       <div class="profile-overview" v-if="isMenuVisible">
         <div class="image-placeholder">
-          <img :src="profilePicture" alt="Profile Picture" />
+          <img src="../../assets/profile-placeholder.svg" alt="Profile Picture" />
         </div>
         <div class="text-fields">
           <p class="name">{{ userDetails.name }}</p>
@@ -64,7 +64,7 @@
       <h1>Account Settings</h1>
       <div class="profile-picture-section">
         <div class="image-placeholder large">
-          <img :src="userDetails.logoFile" alt="Profile Picture" />
+          <img src="../../assets/profile-placeholder.svg" alt="Profile Picture" />
         </div>
         <button class="edit-icon">
           <img src="@/assets/edit-icon.svg" alt="Edit Icon" />
@@ -261,8 +261,8 @@ export default {
       confirmPassword: "",
       isMenuVisible: true,
       notificationMessage: "",
-      notificationType: "", // 'success-message' or 'error-message'
-      disPage: "", // Tracks the current page view
+      notificationType: "",
+      disPage: "AccountSettings",
       passwordFieldType: "password",
       userTokens: [],
       searchTerm_token: "",
@@ -279,7 +279,7 @@ export default {
       return this.$store.getters.getUserDetails;
     },
     profilePicture() {
-      return "@/assets/profile-placeholder.svg";
+      return '../../assets/profile-placeholder.svg'
     },
     paginatedContributions() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -601,9 +601,7 @@ export default {
 
 .menu-icon {
   width: 1.5rem;
-
   height: 1.5rem;
-
   margin: 0 auto;
 }
 
@@ -655,16 +653,11 @@ export default {
   background: rgba(8, 13, 38, 0.1);
   border-radius: 0.625rem;
   padding: 0.25rem;
-
   cursor: pointer;
   width: 2.5rem;
-
   height: 2.5rem;
-
-  top: 92%;
-
-  left: 90%;
-
+  top: 99%;
+  left: 99%;
   transform: translate(-50%, -50%);
 }
 
