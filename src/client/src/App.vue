@@ -240,6 +240,7 @@ export default {
   }
 
   .hamburger-menu img {
+    margin-top: 0.8rem;
     width: 32px;
     height: 32px;
   }
@@ -454,7 +455,7 @@ export default {
   .button-primary {
     background: #00afba;
     color: #0c0826;
-    margin-left: 3rem;
+    margin-left: 2rem;
   }
 
   /* Secondary Button */
@@ -561,10 +562,6 @@ export default {
 
   .nav-bar-icon-text {
     display: none;
-  }
-
-  .hamburgie {
-    display: block;
   }
 
   #navbar-top:has(.responsive-menu:checked) {
