@@ -20,26 +20,29 @@
       :isError="isError"
     />
 
-    <button class="standard-btn" :disabled="isLoading" @click="buttonAction" :style="{ backgroundColor: isLoading ? '#80D7DD' : '#BFEBED' }">
+    <Button @click.native="buttonAction" :isLoading="isLoading" :formData="this.loginData">
       {{ buttonText }}
-    </button>
+    </Button>
+
     <a class="link" href="/login">Return to login</a>
   </section>
 </div>
 </template>
 <script>
-import TextInput from '../TextInput.vue'
-import ErrorMessage from '../ErrorMessage.vue'
+import TextInput from '../Form/TextInput.vue'
+import ErrorMessage from '../Form/ErrorMessage.vue'
+import Button from '../Form/Button.vue'
 
 export default {
   name: "ForgotPassword",
   components: {
     TextInput,
     ErrorMessage,
+    Button,
   },
   data() {
     return {
-      loginData: {},
+      loginData: { email: ""},
       errorMessage: "",
       isLoading: false,
       isError: false,
@@ -77,6 +80,20 @@ export default {
         ret = "Resend reset link";
       return ret;
     },
+    buttonBackgroundColor() {
+      for (var prop in this.loginData) {
+        if (Object.prototype.hasOwnProperty.call(this.loginData, prop)) {
+          console.log(prop === null);
+          if (this.loginData[prop] === null)
+            return "#BFEBED";
+        }
+      }
+
+      return "#00AFBA";
+    },
+    buttonColor() {
+      return this.buttonBackgroundColor === "#00AFBA" ? "#0C0826" : "6D6B7D";
+    },
     buttonAction() {
       return this.isSubmitted ? () => this.isSubmitted = false : this.submitEmail;
     }
@@ -84,6 +101,10 @@ export default {
 }
 </script>
 <style scoped>
+
+button {
+  margin-top: 40px;
+}
 
 .forgot-password-section {
   width: 327px;
@@ -112,24 +133,6 @@ export default {
   border-color: #3D3951;
 
   margin-top: 15px;
-}
-
-.standard-btn {
-  width: 327px;
-  height: 48px;
-  border-radius: 10px;
-  border-width: 0;
-  padding: 10px 24px 10px 24px;
-  box-shadow: none !important;
-  color: #6D6B7D;
-  background-color: #BFEBED;
-  text-transform: none;
-  font-family: "Montserrat";
-  font-weight: 400;
-  font-size: 16px;
-  outline: none !important;
-
-  margin-top: 40px;
 }
 
 .link {

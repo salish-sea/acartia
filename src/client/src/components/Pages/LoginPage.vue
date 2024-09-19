@@ -25,14 +25,9 @@
 
         <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
 
-        <button 
-          @click="loginMethod" 
-          class="standard-btn" 
-          :style="{backgroundColor : isLoading ?  '#80D7DD' : '#BFEBED'}" 
-          :disabled="isLoading"
-        >
-          {{ isLoading ? "Loading..." : "Log in" }}
-        </button>
+        <Button class="standard-btn" @click.native="loginMethod" :isLoading="isLoading" :formData="loginData">
+          {{  isLoading ? "Loading..." : "Log in" }}
+        </Button>
       </form>
       
 
@@ -54,18 +49,20 @@
 
 <script>
 
-import TextInput from "../TextInput.vue"
-import ErrorMessage from "../ErrorMessage.vue"
+import TextInput from "../Form/TextInput.vue"
+import ErrorMessage from "../Form/ErrorMessage.vue"
+import Button from "../Form/Button.vue"
 
 export default {
   name: 'Login',
   components: {
     TextInput,
     ErrorMessage,
+    Button,
   },
   data() {
     return {
-      loginData: {},
+      loginData: {email: "", password: ""},
       isLoading: false,
       isError: false,
     }
@@ -135,10 +132,6 @@ hr {
   outline: none !important;
 
   margin-top: 40px;
-}
-
-.loading-btn {
-  background-color: red;
 }
 
 .forgot-password-section {

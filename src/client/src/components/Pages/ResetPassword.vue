@@ -1,61 +1,58 @@
 <template>
-<div>
-  <section v-if="showForm" class="reset-password-section">
-    <h1 class="header">
-      {{ isSubmitted ? "Your password has been reset" : "Reset Password" }}
-    </h1>
+  <div>
+    <section v-if="showForm" class="reset-password-section">
+      <h1 class="header">
+        {{ isSubmitted ? "Your password has been reset" : "Reset Password" }}
+      </h1>
 
-    <ErrorMessage v-if="isError" v-html="errorMessage"></ErrorMessage>
+      <ErrorMessage v-if="isError" v-html="errorMessage"></ErrorMessage>
 
-    <div v-if="!isSubmitted" class="description">
-      <p>A request has been made to reset your password. If you made this request enter a new password below.</p>
-    </div>
-    <form v-if="!isSubmitted" @submit.prevent>
-      <TextInput 
-        v-model.trim="data.password"
-        label="Password" 
-        inputTypeProp="password" 
-        :hideShowButton="true"
-        :isError="isError"
-      />
-      <TextInput 
-        v-model.trim="data.confirmPassword"
-        label="Confirm Password" 
-        inputTypeProp="password" 
-        :hideShowButton="true"
-        :isError="isError"
-      />
-      <button 
-        class="standard-btn" 
-        @click="resetPassword" 
-        :disabled="isLoading" 
-        :style="{ backgroundColor: isLoading ? '#80D7DD' : '#BFEBED' }"
-      >
-        Reset password
-      </button>
-    </form>
-    
-    
-    <button v-if="isSubmitted" class="standard-btn" @click="$router.replace({name: 'Login'})">
-      Log In
-    </button>
-  </section>
-</div>
+      <div v-if="!isSubmitted" class="description">
+        <p>A request has been made to reset your password. If you made this request enter a new password below.</p>
+      </div>
+      <form v-if="!isSubmitted" @submit.prevent>
+        <TextInput 
+          v-model.trim="data.password"
+          label="Password" 
+          inputTypeProp="password" 
+          :hideShowButton="true"
+          :isError="isError"
+        />
+        <TextInput 
+          v-model.trim="data.confirmPassword"
+          label="Confirm Password" 
+          inputTypeProp="password" 
+          :hideShowButton="true"
+          :isError="isError"
+        />
+
+        <Button @click.native="resetPassword" :isLoading="isLoading" :formData="data">
+          Reset password
+        </Button>
+
+      </form>
+
+      <Button v-if="isSubmitted" @click.native="$router.replace({name: 'Login'})">
+        Log In
+      </Button>
+    </section>
+  </div>
 </template>
 <script>
-import TextInput from '../TextInput.vue';
-import ErrorMessage from '../ErrorMessage.vue';
-
+import TextInput from '../Form/TextInput.vue';
+import ErrorMessage from '../Form/ErrorMessage.vue';
+import Button from '../Form/Button.vue';
 
 export default {
   name: "reset-password",
   components: {
     TextInput,
     ErrorMessage,
+    Button,
   },
   data() {
     return {
-      data: {},
+      data: { password: "", confirmPassword: ""},
       errorMessage: "",
       isLoading: false,
       isSubmitted: false,
@@ -111,6 +108,10 @@ export default {
 </script>
 <style scoped>
 
+button {
+  margin-top: 16px;
+}
+
 .header {
   width: 411px;
   font-family: "Mukta";
@@ -146,25 +147,8 @@ export default {
   margin-top: 10px;
 }
 
-.standard-btn {
-  width: 327px;
-  height: 48px;
-  border-radius: 10px;
-  border-width: 0;
-  padding: 10px 24px 10px 24px;
-  box-shadow: none !important;
-  color: #6D6B7D;
-  background-color: #BFEBED;
-  text-transform: none;
-  font-family: "Montserrat";
-  font-weight: 400;
-  font-size: 16px;
-  outline: none !important;
-
-  margin-top: 16px;
-}
-
 .error-message {
   width: 327px;
 }
+
 </style>
