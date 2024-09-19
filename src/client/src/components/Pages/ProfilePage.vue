@@ -54,7 +54,7 @@
     </aside>
 
     <!-- Main Content Area -->
-    <section v-if="disPage === 'AccountSettings'" class="profile-content">
+    <section v-if="currentPage === 'AccountSettings'" class="profile-content">
       <!-- Notification Area -->
       <div v-if="notificationMessage" :class="['notification-message', notificationType]" @click="clearNotification">
         <img id="notif-msg-icon" src="@/assets/notif-msg-icon.svg" alt="" />
@@ -103,7 +103,7 @@
     </section>
 
     <!-- Active Token Page -->
-    <section v-if="disPage === 'ActiveTokens'" class="token-content">
+    <section v-if="currentPage === 'ActiveTokens'" class="token-content">
       <h1>Active Tokens</h1>
 
       <!-- Search and Filter -->
@@ -156,7 +156,7 @@
     </section>
 
     <!-- Main Content Area -->
-    <section v-if="disPage === 'YourContributions'" class="contributions-content">
+    <section v-if="currentPage === 'YourContributions'" class="contributions-content">
       <!-- Page Header -->
       <h1>Your Contributions</h1>
 
@@ -211,11 +211,11 @@
 
       <!-- Pagination -->
       <div class="pagination">
-        <button class="pagination-button" @click="previousPage" :disabled="currentPage === 1">
+        <button class="pagination-button" @click="previousPage" :disabled="currentPageNumber === 1">
           <img src="@/assets/chevron-left.svg" alt="Previous Page" />
         </button>
-        <span>{{ currentPage }} / {{ totalPages }}</span>
-        <button class="pagination-button" @click="nextPage" :disabled="currentPage === totalPages">
+        <span>{{ currentPageNumber }} / {{ totalPages }}</span>
+        <button class="pagination-button" @click="nextPage" :disabled="currentPageNumber === totalPages">
           <img src="@/assets/chevron-right.svg" alt="Next Page" />
         </button>
       </div>
@@ -228,7 +228,7 @@
     </section>
 
     <!-- Delete Account Section -->
-    <section v-if="disPage === 'DeleteAccount'" class="profile-content delete-account-content">
+    <section v-if="currentPage === 'DeleteAccount'" class="profile-content delete-account-content">
       <h1>Delete your account?</h1>
       <p>
         You will lose all your data by deleting your account, and your
@@ -262,7 +262,7 @@ export default {
       isMenuVisible: true,
       notificationMessage: "",
       notificationType: "",
-      disPage: "AccountSettings",
+      currentPage: "AccountSettings",
       passwordFieldType: "password",
       userTokens: [],
       searchTerm_token: "",
@@ -270,7 +270,7 @@ export default {
       searchTerm_contribution: "",
       contributions: fakeContributions,
       activeFilters: ["Species: Species A"],
-      currentPage: 1,
+      currentPageNumber: 1,
       itemsPerPage: 10,
     };
   },
@@ -282,7 +282,7 @@ export default {
       return '../../assets/profile-placeholder.svg'
     },
     paginatedContributions() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const start = (this.currentPageNumber - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       return this.contributions.slice(start, end);
     },
@@ -292,7 +292,7 @@ export default {
   },
   methods: {
     navigateTo(page) {
-      this.disPage = page;
+      this.currentPage = page;
     },
     logout() {
       this.$store.dispatch("auth_logout").then(() => {
@@ -401,13 +401,13 @@ export default {
       console.log("Downloading contributions");
     },
     previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
+      if (this.currentPageNumber > 1) {
+        this.currentPageNumber--;
       }
     },
     nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
+      if (this.currentPageNumber < this.totalPages) {
+        this.currentPageNumber++;
       }
     },
   },
