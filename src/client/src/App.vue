@@ -2,11 +2,8 @@
   <div>
     <nav id="navbar-top">
       <router-link to="/home" class="navbar-brand" @click="closeMobileMenu">
-        <img
-          src="@/assets/nav-bar-icon.svg"
-          alt="Nav Bar Icon"
-          class="nav-bar-icon"
-        />
+        <!-- <img src="@/assets/nav-bar-icon.svg" alt="Nav Bar Icon" class="nav-bar-icon" /> -->
+        Acartia
       </router-link>
       <div class="hamburger-menu menu-icon" @click="toggleMobileMenu">
         <img src="@/assets/hamburger-icon.svg" alt="Menu" />
@@ -15,63 +12,28 @@
         <div class="close-menu menu-icon" @click="toggleMobileMenu">
           <img src="@/assets/close-icon.svg" alt="Close Menu" />
         </div>
-        <router-link to="/home" @click.native="closeMobileMenu">
-          <img
-            src="@/assets/menu-map-icon.svg"
-            alt="Map Icon"
-            class="menu-icon"
-          />
+        <router-link to="/home" @click.native="closeMobileMenu" :class="{ active: isActive('/home') }">
+          <img src="@/assets/menu-map-icon.svg" alt="Map Icon" class="menu-icon" />
           Home
         </router-link>
-        <router-link
-          to="/about"
-          :class="{ active: isActive('/about') }"
-          @click.native="closeMobileMenu"
-        >
-          <img
-            src="@/assets/menu-about-icon.svg"
-            alt="About Icon"
-            class="menu-icon"
-          />
+        <router-link to="/about" :class="{ active: isActive('/about') }" @click.native="closeMobileMenu">
+          <img src="@/assets/menu-about-icon.svg" alt="About Icon" class="menu-icon" />
           About
         </router-link>
-        <router-link
-          to="/partners"
-          :class="{ active: isActive('/partners') }"
-          @click.native="closeMobileMenu"
-        >
-          <img
-            src="@/assets/menu-contributors-icon.svg"
-            alt="Contributors Icon"
-            class="menu-icon"
-          />
+        <router-link to="/partners" :class="{ active: isActive('/partners') }" @click.native="closeMobileMenu">
+          <img src="@/assets/menu-contributors-icon.svg" alt="Contributors Icon" class="menu-icon" />
           Partners
         </router-link>
-        <router-link
-          to="/reports"
-          :class="{ active: isActive('/reports') }"
-          @click.native="closeMobileMenu"
-        >
-          <img
-            src="@/assets/menu-reports-icon.svg"
-            alt="Reports Icon"
-            class="menu-icon"
-          />
+        <router-link to="/reports" :class="{ active: isActive('/reports') }" @click.native="closeMobileMenu">
+          <img src="@/assets/menu-reports-icon.svg" alt="Reports Icon" class="menu-icon" />
           Reports
         </router-link>
 
         <!-- Map Dropdown -->
-        <div
-          class="dropdown"
-          @mouseenter="toggleDropdown('mapDropdown')"
-          @mouseleave="toggleDropdown(null)"
-        >
+        <div class="dropdown" @mouseenter="toggleDropdown('mapDropdown')" @mouseleave="toggleDropdown(null)"
+          :class="{ active: isActive('/data-explorer') }">
           <div class="dropdown-link">
-            <img
-              src="@/assets/menu-map-icon.svg"
-              alt="Map Icon"
-              class="menu-icon"
-            />
+            <img src="@/assets/menu-map-icon.svg" alt="Map Icon" class="menu-icon" />
             Map
           </div>
           <div v-if="isDropdownOpen === 'mapDropdown'" class="dropdown-content">
@@ -85,27 +47,14 @@
         </div>
 
         <!-- Contribute Dropdown -->
-        <div
-          v-if="isAuth"
-          class="dropdown"
-          @mouseenter="toggleDropdown('contributeDropdown')"
-          @mouseleave="toggleDropdown(null)"
-        >
+        <div v-if="isAuth" class="dropdown" @mouseenter="toggleDropdown('contributeDropdown')"
+          @mouseleave="toggleDropdown(null)">
           <div class="dropdown-link">
-            <img
-              src="@/assets/menu-contribute-icon.svg"
-              alt="Contribute Icon"
-              class="menu-icon"
-            />
+            <img src="@/assets/menu-contribute-icon.svg" alt="Contribute Icon" class="menu-icon" />
             Contribute
           </div>
-          <div
-            v-if="isDropdownOpen === 'contributeDropdown'"
-            class="dropdown-content"
-          >
-            <router-link to="/integrate" v-if="isAuth"
-              >How To Contribute</router-link
-            >
+          <div v-if="isDropdownOpen === 'contributeDropdown'" class="dropdown-content">
+            <router-link to="/integrate" v-if="isAuth">How To Contribute</router-link>
             <router-link to="/upload">Upload File</router-link>
             <router-link to="/import-data">Import Data Manually</router-link>
             <router-link to="/export-data">Export Data</router-link>
@@ -115,81 +64,39 @@
         </div>
 
         <!-- Profile Dropdown -->
-        <div
-          v-if="isAuth"
-          class="dropdown"
-          @mouseenter="toggleDropdown('profileDropdown')"
-          @mouseleave="toggleDropdown(null)"
-        >
+        <div v-if="isAuth" class="dropdown" @mouseenter="toggleDropdown('profileDropdown')"
+          @mouseleave="toggleDropdown(null)">
           <div class="dropdown-link">
-            <img
-              src="@/assets/menu-account-icon.svg"
-              class="profile-icon"
-              alt="Profile Icon"
-            />
-            <img
-              v-if="!isMobileMenuOpen"
-              src="@/assets/down-arrow-icon.svg"
-              alt="Down Arrow Icon"
-              class="down-arrow-icon"
-            />
+            <img src="@/assets/menu-account-icon.svg" class="profile-icon" alt="Profile Icon" />
+            <img v-if="!isMobileMenuOpen" src="@/assets/down-arrow-icon.svg" alt="Down Arrow Icon"
+              class="down-arrow-icon" />
             <div v-if="isMobileMenuOpen">Profile</div>
           </div>
-          <div
-            v-if="isDropdownOpen === 'profileDropdown'"
-            class="dropdown-content dropdown-offset"
-          >
+          <div v-if="isDropdownOpen === 'profileDropdown'" class="dropdown-content dropdown-offset">
             <router-link to="/profile">Contributor Profile</router-link>
             <router-link to="/user-report">User Report</router-link>
             <router-link to="/create-token">Create Token</router-link>
             <router-link to="/update-profile">Update Profile</router-link>
-            <a v-if="!isMobileMenuOpen" @click="logoutMethod"
-              ><img
-                src="@/assets/menu-sign-out-icon.svg"
-                alt="Log In Icon"
-                class="menu-icon"
-              />Log Out</a
-            >
+            <a v-if="!isMobileMenuOpen" @click="logoutMethod"><img src="@/assets/menu-sign-out-icon.svg"
+                alt="Log In Icon" class="menu-icon" />Log Out</a>
           </div>
         </div>
 
         <!-- Log Out - Visible only on mobile -->
         <div v-if="isAuth && isMobileMenuOpen">
           <div @click="logoutMethod" class="logout-link">
-            <img
-              src="@/assets/menu-sign-out-icon.svg"
-              alt="Sign Out Icon"
-              class="menu-icon"
-            />
+            <img src="@/assets/menu-sign-out-icon.svg" alt="Sign Out Icon" class="menu-icon" />
             Log Out
           </div>
         </div>
 
         <!-- Login and Sign Up -->
-        <router-link
-          to="/login"
-          v-if="!isAuth"
-          class="login-button button-primary"
-          @click.native="closeMobileMenu"
-        >
-          <img
-            src="@/assets/menu-sign-out-icon.svg"
-            alt="Log In Icon"
-            class="menu-icon"
-          />
+        <router-link to="/login" v-if="!isAuth" class="login-button button-primary" @click.native="closeMobileMenu">
+          <img src="@/assets/menu-sign-out-icon.svg" alt="Log In Icon" class="menu-icon" />
           Login
         </router-link>
-        <router-link
-          to="/register"
-          v-if="!isAuth"
-          class="signup-button button-secondary"
-          @click.native="closeMobileMenu"
-        >
-          <img
-            src="@/assets/menu-sign-up-icon.svg"
-            alt="Sign Up Icon"
-            class="menu-icon"
-          />
+        <router-link to="/register" v-if="!isAuth" class="button-secondary" @click.native="closeMobileMenu">
+          <img src="@/assets/menu-sign-up-icon.svg" alt="Sign Up Icon" class="menu-icon" />
           Sign Up
         </router-link>
       </div>
@@ -268,9 +175,10 @@ export default {
 #navbar-top {
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 99999;
+  height: 70px;
   background-color: #e6f7f9;
-  padding: 20px 24px;
+  padding: 5px 30px;
   display: flex;
   align-items: space-between;
   justify-content: space-between;
@@ -289,11 +197,6 @@ export default {
   font-weight: 700;
   color: #00585d;
   text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.navbar-brand:hover {
-  transform: scale(1.1);
 }
 
 .nav-bar-icon {
@@ -307,8 +210,7 @@ export default {
 }
 
 .menu-icon {
-  filter: brightness(0) saturate(100%) invert(7%) sepia(13%) saturate(3485%)
-    hue-rotate(176deg) brightness(94%) contrast(90%);
+  filter: brightness(0) saturate(100%) invert(7%) sepia(13%) saturate(3485%) hue-rotate(176deg) brightness(94%) contrast(90%);
 }
 
 /* Navbar Links */
@@ -319,7 +221,6 @@ export default {
   font-size: 16px;
   color: #00585d;
   text-decoration: none;
-  transition: color 0.3s ease, transform 0.3s ease; /* Add hover and transition */
 }
 
 .navbar-links a:hover,
@@ -331,15 +232,11 @@ export default {
 
 /* mobile styles */
 @media (max-width: 768px) {
+
   /* Hamburger Menu Icon */
   .hamburger-menu {
     display: block;
     cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-
-  .hamburger-menu:hover {
-    transform: rotate(90deg);
   }
 
   .hamburger-menu img {
@@ -354,11 +251,6 @@ export default {
     top: 1rem;
     right: 1rem;
     cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-
-  .close-menu:hover {
-    transform: rotate(90deg);
   }
 
   .close-menu img {
@@ -387,6 +279,7 @@ export default {
     from {
       transform: translateX(-100%);
     }
+
     to {
       transform: translateX(0);
     }
@@ -442,12 +335,14 @@ export default {
     flex-direction: column;
     background-color: inherit;
     width: 100%;
-    animation: fadeIn 0.3s forwards;   }
+    animation: fadeIn 0.3s forwards;
+  }
 
   @keyframes fadeIn {
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
@@ -477,7 +372,8 @@ export default {
   }
 
   .brand-title {
-    display: none;   }
+    display: none;
+  }
 
   .navbar-links,
   .auth-links {
@@ -518,17 +414,17 @@ export default {
   }
 
   .navbar-links {
-    display: flex;     
+    display: flex;
     align-items: center;
     gap: 1rem;
   }
 
   .navbar-links a,
   .dropdown-link {
-    padding: 0 15px;     
-    border-bottom: none;     
-    width: auto;     
-    box-sizing: content-box;     
+    padding: 0 15px;
+    border-bottom: none;
+    width: auto;
+    box-sizing: content-box;
     font-weight: bold;
   }
 
@@ -539,12 +435,11 @@ export default {
   /* Primary and Secondary Button */
   .button-primary,
   .button-secondary {
-    margin-left: 24px;     
+    margin-left: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0.85rem 1.5rem !important;
-    gap: 8px;
+    padding: 0.5rem 2rem !important;
     font-family: "Montserrat", sans-serif;
     font-style: normal;
     font-weight: 500;
@@ -558,28 +453,29 @@ export default {
   /* Primary Button */
   .button-primary {
     background: #00afba;
-    color: #0c0826;   }
+    color: #0c0826;
+    margin-left: 3rem;
+  }
 
   /* Secondary Button */
   .button-secondary {
     background: transparent;
-    color: #00585d;     
+    color: #00585d;
     border: 1px solid #00585d !important;
   }
 
   /* Button Hover Effects */
   .button-primary:hover {
-    background: #00979d !important;     
+    background: #00979d !important;
     border-color: 1px solid #00585d !important;
   }
 
   .button-secondary:hover {
-    background: rgba(
-      0,
-      88,
-      93,
-      0.1
-    ) !important;   }
+    background: rgba(0,
+        88,
+        93,
+        0.1) !important;
+  }
 
   /* Dropdown Styles */
   .dropdown {
@@ -588,17 +484,17 @@ export default {
 
   .dropdown-link {
     display: flex;
-    align-items: center;     
-    gap: 0.5rem;   
+    align-items: center;
+    gap: 0.5rem;
   }
 
   /* Style for the dropdown content */
   .dropdown-content {
     display: none;
     position: absolute;
-    top: 80% !important;
-    right: 0;     width: 10rem;
-    background-color: #bcccdb;     
+    right: 0;
+    width: 15rem;
+    background-color: #bcccdb;
     border-radius: 0 0 16px 16px;
     z-index: 999;
   }
@@ -607,14 +503,14 @@ export default {
   .dropdown:after {
     content: "*";
     position: absolute;
-    top: -1.5rem;     
-    left: -1rem;     
-    right: -1rem;     
-    bottom: -2.5rem;     
+    top: -1.5rem;
+    left: -1rem;
+    right: -1rem;
+    bottom: -2.5rem;
     color: transparent;
   }
 
-    .dropdown:hover .dropdown-content {
+  .dropdown:hover .dropdown-content {
     display: flex;
     flex-direction: column;
     margin-top: 2.85rem;
@@ -623,7 +519,8 @@ export default {
   .dropdown:hover .dropdown-content {
     right: auto;
     left: auto;
-    transform: translateX(-30%); /* Center align dropdown */
+    transform: translateX(-30%);
+    /* Center align dropdown */
   }
 
   .dropdown-content a {
@@ -635,10 +532,10 @@ export default {
     font-family: "Inter", sans-serif;
     font-weight: 400;
     font-size: 1rem;
-    line-height: 30px;     
-    color: #0c0826;     
+    line-height: 30px;
+    color: #0c0826;
     text-decoration: none;
-    border-bottom: 0.5px solid #000000;     
+    border-bottom: 0.5px solid #000000;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
   }
@@ -648,18 +545,17 @@ export default {
   }
 
   .dropdown-content a:last-child {
-    border-bottom: none;   
+    border-bottom: none;
   }
 
   .dropdown-content a:hover {
-    background-color: rgba(0, 88, 93, 0.1);   
+    background-color: rgba(0, 88, 93, 0.1);
   }
 
   .down-arrow-icon {
     width: 16px;
     height: 16px;
-    filter: brightness(0) saturate(100%) invert(7%) sepia(13%) saturate(3485%)
-      hue-rotate(176deg) brightness(94%) contrast(90%);
+    filter: brightness(0) saturate(100%) invert(7%) sepia(13%) saturate(3485%) hue-rotate(176deg) brightness(94%) contrast(90%);
     display: block !important;
   }
 
@@ -672,10 +568,11 @@ export default {
   }
 
   #navbar-top:has(.responsive-menu:checked) {
-    border-radius:  0px 0px 20px 20px;
+    border-radius: 0px 0px 20px 20px;
   }
 
-  #navbar-top:has(.responsive-menu:checked) .navbar-links, #navbar-top:has(.responsive-menu:checked) .auth-links {
+  #navbar-top:has(.responsive-menu:checked) .navbar-links,
+  #navbar-top:has(.responsive-menu:checked) .auth-links {
     display: flex;
   }
 }
