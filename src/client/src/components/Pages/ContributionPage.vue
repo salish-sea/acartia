@@ -82,9 +82,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
-
 .cont {
   color: rgba(61, 57, 81, 1);
 }
@@ -122,6 +119,7 @@ export default {
   width: 1120px;
   height: auto;
   margin: auto;
+  margin-bottom: 3rem;
   padding-top: 24px;
 }
 
