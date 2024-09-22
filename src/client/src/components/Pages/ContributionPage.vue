@@ -49,13 +49,11 @@
       </h2>
       <mdb-row class="row">
         <a class="btn btn-primary" data-mdb-ripple-init href="mailto:info@acartia.io" role="button" id="export-btn">
-          <img src="@/assets/right-icon.svg" alt="Right Icon" class="righticon2" />
           <img src="@/assets/download-icon.svg" alt="Export Icon" class="icon" />
           Export data
           <span>Download Acartia sightings data here.</span>
         </a>
         <a class="btn btn-primary" data-mdb-ripple-init href="mailto:info@acartia.io" role="button" id="contact-btn">
-          <img src="@/assets/right-icon.svg" alt="Right Icon" class="righticon3" />
           <img src="@/assets/mail-icon.svg" alt="Mail Icon" class="icon" />
           Contact us
           <span>Get in touch with Acartia.</span>
