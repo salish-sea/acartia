@@ -26,18 +26,24 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
 import { getNDaysAgo } from './dateUtils'
-import { filterSightingData } from './mapUtils'
+import { filterSightingData, filterTableData } from './mapUtils'
 import { sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData } from './mapUtils'
 
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
 
-let initFilterState = {
+let initMapFilterState = {
   dateBegin: getNDaysAgo(7),
   dateEnd: getNDaysAgo(0),
   species: ALL_SPECIES,
   contributor: ALL_CONTRIBUTORS,
   verifiedOnly: false,
+}
+
+let initTableFilterState = {
+  date: getNDaysAgo(1),
+  species: ALL_SPECIES,
+  contributor: ALL_CONTRIBUTORS,
 }
 
 Vue.config.productionTip = false
@@ -235,26 +241,42 @@ Vue.use(Vuex)
 export const store = new Vuex.Store(
   {
     state: {
+      //User state
       isAuthenticated: false,
       token: null,
       userDetails: [],
       isAdmin: false,
       userRequestList: [],
+
+      //Data state
       sightings: [],
       filteredSightings: [],
-      lastSighting: {},
-      mapFilters: Object.assign({}, initFilterState),
-      tableFilters: Object.assign({}, initFilterState),
+      lastSighting: undefined,
+      loading: false,
+      error: null,
+
+      //Map state
+      mapFilters: Object.assign({}, initMapFilterState),
       mapOptions: {
         contributors: [],
         species: [],
       },
       map: null,
       activeMapLayer: "ssemi-map-layer",
-      loading: false,
-      error: null
+
+      //Table view state
+      tableFilters: Object.assign({}, initTableFilterState),
+      tableSightings: []
     },
     mutations: {
+      applyTableFilters(state) {
+        console.log("applying ", state.tableFilters.date, state.tableFilters.species, state.tableFilters.contributor)
+        state.tableSightings = filterTableData(state.sightings, state.tableFilters)
+      },
+      emptySightings(state) {
+        state.sightings = []
+        state.filteredSightings = []
+      },
       setLoading(state, isLoading) {
         state.loading = isLoading;
       },
@@ -262,7 +284,7 @@ export const store = new Vuex.Store(
         state.error = error;
       },
       resetMapFilters(state) {
-        state.mapFilters = Object.assign({}, initFilterState)
+        state.mapFilters = Object.assign({}, initMapFilterState)
         state.filteredSightings = filterSightingData(state.sightings, state.mapFilters)
 
         //Rerender map
@@ -274,7 +296,11 @@ export const store = new Vuex.Store(
         }
       },
       setLastSighting(state, sighting) {
-        state.lastSighting = sighting
+        //Not required to set when refetching data on auth status change
+        //as it will be the same last sighting
+        if (!state.lastSighting) {
+          state.lastSighting = sighting
+        }
       },
       setAuthentication(state, status) {
         state.isAuthenticated = status
@@ -345,14 +371,14 @@ export const store = new Vuex.Store(
       setTableFilterContributor(state, contributor) {
         state.tableFilters.contributor = contributor
       },
-      setTableFilterDateBegin(state, dateBegin) {
-        state.tableFilters.dateBegin = dateBegin
-      },
-      setTableFilterDateEnd(state, dateEnd) {
-        state.tableFilters.dateEnd = dateEnd
+      setTableFilterDate(state, date) {
+        state.tableFilters.date = date
       },
     },
     getters: {
+      getTableSightings: state => {
+          return state.tableSightings
+      },
       getUserAuthStatus: state => {
         return state.isAuthenticated
       },
@@ -420,7 +446,7 @@ export const store = new Vuex.Store(
 
           //sort data first then grab reference to the most recent sighting for the reports page
           let dataPoints = sortApiDataChronologically(sightings.data)
-          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 1])
+          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 2])
           commit("setLastSighting", lastSighting)
 
           dataPoints = transformApiDataToMappableData(dataPoints)
@@ -468,6 +494,8 @@ export const store = new Vuex.Store(
           })
             // Retreive token and redirect to requested page
             .then(user => {
+              //TODO: fix  this hacky way to trigger rerender on auth status change
+              commit('emptySightings')
               // Route protection to the next page
               commit('setAuthentication', true)
               // Save retreived token to state and session storage
