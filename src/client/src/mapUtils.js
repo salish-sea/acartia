@@ -372,7 +372,7 @@ text-align:left;
         letter-spacing: -0.28px;
     "><b>Submitter: </b><span style="font-weight: 400;">
 
-    ${sighting.witness}
+    ${sighting.entity}
 
     <span></span>
 
@@ -388,7 +388,7 @@ text-align:left;
         letter-spacing: -0.28px;
     "><b>Contributor: </b><span style="font-weight: 400;">
 
-    ${sighting.entity}
+    ${sighting.witness}
 
    <span></span>
 
