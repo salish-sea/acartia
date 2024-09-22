@@ -84,6 +84,10 @@ export default {
 <style scoped>
 .cont {
   color: rgba(61, 57, 81, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .cont h1 {
@@ -119,7 +123,7 @@ export default {
   width: 1120px;
   height: auto;
   margin: auto;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   padding-top: 24px;
 }
 
@@ -165,10 +169,8 @@ export default {
 }
 
 #content3 {
-  width: 678px;
   height: auto;
-  position: relative;
-  margin: auto;
+  margin: 0px;
   padding-top: 64px;
 }
 
