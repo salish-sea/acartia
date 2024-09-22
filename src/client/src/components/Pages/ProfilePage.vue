@@ -17,27 +17,27 @@
       </div>
 
       <nav class="menu">
-        <div class="side-navigation-item" @click="navigateTo('AccountSettings')">
+        <div class="side-navigation-item" @click="navigateTo('accountSettings')">
           <img class="menu-icon" src="@/assets/menu-account-icon.svg" alt="Account Settings Icon" />
           <p v-if="isMenuVisible" class="home">Account Settings</p>
           <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div class="side-navigation-item" @click="navigateTo('ActiveTokens')">
+        <div class="side-navigation-item" @click="navigateTo('activeTokens')">
           <img class="menu-icon" src="@/assets/menu-token-icon.svg" alt="Active Tokens Icon" />
           <p v-if="isMenuVisible" class="home">Active Tokens</p>
           <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div class="side-navigation-item" @click="navigateTo('UserReports')">
+        <div class="side-navigation-item" @click="navigateTo('userReports')">
           <img class="menu-icon" src="@/assets/menu-reports-icon.svg" alt="User Reports Icon" />
           <p v-if="isMenuVisible" class="home">User Reports</p>
           <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div class="side-navigation-item" @click="navigateTo('YourContributions')">
+        <div class="side-navigation-item" @click="navigateTo('yourContributions')">
           <img class="menu-icon" src="@/assets/menu-contributions-icon.svg" alt="Your Contributions Icon" />
           <p v-if="isMenuVisible" class="home">Your Contributions</p>
           <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div class="side-navigation-item" @click="navigateTo('DeleteAccount')">
+        <div class="side-navigation-item" @click="navigateTo('deleteAccount')">
           <img class="menu-icon" src="@/assets/menu-delete-icon.svg" alt="Delete Account Icon" />
           <p v-if="isMenuVisible" class="home">Delete Account</p>
           <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
@@ -54,7 +54,7 @@
     </aside>
 
     <!-- Main Content Area -->
-    <section v-if="currentPage === 'AccountSettings'" class="profile-content">
+    <section v-if="currentPage === 'accountSettings'" class="profile-content">
       <!-- Notification Area -->
       <div v-if="notificationMessage" :class="['notification-message', notificationType]" @click="clearNotification">
         <img id="notif-msg-icon" src="@/assets/notif-msg-icon.svg" alt="" />
@@ -103,7 +103,7 @@
     </section>
 
     <!-- Active Token Page -->
-    <section v-if="currentPage === 'ActiveTokens'" class="token-content">
+    <section v-if="currentPage === 'activeTokens'" class="token-content">
       <h1>Active Tokens</h1>
 
       <!-- Search and Filter -->
@@ -156,7 +156,7 @@
     </section>
 
     <!-- Main Content Area -->
-    <section v-if="currentPage === 'YourContributions'" class="contributions-content">
+    <section v-if="currentPage === 'yourContributions'" class="contributions-content">
       <!-- Page Header -->
       <h1>Your Contributions</h1>
 
@@ -228,7 +228,7 @@
     </section>
 
     <!-- Delete Account Section -->
-    <section v-if="currentPage === 'DeleteAccount'" class="profile-content delete-account-content">
+    <section v-if="currentPage === 'deleteAccount'" class="profile-content delete-account-content">
       <h1>Delete your account?</h1>
       <p>
         You will lose all your data by deleting your account, and your
@@ -255,6 +255,20 @@ import dayjs from "dayjs";
 import { fakeContributions } from "@/fake_contribution_data.js";
 
 export default {
+  created() {
+    console.log(this.$route.params.activePage)
+  },
+  watch: {
+    '$route'() {
+      this.currentPage = this.$route.params.activePage
+    }
+  },
+  props: {
+    activePage: {
+      type: String,
+      required: false
+    }
+  },
   data() {
     return {
       password: "",
@@ -262,7 +276,7 @@ export default {
       isMenuVisible: true,
       notificationMessage: "",
       notificationType: "",
-      currentPage: "AccountSettings",
+      currentPage: "accountSettings",
       passwordFieldType: "password",
       userTokens: [],
       searchTerm_token: "",
@@ -273,6 +287,10 @@ export default {
       currentPageNumber: 1,
       itemsPerPage: 10,
     };
+  },
+  mounted() {
+    this.currentPage = this.activePage
+    this.loadUserTokens();
   },
   computed: {
     userDetails() {
@@ -292,7 +310,7 @@ export default {
   },
   methods: {
     navigateTo(page) {
-      this.currentPage = page;
+      this.$router.push(`/profile/${page}`);
     },
     logout() {
       this.$store.dispatch("auth_logout").then(() => {
@@ -410,9 +428,6 @@ export default {
         this.currentPageNumber++;
       }
     },
-  },
-  mounted() {
-    this.loadUserTokens();
   },
 };
 </script>

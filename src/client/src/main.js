@@ -18,6 +18,7 @@ import Profile from './components/Pages/ProfilePage.vue';
 import Reports from './components/Pages/ReportsPage.vue';
 import Contributions from './components/Pages/ContributionPage'
 import Contribute from './components/Pages/ContributePage'
+import UploadPage from './components/Pages/UploadPage.vue'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
 import 'bootstrap-css-only/css/bootstrap.min.css'
@@ -73,7 +74,7 @@ const router = new Router({
       }
     },
     {
-      path: '/profile',
+      path: '/profile/:activePage',
       name: 'Profile',
       component: Profile,
       beforeEnter: (to, from, next) => {
@@ -86,7 +87,8 @@ const router = new Router({
         } else {
           next('/login'); // Redirect to login if not authenticated
         }
-      }
+      },
+      props: { activePage: "accountSettings"}
     },
     {
       // Login page
@@ -231,6 +233,12 @@ const router = new Router({
       path: '/contribute',
       name: 'Contribute',
       component: Contribute
+    },
+    {
+      //Contribute page
+      path: '/upload',
+      name: 'Upload',
+      component: UploadPage
     },
   ]
 })

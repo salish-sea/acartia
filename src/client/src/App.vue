@@ -73,10 +73,10 @@
             <div v-if="isMobileMenuOpen">Profile</div>
           </div>
           <div v-if="isDropdownOpen === 'profileDropdown'" class="dropdown-content dropdown-offset">
-            <router-link to="/profile">Contributor Profile</router-link>
-            <router-link to="/user-report">User Report</router-link>
-            <router-link to="/create-token">Create Token</router-link>
-            <router-link to="/update-profile">Update Profile</router-link>
+            <router-link to="/profile/accountSettings">Contributor Profile</router-link>
+            <router-link to="/profile/userReports">User Report</router-link>
+            <router-link to="/profile/activeTokens">Create Token</router-link>
+            <router-link to="/profile/accountSettings">Update Profile</router-link>
             <a v-if="!isMobileMenuOpen" @click="logoutMethod"><img src="@/assets/menu-sign-out-icon.svg"
                 alt="Log In Icon" class="menu-icon" />Log Out</a>
           </div>
