@@ -50,7 +50,16 @@
           <th>Reports</th>
         </tr>
       </thead>
-      <tbody>
+
+      <tbody v-if="tableSightings.length == 0">
+        <tr>
+          <td colspan="6">
+            No data available
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody v-else>
         <tr v-for="(sighting, index) of tableSightings" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ sighting.properties.created }} </td>
@@ -62,12 +71,12 @@
       </tbody>
     </table>
 
-    <div v-if="!viewingMore" class="view-more">
+    <div v-if="!viewingMore && tableSightings.length > 5" class="view-more">
       <a @click="toggleViewMore">View More <img src="../../../assets/Icon-arrow.svg" alt="Icon" width="40"
           height="40"></a>
     </div>
 
-    <div v-else class="view-more">
+    <div v-else-if="viewingMore && tableSightings.length > 5" class="view-more">
       <a @click="toggleViewMore">View Less <img src="../../../assets/Icon-arrow.svg" alt="Icon" width="40"
           style="transform: rotate(180deg);" height=" 40"></a>
     </div>
@@ -123,7 +132,7 @@ export default {
       if (this.viewingMore) {
         return this.$store.getters.getTableSightings
       } else {
-        return this.$store.getters.getTableSightings.slice(0, 5)
+        return this.$store.getters.getTableSightings.slice(0, 6)
       }
     },
     //same as the map options saved in the store. Reusable filed for the table.
