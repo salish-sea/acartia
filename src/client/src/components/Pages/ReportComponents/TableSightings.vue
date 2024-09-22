@@ -11,7 +11,7 @@
       <div class="table-input-container">
         <div class="date-content ">
           <span id="date-label">Date</span>
-          <input class="date-input" type="date" id="dateBegin" name="dateBegin" v-model="dateBegin">
+          <input class="date-input" type="date" id="date" name="date" v-model="date">
         </div>
 
         <div class="species-content ">
@@ -29,6 +29,12 @@
             <option v-for="option in contributorOptions" :key="option" :value="option">{{ option }}</option>
           </select>
         </div>
+
+        <button class="apply-btn" @click="applyTableFilters">
+          Filter
+          <img src="../../../assets/icon-filter.svg" alt="filter icon" />
+        </button>
+
       </div>
     </div>
 
@@ -48,7 +54,7 @@
         <tr v-for="(sighting, index) of tableSightings" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ sighting.properties.created }} </td>
-          <td>{{ sighting.properties.entity }}</td>
+          <td>{{ sighting.properties.witness }}</td>
           <td>{{ sighting.properties.type }}</td>
           <td>Lat: {{ sighting.geometry.coordinates[0] }} Long: {{ sighting.geometry.coordinates[1] }} </td>
           <td><a href="#" class="text-primary">View Reports</a></td>
@@ -77,9 +83,15 @@ export default {
       viewingMore: false
     }
   },
+  created() {
+    this.$store.commit('applyTableFilters')
+  },
   methods: {
     toggleViewMore() {
       this.viewingMore = !this.viewingMore
+    },
+    applyTableFilters() {
+      this.$store.commit('applyTableFilters')
     }
   },
   computed: {
@@ -99,27 +111,19 @@ export default {
         this.$store.commit('setTableFilterSpecies', value)
       },
     },
-    dateBegin: {
+    date: {
       get() {
-        return this.$store.state.tableFilters.dateBegin
+        return this.$store.state.tableFilters.date
       },
       set(value) {
-        this.$store.commit('setTableFilterDateBegin', value)
-      },
-    },
-    dateEnd: {
-      get() {
-        return this.$store.state.tableFilters.dateEnd
-      },
-      set(value) {
-        this.$store.commit('setTableFilterDateEnd', value)
+        this.$store.commit('setTableFilterDate', value)
       },
     },
     tableSightings() {
       if (this.viewingMore) {
-        return this.$store.getters.getSightings
+        return this.$store.getters.getTableSightings
       } else {
-        return this.$store.getters.getSightings.slice(0, 5)
+        return this.$store.getters.getTableSightings.slice(0, 5)
       }
     },
     //same as the map options saved in the store. Reusable filed for the table.
@@ -140,6 +144,31 @@ export default {
 
 
 <style scoped>
+.filter-icon {
+  width: 50px;
+  height: 50px;
+  fill: #000;
+}
+
+.apply-btn {
+  border-radius: 0.625rem;
+  background: var(--Primary-Primary-100, #00AFBA);
+  display: flex;
+  height: 3rem;
+  margin-top: 1.5rem;
+  width: 10rem;
+  padding: 0.625rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: var(--1, 0.5rem);
+  color: var(--Neutrals-White, #FFF);
+  font-family: Montserrat;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+}
+
 .bottom-row {
   border-radius: 1rem;
   background: white;
