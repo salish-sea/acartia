@@ -1,42 +1,44 @@
 <template>
 
-
-  <div class="all-components-container">
-
+  <div>
     <LoadingSpinner v-if="isLoading" />
 
-    <div class="top-row">
-      <div class="component width-9 ">
-        <PrimaryChart />
-      </div>
-      <div class="component width-3 ">
-        <LastSighting />
-      </div>
-    </div>
+    <div v-else class="all-components-container">
 
-    <div class="middle-row ">
-      <div class="component width-4 ">
-        <TopContributors />
+      <div class="top-row">
+        <div class="component width-9 ">
+          <PrimaryChart />
+        </div>
+        <div class="component width-3 ">
+          <LastSighting />
+        </div>
       </div>
-      <div class="component width-4 ">
-        <Stats />
-      </div>
-      <div class="component width-4 ">
-        <SecondaryChart />
-      </div>
-    </div>
 
-    <div class="bottom-row ">
-      <div class="component width-12 ">
-        <TableSightings />
+      <div class="middle-row ">
+        <div class="component width-4 ">
+          <TopContributors />
+        </div>
+        <div class="component width-4 ">
+          <Stats />
+        </div>
+        <div class="component width-4 ">
+          <SecondaryChart />
+        </div>
       </div>
-    </div>
 
+      <div class="bottom-row ">
+        <div class="component width-12 ">
+          <TableSightings />
+        </div>
+      </div>
+
+    </div>
   </div>
+
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import PrimaryChart from './ReportComponents/PrimaryChart.vue';
 import LastSighting from './ReportComponents/LastSighting.vue';
 import TopContributors from './ReportComponents/TopContributors.vue';
@@ -63,8 +65,14 @@ export default {
     ...mapActions(['fill_store']),
   },
   computed: {
+    ...mapState({
+      isAuth: state => state.isAuthenticated
+    }),
     isLoading() {
       return this.$store.state.loading
+    },
+    lastSighting() {
+      return this.$store.state.lastSighting
     }
   },
   async created() {
@@ -73,7 +81,6 @@ export default {
     }
   },
 }
-
 </script>
 
 
