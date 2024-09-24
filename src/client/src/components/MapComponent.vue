@@ -43,9 +43,6 @@ export default {
         return "ssemmi-heat-layer"
       } else if (activeComponent === "Home") {
         return "ssemmi-map-layer"
-      } else {
-        console.log("Map rendered on incorrect page")
-        return ""
       }
     },
     mapSightings() {
