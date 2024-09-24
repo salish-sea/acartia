@@ -805,11 +805,36 @@ export const store = new Vuex.Store(
         })
       },
 
-      forgot_password() {
-        //return Promise.reject("The email you entered did not match our records");
-        return Promise.resolve("success!");
-      }
+      // eslint-disable-next-line no-unused-vars
+      forgot_password({ commit }, formData) {
+        return new Promise((resolve, reject) => {
+          let payload = {
+            email: formData.email,
+            link: "google.com",
+          };
 
+          let options = {
+            headers: {
+              'Authorization': 'Bearer ' + process.env.VUE_APP_MASTER_KEY,
+              'Content-Type': 'application/json',
+            },
+          };
+
+          axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/password-resets/`, payload, options)
+            .then(res => {
+              console.log(res);
+              resolve(res);
+            })
+            .catch(err => {
+              console.error(err);
+              let errMsg = "Error, please try again later";
+              if (err.response.status === 500) {
+                errMsg = "Internal Server Error";
+              }
+              reject(errMsg);
+            })
+        });
+      },
     },
   }
 )

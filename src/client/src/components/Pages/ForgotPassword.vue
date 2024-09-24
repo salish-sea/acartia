@@ -51,24 +51,32 @@ export default {
   },
   methods: {
     submitEmail() {
+      // TODO: Test this function?
+      function validateEmail(email) {
+        let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+      }
+
       this.isLoading = true;
-      this.$store.dispatch('forgot_password')
+      if (!validateEmail(this.loginData.email)) {
+        this.errorMessage = "Email is invalid";
+        this.isError = true;
+        this.isLoading = false;
+        return;
+      }
+
+      this.$store.dispatch('forgot_password', this.loginData)
       .then( (message) => {
         console.log(message);
-        setTimeout(() => this.isLoading = false, 900);
-        setTimeout(() => this.isSubmitted = true, 900);
-        //this.isLoading = false;
-        //this.isSubmitted = true;
+        this.isLoading = false;
+        this.isSubmitted = true;
       })
       .catch( (message) => {
         console.log(message);
-        setTimeout(() => this.isLoading = false, 900);
-        setTimeout(() => this.isError = true, 900);
-        console.log(message);
         this.errorMessage = message;
-        //this.isError = true;
-        //this.isLoading = false;
-      })
+        this.isError = true;
+        this.isLoading = false;
+      });
     },
   },
   computed: {
@@ -79,20 +87,6 @@ export default {
       else if (this.isSubmitted)
         ret = "Resend reset link";
       return ret;
-    },
-    buttonBackgroundColor() {
-      for (var prop in this.loginData) {
-        if (Object.prototype.hasOwnProperty.call(this.loginData, prop)) {
-          console.log(prop === null);
-          if (this.loginData[prop] === null)
-            return "#BFEBED";
-        }
-      }
-
-      return "#00AFBA";
-    },
-    buttonColor() {
-      return this.buttonBackgroundColor === "#00AFBA" ? "#0C0826" : "6D6B7D";
     },
     buttonAction() {
       return this.isSubmitted ? () => this.isSubmitted = false : this.submitEmail;
