@@ -18,7 +18,6 @@ import Profile from './components/Pages/ProfilePage.vue';
 import Reports from './components/Pages/ReportsPage.vue';
 import Contributions from './components/Pages/ContributionPage'
 import Contribute from './components/Pages/ContributePage'
-import UploadPage from './components/Pages/UploadPage.vue'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
 import 'bootstrap-css-only/css/bootstrap.min.css'
@@ -234,12 +233,6 @@ const router = new Router({
       name: 'Contribute',
       component: Contribute
     },
-    {
-      //Contribute page
-      path: '/upload',
-      name: 'Upload',
-      component: UploadPage
-    },
   ]
 })
 
@@ -278,7 +271,6 @@ export const store = new Vuex.Store(
     },
     mutations: {
       applyTableFilters(state) {
-        console.log("applying ", state.tableFilters.date, state.tableFilters.species, state.tableFilters.contributor)
         state.tableSightings = filterTableData(state.sightings, state.tableFilters)
       },
       emptySightings(state) {
