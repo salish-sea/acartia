@@ -9,20 +9,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Map',
-  components: {
-  },
   data() {
     return {
       mapboxKey: process.env.VUE_APP_MAPBOX_KEY,
       map: null,
     }
   },
-  created() {
-    this.mapSightings
-  },
   methods: {
-    //TODO: wait for loading state before loading map.
-    //Try rerendering in inwatcher on last sighting state.
     mapSightings() {
       // Grab access token for Mapbox
       mapboxgl.accessToken = this.mapboxKey
@@ -37,11 +30,6 @@ export default {
 
       //Save reference to map for rerendering
       this.map = map
-
-      if (this.$store.state.loading) {
-        return
-      }
-
       let geoData = {
         "type": "FeatureCollection",
         "features": transformApiDataToMappableData([this.getLastSighting])
@@ -78,10 +66,15 @@ export default {
     lastSighting() {
       return this.$store.getters.getLastSighting
     },
+    sightings() {
+      return this.$store.state.sightings
+    },
   },
   mounted() {
-    this.mapSightings()
-  }
+    if (this.lastSighting) {
+      this.mapSightings()
+    }
+  },
 }
 </script>
 
@@ -89,6 +82,12 @@ export default {
 #lastSightingContainer {
   width: 100%;
   height: 45%;
-  position: relative;
+}
+
+@media (max-width: 768px) {
+  #lastSightingContainer {
+    width: 100%;
+    height: 20rem;
+  }
 }
 </style>

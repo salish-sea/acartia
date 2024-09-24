@@ -4,7 +4,7 @@
     <aside :class="{ 'secondary-navigation': true, collapsed: !isMenuVisible }">
       <div class="profile-overview" v-if="isMenuVisible">
         <div class="image-placeholder">
-          <img :src="profilePicture" alt="Profile Picture" />
+          <img src="../../assets/profile-placeholder.svg" alt="Profile Picture" />
         </div>
         <div class="text-fields">
           <p class="name">{{ userDetails.name }}</p>
@@ -17,83 +17,33 @@
       </div>
 
       <nav class="menu">
-        <div
-          class="side-navigation-item"
-          @click="navigateTo('AccountSettings')"
-        >
-          <img
-            class="menu-icon"
-            src="@/assets/menu-account-icon.svg"
-            alt="Account Settings Icon"
-          />
+        <div class="side-navigation-item" @click="navigateTo('accountSettings')">
+          <img class="menu-icon" src="@/assets/menu-account-icon.svg" alt="Account Settings Icon" />
           <p v-if="isMenuVisible" class="home">Account Settings</p>
-          <img
-            v-if="isMenuVisible"
-            src="@/assets/menu-arrow-icon.svg"
-            alt="Arrow Icon"
-          />
+          <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div class="side-navigation-item" @click="navigateTo('ActiveTokens')">
-          <img
-            class="menu-icon"
-            src="@/assets/menu-token-icon.svg"
-            alt="Active Tokens Icon"
-          />
+        <div class="side-navigation-item" @click="navigateTo('activeTokens')">
+          <img class="menu-icon" src="@/assets/menu-token-icon.svg" alt="Active Tokens Icon" />
           <p v-if="isMenuVisible" class="home">Active Tokens</p>
-          <img
-            v-if="isMenuVisible"
-            src="@/assets/menu-arrow-icon.svg"
-            alt="Arrow Icon"
-          />
+          <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div class="side-navigation-item" @click="navigateTo('UserReports')">
-          <img
-            class="menu-icon"
-            src="@/assets/menu-reports-icon.svg"
-            alt="User Reports Icon"
-          />
+        <div class="side-navigation-item" @click="navigateTo('userReports')">
+          <img class="menu-icon" src="@/assets/menu-reports-icon.svg" alt="User Reports Icon" />
           <p v-if="isMenuVisible" class="home">User Reports</p>
-          <img
-            v-if="isMenuVisible"
-            src="@/assets/menu-arrow-icon.svg"
-            alt="Arrow Icon"
-          />
+          <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div
-          class="side-navigation-item"
-          @click="navigateTo('YourContributions')"
-        >
-          <img
-            class="menu-icon"
-            src="@/assets/menu-contributions-icon.svg"
-            alt="Your Contributions Icon"
-          />
+        <div class="side-navigation-item" @click="navigateTo('yourContributions')">
+          <img class="menu-icon" src="@/assets/menu-contributions-icon.svg" alt="Your Contributions Icon" />
           <p v-if="isMenuVisible" class="home">Your Contributions</p>
-          <img
-            v-if="isMenuVisible"
-            src="@/assets/menu-arrow-icon.svg"
-            alt="Arrow Icon"
-          />
+          <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
-        <div class="side-navigation-item" @click="navigateTo('DeleteAccount')">
-          <img
-            class="menu-icon"
-            src="@/assets/menu-delete-icon.svg"
-            alt="Delete Account Icon"
-          />
+        <div class="side-navigation-item" @click="navigateTo('deleteAccount')">
+          <img class="menu-icon" src="@/assets/menu-delete-icon.svg" alt="Delete Account Icon" />
           <p v-if="isMenuVisible" class="home">Delete Account</p>
-          <img
-            v-if="isMenuVisible"
-            src="@/assets/menu-arrow-icon.svg"
-            alt="Arrow Icon"
-          />
+          <img v-if="isMenuVisible" src="@/assets/menu-arrow-icon.svg" alt="Arrow Icon" />
         </div>
         <div class="side-navigation-item" @click="logout">
-          <img
-            class="menu-icon"
-            src="@/assets/menu-sign-out-icon.svg"
-            alt="Sign Out Icon"
-          />
+          <img class="menu-icon" src="@/assets/menu-sign-out-icon.svg" alt="Sign Out Icon" />
           <p v-if="isMenuVisible" class="home">Sign Out</p>
         </div>
       </nav>
@@ -104,13 +54,9 @@
     </aside>
 
     <!-- Main Content Area -->
-    <section v-if="disPage === 'AccountSettings'" class="profile-content">
+    <section v-if="currentPage === 'accountSettings'" class="profile-content">
       <!-- Notification Area -->
-      <div
-        v-if="notificationMessage"
-        :class="['notification-message', notificationType]"
-        @click="clearNotification"
-      >
+      <div v-if="notificationMessage" :class="['notification-message', notificationType]" @click="clearNotification">
         <img id="notif-msg-icon" src="@/assets/notif-msg-icon.svg" alt="" />
         <div class="notification-content">{{ notificationMessage }}</div>
       </div>
@@ -118,7 +64,7 @@
       <h1>Account Settings</h1>
       <div class="profile-picture-section">
         <div class="image-placeholder large">
-          <img :src="userDetails.logoFile" alt="Profile Picture" />
+          <img src="../../assets/profile-placeholder.svg" alt="Profile Picture" />
         </div>
         <button class="edit-icon">
           <img src="@/assets/edit-icon.svg" alt="Edit Icon" />
@@ -141,22 +87,14 @@
         <div class="text-field">
           <label>Password</label>
           <input :type="passwordFieldType" v-model="password" />
-          <img
-            class="password-eye-icon"
-            src="@/assets/password-eye-icon.svg"
-            alt="Toggle Password Visibility"
-            @click="togglePasswordVisibility"
-          />
+          <img class="password-eye-icon" src="@/assets/password-eye-icon.svg" alt="Toggle Password Visibility"
+            @click="togglePasswordVisibility" />
         </div>
         <div class="text-field">
           <label>Confirm Password</label>
           <input :type="passwordFieldType" v-model="confirmPassword" />
-          <img
-            class="password-eye-icon"
-            src="@/assets/password-eye-icon.svg"
-            alt="Toggle Password Visibility"
-            @click="togglePasswordVisibility"
-          />
+          <img class="password-eye-icon" src="@/assets/password-eye-icon.svg" alt="Toggle Password Visibility"
+            @click="togglePasswordVisibility" />
         </div>
         <div class="button-container">
           <button type="submit" class="save-button">Save Changes</button>
@@ -165,18 +103,13 @@
     </section>
 
     <!-- Active Token Page -->
-    <section v-if="disPage === 'ActiveTokens'" class="token-content">
+    <section v-if="currentPage === 'activeTokens'" class="token-content">
       <h1>Active Tokens</h1>
 
       <!-- Search and Filter -->
       <div class="search-filter">
         <div class="search-input">
-          <input
-            type="text"
-            placeholder="Search tokens"
-            v-model="searchTerm_token"
-            @input="filterTokens"
-          />
+          <input type="text" placeholder="Search tokens" v-model="searchTerm_token" @input="filterTokens" />
           <img src="@/assets/search-icon.svg" alt="Search Icon" />
         </div>
         <button class="filter-button">
@@ -202,14 +135,8 @@
               <td>{{ token.createdAt }}</td>
               <td>
                 <div class="dropdown">
-                  <button
-                    class="dropdown-toggle"
-                    @click="toggleDropdown(token.id)"
-                  >
-                    <img
-                      src="@/assets/table-option-icon.svg"
-                      alt="Actions Icon"
-                    />
+                  <button class="dropdown-toggle" @click="toggleDropdown(token.id)">
+                    <img src="@/assets/table-option-icon.svg" alt="Actions Icon" />
                   </button>
                   <ul v-if="isDropdownOpen(token.id)" class="dropdown-menu">
                     <li @click="copyToken(token.token)">Copy</li>
@@ -229,22 +156,14 @@
     </section>
 
     <!-- Main Content Area -->
-    <section
-      v-if="disPage === 'YourContributions'"
-      class="contributions-content"
-    >
+    <section v-if="currentPage === 'yourContributions'" class="contributions-content">
       <!-- Page Header -->
       <h1>Your Contributions</h1>
 
       <!-- Search and Filter -->
       <div class="search-filter">
         <div class="search-input">
-          <input
-            type="text"
-            placeholder="Search contributions"
-            v-model="searchTerm"
-            @input="filterContributions"
-          />
+          <input type="text" placeholder="Search contributions" v-model="searchTerm" @input="filterContributions" />
           <img src="@/assets/search-icon.svg" alt="Search Icon" />
         </div>
         <div class="filter-sort">
@@ -264,12 +183,7 @@
       <div class="active-filters">
         <div v-for="filter in activeFilters" :key="filter" class="filter-tag">
           {{ filter }}
-          <img
-            class="filter-icon"
-            src="@/assets/x-icon.svg"
-            alt="Remove Filter"
-            @click="removeFilter(filter)"
-          />
+          <img class="filter-icon" src="@/assets/x-icon.svg" alt="Remove Filter" @click="removeFilter(filter)" />
         </div>
       </div>
 
@@ -285,10 +199,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="contribution in paginatedContributions"
-              :key="contribution.id"
-            >
+            <tr v-for="contribution in paginatedContributions" :key="contribution.id">
               <td>{{ contribution.date }}</td>
               <td>{{ contribution.species }}</td>
               <td>{{ contribution.sighted }}</td>
@@ -300,38 +211,24 @@
 
       <!-- Pagination -->
       <div class="pagination">
-        <button
-          class="pagination-button"
-          @click="previousPage"
-          :disabled="currentPage === 1"
-        >
+        <button class="pagination-button" @click="previousPage" :disabled="currentPageNumber === 1">
           <img src="@/assets/chevron-left.svg" alt="Previous Page" />
         </button>
-        <span>{{ currentPage }} / {{ totalPages }}</span>
-        <button
-          class="pagination-button"
-          @click="nextPage"
-          :disabled="currentPage === totalPages"
-        >
+        <span>{{ currentPageNumber }} / {{ totalPages }}</span>
+        <button class="pagination-button" @click="nextPage" :disabled="currentPageNumber === totalPages">
           <img src="@/assets/chevron-right.svg" alt="Next Page" />
         </button>
       </div>
 
       <!-- Download Contributions Button -->
-      <button
-        class="download-contributions-button"
-        @click="downloadContributions"
-      >
+      <button class="download-contributions-button" @click="downloadContributions">
         <img src="@/assets/download-icon.svg" alt="Download Contributions" />
         Download Contributions
       </button>
     </section>
 
     <!-- Delete Account Section -->
-    <section
-      v-if="disPage === 'DeleteAccount'"
-      class="profile-content delete-account-content"
-    >
+    <section v-if="currentPage === 'deleteAccount'" class="profile-content delete-account-content">
       <h1>Delete your account?</h1>
       <p>
         You will lose all your data by deleting your account, and your
@@ -342,12 +239,8 @@
         <div class="text-field">
           <label>Password</label>
           <input :type="passwordFieldType" v-model="password" />
-          <img
-            class="password-eye-icon"
-            src="@/assets/password-eye-icon.svg"
-            alt="Toggle Password Visibility"
-            @click="togglePasswordVisibility"
-          />
+          <img class="password-eye-icon" src="@/assets/password-eye-icon.svg" alt="Toggle Password Visibility"
+            @click="togglePasswordVisibility" />
         </div>
         <div class="button-container">
           <button type="submit" class="delete-button">Delete Account</button>
@@ -362,14 +255,28 @@ import dayjs from "dayjs";
 import { fakeContributions } from "@/fake_contribution_data.js";
 
 export default {
+  created() {
+    console.log(this.$route.params.activePage)
+  },
+  watch: {
+    '$route'() {
+      this.currentPage = this.$route.params.activePage
+    }
+  },
+  props: {
+    activePage: {
+      type: String,
+      required: false
+    }
+  },
   data() {
     return {
       password: "",
       confirmPassword: "",
       isMenuVisible: true,
       notificationMessage: "",
-      notificationType: "", // 'success-message' or 'error-message'
-      disPage: "", // Tracks the current page view
+      notificationType: "",
+      currentPage: "accountSettings",
       passwordFieldType: "password",
       userTokens: [],
       searchTerm_token: "",
@@ -377,19 +284,23 @@ export default {
       searchTerm_contribution: "",
       contributions: fakeContributions,
       activeFilters: ["Species: Species A"],
-      currentPage: 1,
+      currentPageNumber: 1,
       itemsPerPage: 10,
     };
+  },
+  mounted() {
+    this.currentPage = this.activePage
+    this.loadUserTokens();
   },
   computed: {
     userDetails() {
       return this.$store.getters.getUserDetails;
     },
     profilePicture() {
-      return "@/assets/profile-placeholder.svg";
+      return '../../assets/profile-placeholder.svg'
     },
     paginatedContributions() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const start = (this.currentPageNumber - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       return this.contributions.slice(start, end);
     },
@@ -399,7 +310,7 @@ export default {
   },
   methods: {
     navigateTo(page) {
-      this.disPage = page;
+      this.$router.push(`/profile/${page}`);
     },
     logout() {
       this.$store.dispatch("auth_logout").then(() => {
@@ -484,7 +395,6 @@ export default {
       });
     },
     copyToken(token) {
-      console.log("copying - ".token);
       navigator.clipboard.writeText(token);
     },
     deleteToken(id) {
@@ -509,18 +419,15 @@ export default {
       console.log("Downloading contributions");
     },
     previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
+      if (this.currentPageNumber > 1) {
+        this.currentPageNumber--;
       }
     },
     nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
+      if (this.currentPageNumber < this.totalPages) {
+        this.currentPageNumber++;
       }
     },
-  },
-  mounted() {
-    this.loadUserTokens();
   },
 };
 </script>
@@ -709,9 +616,7 @@ export default {
 
 .menu-icon {
   width: 1.5rem;
-
   height: 1.5rem;
-
   margin: 0 auto;
 }
 
@@ -763,16 +668,11 @@ export default {
   background: rgba(8, 13, 38, 0.1);
   border-radius: 0.625rem;
   padding: 0.25rem;
-
   cursor: pointer;
   width: 2.5rem;
-
   height: 2.5rem;
-
-  top: 92%;
-
-  left: 90%;
-
+  top: 99%;
+  left: 99%;
   transform: translate(-50%, -50%);
 }
 

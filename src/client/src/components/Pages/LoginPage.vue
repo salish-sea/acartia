@@ -5,23 +5,13 @@
     <section class="login--section">
       <h1 class="header">Welcome back!</h1>
 
-     <!-- TODO: the error message should be received from the backend instead of hardcoded --> 
+      <!-- TODO: the error message should be received from the backend instead of hardcoded -->
       <ErrorMessage v-if="isError">The email and/or password you entered did not match our records.</ErrorMessage>
       <form>
-        <TextInput 
-          v-model.trim="loginData.email" 
-          label="Email" 
-          inputType="text" 
-          :hideShowButton="false" 
-          :isError="isError"
-        />
-        <TextInput 
-          v-model.trim="loginData.password" 
-          label="Password" 
-          inputTypeProp="password" 
-          :hideShowButton="true" 
-          :isError="isError"
-        />
+        <TextInput v-model.trim="loginData.email" label="Email" inputType="text" :hideShowButton="false"
+          :isError="isError" />
+        <TextInput v-model.trim="loginData.password" label="Password" inputTypeProp="password" :hideShowButton="true"
+          :isError="isError" />
 
         <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
 
@@ -29,10 +19,10 @@
           {{  isLoading ? "Loading..." : "Log in" }}
         </Button>
       </form>
-      
+
 
       <div id="NoAccount">
-        <p>Don't have an account? <a id="signup" href="/register">Sign up</a></p> 
+        <p>Don't have an account? <a id="signup" href="/register">Sign up</a></p>
       </div>
 
       <div id="OrLoginWith">
@@ -41,8 +31,8 @@
         <hr width="60px">
       </div>
 
-      <button class="alternative-btn"><img class="icon" src="../../assets/google.svg"/>Log in with Google</button>
-      <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg"/>Log in with Linkedin</button>
+      <button class="alternative-btn"><img class="icon" src="../../assets/google.svg" />Log in with Google</button>
+      <button class="alternative-btn"><img class="icon" src="../../assets/linkedin.svg" />Log in with Linkedin</button>
     </section>
   </div>
 </template>
@@ -71,18 +61,18 @@ export default {
     loginMethod() {
       this.isLoading = true;
       this.$store.dispatch('auth_request', this.loginData)
-      .then( (loginMessage) => {
-        console.log(loginMessage);
-        this.isLoading = false;
-        this.$router.replace({name: 'DataExplorer'});
-      })
-      .catch( (loginMessage) => {
-        this.isError = true;
-        console.log(loginMessage);
-        this.inputBorder = "2px solid #B22A2A";
-        this.errorVisibility = "block";
-        this.isLoading = false;
-      })
+        .then((loginMessage) => {
+          console.log(loginMessage);
+          this.isLoading = false;
+          this.$router.replace({ name: 'DataExplorer' });
+        })
+        .catch((loginMessage) => {
+          this.isError = true;
+          console.log(loginMessage);
+          this.inputBorder = "2px solid #B22A2A";
+          this.errorVisibility = "block";
+          this.isLoading = false;
+        })
     },
   },
 }
@@ -90,11 +80,11 @@ export default {
 </script>
 
 <style scoped>
-
 p {
   font-family: "Montserrat";
   font-weight: 400;
-  margin-top: 0 !important; /* css in this project is cooked */
+  margin-top: 0 !important;
+  /* css in this project is cooked */
 }
 
 hr {
@@ -148,7 +138,7 @@ hr {
   font-weight: 400;
   font-size: 32px;
   line-height: 32px;
-  color: #3D3951; 
+  color: #3D3951;
   text-align: center;
   margin-top: 100px;
 }
@@ -173,15 +163,16 @@ hr {
   border-color: #9E9CA8;
   color: #3D3951;
   margin-top: 6px;
-  margin-bottom:8px;
+  margin-bottom: 8px;
   height: 56px;
 }
 
 #ForgotPassword {
   margin-top: -14px !important;
   margin-left: auto !important;
-  display: block; /* necessary when wrapped inside a form element apparently */
-  text-align:right;
+  display: block;
+  /* necessary when wrapped inside a form element apparently */
+  text-align: right;
 }
 
 #signup {
@@ -204,8 +195,8 @@ hr {
 #NoAccount {
   display: flex;
   flex-direction: row;
-  justify-content:center;;
+  justify-content: center;
+  ;
   margin-top: 16px;
 }
-
 </style>

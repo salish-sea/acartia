@@ -26,18 +26,24 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 import IPFS from 'ipfs'
 import OrbitDB from 'orbit-db'
 import { getNDaysAgo } from './dateUtils'
-import { filterSightingData } from './mapUtils'
+import { filterSightingData, filterTableData } from './mapUtils'
 import { sortApiDataChronologically, getSpeciesAndContributors, transformApiDataToMappableData } from './mapUtils'
 
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
 
-let initFilterState = {
+let initMapFilterState = {
   dateBegin: getNDaysAgo(7),
   dateEnd: getNDaysAgo(0),
   species: ALL_SPECIES,
   contributor: ALL_CONTRIBUTORS,
   verifiedOnly: false,
+}
+
+let initTableFilterState = {
+  date: getNDaysAgo(1),
+  species: ALL_SPECIES,
+  contributor: ALL_CONTRIBUTORS,
 }
 
 Vue.config.productionTip = false
@@ -67,7 +73,7 @@ const router = new Router({
       }
     },
     {
-      path: '/profile',
+      path: '/profile/:activePage',
       name: 'Profile',
       component: Profile,
       beforeEnter: (to, from, next) => {
@@ -80,7 +86,8 @@ const router = new Router({
         } else {
           next('/login'); // Redirect to login if not authenticated
         }
-      }
+      },
+      props: { activePage: "accountSettings"}
     },
     {
       // Login page
@@ -235,26 +242,41 @@ Vue.use(Vuex)
 export const store = new Vuex.Store(
   {
     state: {
+      //User state
       isAuthenticated: false,
       token: null,
       userDetails: [],
       isAdmin: false,
       userRequestList: [],
+
+      //Data state
       sightings: [],
       filteredSightings: [],
-      lastSighting: {},
-      mapFilters: Object.assign({}, initFilterState),
-      tableFilters: Object.assign({}, initFilterState),
+      lastSighting: undefined,
+      loading: false,
+      error: null,
+
+      //Map state
+      mapFilters: Object.assign({}, initMapFilterState),
       mapOptions: {
         contributors: [],
         species: [],
       },
       map: null,
       activeMapLayer: "ssemi-map-layer",
-      loading: false,
-      error: null
+
+      //Table view state
+      tableFilters: Object.assign({}, initTableFilterState),
+      tableSightings: []
     },
     mutations: {
+      applyTableFilters(state) {
+        state.tableSightings = filterTableData(state.sightings, state.tableFilters)
+      },
+      emptySightings(state) {
+        state.sightings = []
+        state.filteredSightings = []
+      },
       setLoading(state, isLoading) {
         state.loading = isLoading;
       },
@@ -262,7 +284,7 @@ export const store = new Vuex.Store(
         state.error = error;
       },
       resetMapFilters(state) {
-        state.mapFilters = Object.assign({}, initFilterState)
+        state.mapFilters = Object.assign({}, initMapFilterState)
         state.filteredSightings = filterSightingData(state.sightings, state.mapFilters)
 
         //Rerender map
@@ -274,7 +296,11 @@ export const store = new Vuex.Store(
         }
       },
       setLastSighting(state, sighting) {
-        state.lastSighting = sighting
+        //Not required to set when refetching data on auth status change
+        //as it will be the same last sighting
+        if (!state.lastSighting) {
+          state.lastSighting = sighting
+        }
       },
       setAuthentication(state, status) {
         state.isAuthenticated = status
@@ -312,7 +338,6 @@ export const store = new Vuex.Store(
       },
       setActiveMapLayer(state, layer) {
         state.activeMapLayer = layer
-        console.log("active layer: ", state.activeMapLayer)
       },
       setFilterVerifiedOnly(state, verifiedStatus) {
         state.mapFilters.verifiedOnly = verifiedStatus
@@ -346,14 +371,14 @@ export const store = new Vuex.Store(
       setTableFilterContributor(state, contributor) {
         state.tableFilters.contributor = contributor
       },
-      setTableFilterDateBegin(state, dateBegin) {
-        state.tableFilters.dateBegin = dateBegin
-      },
-      setTableFilterDateEnd(state, dateEnd) {
-        state.tableFilters.dateEnd = dateEnd
+      setTableFilterDate(state, date) {
+        state.tableFilters.date = date
       },
     },
     getters: {
+      getTableSightings: state => {
+          return state.tableSightings
+      },
       getUserAuthStatus: state => {
         return state.isAuthenticated
       },
@@ -421,7 +446,7 @@ export const store = new Vuex.Store(
 
           //sort data first then grab reference to the most recent sighting for the reports page
           let dataPoints = sortApiDataChronologically(sightings.data)
-          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 1])
+          let lastSighting = Object.assign({}, dataPoints[dataPoints.length - 2])
           commit("setLastSighting", lastSighting)
 
           dataPoints = transformApiDataToMappableData(dataPoints)
@@ -460,7 +485,6 @@ export const store = new Vuex.Store(
           const requestOpts = {
             'access_token': process.env.VUE_APP_MASTER_KEY
           }
-          console.log(process.env.VUE_APP_WEB_SERVER_URL)
           //Header post method to authenticate login by passing login details
           axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/auth/`, requestOpts, {
             auth: {
@@ -470,6 +494,8 @@ export const store = new Vuex.Store(
           })
             // Retreive token and redirect to requested page
             .then(user => {
+              //TODO: fix  this hacky way to trigger rerender on auth status change
+              commit('emptySightings')
               // Route protection to the next page
               commit('setAuthentication', true)
               // Save retreived token to state and session storage
@@ -484,7 +510,6 @@ export const store = new Vuex.Store(
               }
               sessionStorage.setItem('userToken', user.data.token)
               // Login success
-              console.log(`Login successful, Hello ${user.data.user.name}`)
 
               resolve("Login successful!")
             })
@@ -544,7 +569,6 @@ export const store = new Vuex.Store(
             axios.get(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/requests`, requestAuth)
               // Add list of users into the store of user requests
               .then(users => {
-                // console.log(users.data)
                 commit('setUserRequestList', users.data)
                 resolve(users)
               })
@@ -576,7 +600,6 @@ export const store = new Vuex.Store(
             axios.get(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users`, requestAuth)
               // Add list of users into the store of users
               .then(users => {
-                // console.log(users.data)
                 commit('setUserList', users.data)
                 resolve(users)
               })
@@ -607,7 +630,6 @@ export const store = new Vuex.Store(
           axios.get(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/${store.state.userDetails.user.id}/tokens`, requestAuth)
             // Add list of users into the store of users
             .then(tokens => {
-              // console.log(users.data)
               commit('setTokenList', tokens.data)
               resolve(tokens)
             })
@@ -627,7 +649,6 @@ export const store = new Vuex.Store(
             }
           }
 
-          console.log(tokenName)
           //Header post method to authenticate login by passing login details
           axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/${store.state.userDetails.user.id}/tokens`,
             {
@@ -661,7 +682,6 @@ export const store = new Vuex.Store(
             }
           }
 
-          console.log(formData)
           //Header post method to authenticate login by passing login details
           axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/${store.state.userDetails.user.id}/profile`,
             formData,
@@ -705,11 +725,9 @@ export const store = new Vuex.Store(
 
           // Create IPFS instance with optional config
           const ipfs = await IPFS.create(ipfsOptions)
-          console.log(ipfs)
 
           // Create OrbitDB instance
           const orbitdb = await OrbitDB.createInstance(ipfs)
-          console.log(orbitdb)
 
           // Connect to the peer id of the backend orbitdb database (NOTE: this will be an env variable)
           await orbitdb._ipfs.swarm.connect('/ip4/127.0.0.1/tcp/4003/ws/p2p/QmWdwcHK2ih8VzP9jacLPKGBdmxzZf1F3Nvo9pqj5Q4QcN')
@@ -719,10 +737,9 @@ export const store = new Vuex.Store(
 
           // Emit log message when db has synced with another peer
           db2.events.on('replicated', (address) => {
-            console.log(`Replicated ${address}`)
+            console.log(address)
             const getData = db2.get('')
             // Set data from synchronisation into store
-            console.log("tf is this: ", getData)
             commit('setSightings', getData)
           })
 

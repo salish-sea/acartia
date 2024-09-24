@@ -43,9 +43,6 @@ export default {
         return "ssemmi-heat-layer"
       } else if (activeComponent === "Home") {
         return "ssemmi-map-layer"
-      } else {
-        console.log("Map rendered on incorrect page")
-        return ""
       }
     },
     mapSightings() {
@@ -69,7 +66,6 @@ export default {
       this.mapView = map
       // Resize map to fit into screen width
       this.mapView.resize()
-      console.log("data: ", this.filteredSightings)
 
       let geoData = {
         "type": "FeatureCollection",

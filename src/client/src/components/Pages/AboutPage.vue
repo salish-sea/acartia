@@ -113,8 +113,13 @@ export default {
         };
       });
     },
-    linkToContributions() { },
-    linkToGithub() { },
+    linkToContributions() {
+      this.$router.push('/integrate')
+      this.$router.go()
+    },
+    linkToGithub() {
+      window.open('https://github.com/salish-sea/acartia', '_blank');
+    },
     linkToExportData() { },
   },
 };
@@ -176,9 +181,10 @@ export default {
   font-weight: 600;
 }
 
-/* FAQ Items arranged in two columns */
+/* TODO: return to single column when time permits to fix opening bug */
 .faq-items {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
   gap: 24px;

@@ -1,24 +1,18 @@
 <template>
-<div>
-  <header class="forgot-password-header">
-  </header>
-  <section class="forgot-password-section">
-    <h1 class="header">Forgot password?</h1>
+  <div>
+    <header class="forgot-password-header">
+    </header>
+    <section class="forgot-password-section">
+      <h1 class="header">Forgot password?</h1>
 
-    <ErrorMessage v-if="isError">{{ errorMessage }}</ErrorMessage>
+      <ErrorMessage v-if="isError">{{ errorMessage }}</ErrorMessage>
 
-    <div class="description">
-      <p>Enter your email and we'll send you a link to reset your password.</p>
-    </div>
+      <div class="description">
+        <p>Enter your email and we'll send you a link to reset your password.</p>
+      </div>
 
-    <TextInput 
-      v-if="!isSubmitted"
-      v-model.trim="loginData.email" 
-      label="Email" 
-      inputTypeProp="text" 
-      :hideShowButton="false" 
-      :isError="isError"
-    />
+      <TextInput v-if="!isSubmitted" v-model.trim="loginData.email" label="Email" inputTypeProp="text"
+        :hideShowButton="false" :isError="isError" />
 
     <Button @click.native="buttonAction" :isLoading="isLoading" :formData="this.loginData">
       {{ buttonText }}
@@ -58,6 +52,7 @@ export default {
       }
 
       this.isLoading = true;
+
       if (!validateEmail(this.loginData.email)) {
         this.errorMessage = "Email is invalid";
         this.isError = true;
@@ -114,7 +109,7 @@ button {
   font-weight: 600;
   font-size: 32px;
   line-height: 32px;
-  color: #3D3951; 
+  color: #3D3951;
   text-align: center;
   margin-top: 100px;
 }
