@@ -93,7 +93,6 @@ export default {
 .top-row {
   display: flex;
   height: 50vh;
-  flex-wrap: nowrap;
   gap: 20px;
   margin-bottom: 20px;
 }
@@ -132,5 +131,37 @@ export default {
 
 .width-4 {
   width: 33%;
+}
+
+@media (max-width: 768px) {
+
+  .width-3,
+  .width-9,
+  .width-4,
+  .width-12 {
+    width: 100%;
+  }
+
+  .component {
+    background: white;
+    height: 100%;
+    border-radius: 20px;
+    padding: 10px;
+  }
+
+  .top-row,
+  .middle-row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: fit-content;
+  }
+
+  .middle-row {
+    display: flex;
+    height: auto;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
 }
 </style>

@@ -54,22 +54,35 @@ export default {
 
 
 <style scoped>
-/* Styles used in the Vue component */
-
 h2 {
-  color: var(--Neutrals-Black, #0C0826);
-  text-align: center;
   font-family: Mukta;
-  font-size: 1.5rem;
+  font-size: 1.5rem !important;
   font-style: normal;
   font-weight: 500;
   line-height: 105%;
+  text-align: center;
+  /* 1.575rem */
+}
+
+p {
+  text-align: center;
 }
 
 .slider {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.fw-bold {
+  color: var(--Neutrals-Black, #0C0826);
+  text-align: center;
+  font-family: Mukta;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 105%;
+  /* 1.3125rem */
 }
 
 .divider-active {

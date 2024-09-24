@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div style="z-index:1;" id='lastSightingContainer'></div>
-  </div>
+  <div style="z-index:1;" id='lastSightingContainer'></div>
 </template>
 
 <script>
@@ -84,6 +82,12 @@ export default {
 #lastSightingContainer {
   width: 100%;
   height: 45%;
-  position: relative;
+}
+
+@media (max-width: 768px) {
+  #lastSightingContainer {
+    width: 100%;
+    height: 20rem;
+  }
 }
 </style>

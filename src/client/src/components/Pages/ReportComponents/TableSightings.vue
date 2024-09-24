@@ -71,6 +71,24 @@
       </tbody>
     </table>
 
+
+    <!-- mobile table  -->
+
+    <table class="table table-mobile">
+
+      <tbody>
+        <tr v-for="(sighting, index) of tableSightings" :key="index">
+          <td>
+            <p>{{ sighting.properties.created }} </p>
+            <p> {{ sighting.properties.entity }}</p>
+            <p> {{ sighting.properties.type }}</p>
+            <p> Lat: {{ sighting.geometry.coordinates[0] }} Long: {{ sighting.geometry.coordinates[1] }} </p>
+
+            <a href="#" class="text-primary">View Reports</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div v-if="!viewingMore && tableSightings.length > 5" class="view-more">
       <a @click="toggleViewMore">View More <img src="../../../assets/Icon-arrow.svg" alt="Icon" width="40"
           height="40"></a>
@@ -304,5 +322,53 @@ a {
 
 .view-more a:hover {
   text-decoration: underline;
+}
+
+.filter-btn {
+  background-color: #00AFBA;
+  color: #F0FBFB;
+  display: flex;
+  width: 6.125rem;
+  height: 3rem;
+  border-radius: 0.375rem;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.table-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .table-input-container {
+    flex-direction: column;
+    /* 모바일 뷰에서 세로로 정렬 */
+    width: 100%;
+    /* 전체 너비 사용 */
+    gap: 20px;
+    /* 각 필드 사이에 충분한 여백 추가 */
+  }
+
+  .date-content,
+  .species-content,
+  .contributor-content {
+    width: 100%;
+    /* 각 필드가 화면 전체 너비를 차지 */
+  }
+
+  .table-mobile {
+    display: block;
+    width: 100%;
+
+  }
+
+  .table-mobile tr td {
+    width: 100%
+  }
+
+  .table-bordered {
+    display: none;
+  }
 }
 </style>

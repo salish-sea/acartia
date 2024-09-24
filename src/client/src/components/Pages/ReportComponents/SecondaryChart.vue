@@ -69,6 +69,16 @@ export default {
 
 
 <style scoped>
+h2 {
+  font-family: Mukta;
+  font-size: 1.5rem !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 105%;
+  text-align: center;
+  /* 1.575rem */
+}
+
 #species-chart {
   width: 100%;
 }
