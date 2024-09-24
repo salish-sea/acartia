@@ -313,7 +313,7 @@ export default {
   background-color: #BFEBED;
   border: none;
   border-radius: 10px;
-
+  margin-top: 24px;
 }
 
 .line {

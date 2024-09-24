@@ -123,7 +123,6 @@ export default {
 }
 
 .text-input-div {
-  margin-top: -20px;
 }
 
 .reset-password-section {
@@ -144,6 +143,7 @@ export default {
   line-height: 22.4px;
   text-align: left;
   margin-top: 10px;
+  margin-bottom: -16px;
 }
 
 .standard-btn {
