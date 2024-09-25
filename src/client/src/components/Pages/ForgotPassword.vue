@@ -14,27 +14,29 @@
       <TextInput v-if="!isSubmitted" v-model.trim="loginData.email" label="Email" inputTypeProp="text"
         :hideShowButton="false" :isError="isError" />
 
-      <button class="standard-btn" :disabled="isLoading" @click="buttonAction"
-        :style="{ backgroundColor: isLoading ? '#80D7DD' : '#BFEBED' }">
-        {{ buttonText }}
-      </button>
-      <a class="link" href="/login">Return to login</a>
-    </section>
-  </div>
+    <Button @click.native="buttonAction" :isLoading="isLoading" :formData="this.loginData">
+      {{ buttonText }}
+    </Button>
+
+    <a class="link" href="/login">Return to login</a>
+  </section>
+</div>
 </template>
 <script>
-import TextInput from '../TextInput.vue'
-import ErrorMessage from '../ErrorMessage.vue'
+import TextInput from '../Form/TextInput.vue'
+import ErrorMessage from '../Form/ErrorMessage.vue'
+import Button from '../Form/Button.vue'
 
 export default {
   name: "ForgotPassword",
   components: {
     TextInput,
     ErrorMessage,
+    Button,
   },
   data() {
     return {
-      loginData: {},
+      loginData: { email: ""},
       errorMessage: "",
       isLoading: false,
       isError: false,
@@ -43,23 +45,33 @@ export default {
   },
   methods: {
     submitEmail() {
+      // TODO: Test this function?
+      function validateEmail(email) {
+        let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+      }
+
       this.isLoading = true;
-      this.$store.dispatch('forgot_password')
-        .then((message) => {
-          console.log(message);
-          setTimeout(() => this.isLoading = false, 900);
-          setTimeout(() => this.isSubmitted = true, 900);
-          //this.isLoading = false;
-          //this.isSubmitted = true;
-        })
-        .catch((message) => {
-          setTimeout(() => this.isLoading = false, 900);
-          setTimeout(() => this.isError = true, 900);
-          console.log(message);
-          this.errorMessage = message;
-          //this.isError = true;
-          //this.isLoading = false;
-        })
+
+      if (!validateEmail(this.loginData.email)) {
+        this.errorMessage = "Email is invalid";
+        this.isError = true;
+        this.isLoading = false;
+        return;
+      }
+
+      this.$store.dispatch('forgot_password', this.loginData)
+      .then( (message) => {
+        console.log(message);
+        this.isLoading = false;
+        this.isSubmitted = true;
+      })
+      .catch( (message) => {
+        console.log(message);
+        this.errorMessage = message;
+        this.isError = true;
+        this.isLoading = false;
+      });
     },
   },
   computed: {
@@ -78,6 +90,11 @@ export default {
 }
 </script>
 <style scoped>
+
+button {
+  margin-top: 40px;
+}
+
 .forgot-password-section {
   width: 327px;
   margin-left: auto;
@@ -105,24 +122,6 @@ export default {
   border-color: #3D3951;
 
   margin-top: 15px;
-}
-
-.standard-btn {
-  width: 327px;
-  height: 48px;
-  border-radius: 10px;
-  border-width: 0;
-  padding: 10px 24px 10px 24px;
-  box-shadow: none !important;
-  color: #6D6B7D;
-  background-color: #BFEBED;
-  text-transform: none;
-  font-family: "Montserrat";
-  font-weight: 400;
-  font-size: 16px;
-  outline: none !important;
-
-  margin-top: 40px;
 }
 
 .link {
