@@ -115,15 +115,12 @@ button {
 .header {
   width: 411px;
   font-family: "Mukta";
-  font-weight: 600;
+  font-weight: 500;
   font-size: 32px;
   line-height: 32px;
   color: #3D3951; 
   text-align: center;
   margin-top: 100px;
-}
-
-.text-input-div {
 }
 
 .reset-password-section {

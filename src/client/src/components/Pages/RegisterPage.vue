@@ -41,7 +41,7 @@
               :hideShowButton="true" :isError="isError" />
             <div>
               <button class="montserrat-regular button-next" @click="validateForm($event)">Next</button>
-              <p class="montserrat-light">Already have an account? <a href="/login">Log in</a></p>
+              <p class="montserrat-light login-link">Already have an account? <router-link to="/login">Log in</router-link></p>
             </div>
             <div class="line-container">
               <hr class="line">
@@ -474,5 +474,10 @@ a {
 
 .icon {
   margin-right: 9px;
+}
+
+.login-link {
+  margin-top: 10px;
+  text-align: center;
 }
 </style>
