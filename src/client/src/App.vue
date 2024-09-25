@@ -501,11 +501,10 @@ export default {
     position: absolute;
     right: 0;
     top: 0;
-    width: 15rem;
+    width: 10.25em;
     background-color: #ffffff;
     border-radius: 0 0 16px 16px;
     border: 0.0025rem solid #6d6b7d;
-    z-index: 999;
   }
 
   /* invisible hover area around the dropdown */
@@ -535,9 +534,8 @@ export default {
   .dropdown-content a {
     display: flex;
     align-items: center;
-    padding: 16px 24px;
     width: 100%;
-    height: 62px;
+    height: 3.5rem;
     font-family: "Inter", sans-serif;
     font-weight: 400;
     font-size: 1rem;
@@ -550,7 +548,7 @@ export default {
   }
 
   .dropdown-offset {
-    margin-right: 1.75rem !important;
+    margin-right: 2.75rem !important;
   }
 
   .dropdown-content a:last-child {
