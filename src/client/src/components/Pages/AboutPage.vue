@@ -168,6 +168,7 @@ export default {
   margin: 24px auto 0;
   font-size: 16px;
   line-height: 1.4;
+  text-align: left;
 }
 
 /* FAQ Section */
@@ -188,7 +189,7 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
-  max-width: 1128px;
+  max-width: 552px; /* Old value: 1128px */
   margin: 24px auto;
 }
 
@@ -301,4 +302,11 @@ export default {
   margin-left: auto;
   /* Pushes the arrow to the far right */
 }
+
+@media screen and (max-width: 1080px) {
+  #about-content {
+    margin: 22px;
+  }
+}
+
 </style>
