@@ -2,7 +2,7 @@
   <div>
     <nav id="navbar-top">
       <router-link to="/home" class="navbar-brand" @click="closeMobileMenu">
-        <!-- <img src="@/assets/nav-bar-icon.svg" alt="Nav Bar Icon" class="nav-bar-icon" /> -->
+        <img src="@/assets/nav-bar-icon.svg" alt="Nav Bar Icon" class="nav-bar-icon" />
         Acartia
       </router-link>
       <div class="hamburger-menu menu-icon" @click="toggleMobileMenu">
@@ -31,8 +31,8 @@
 
         <!-- Map Dropdown -->
         <div class="dropdown" @mouseenter="toggleDropdown('mapDropdown')" @mouseleave="toggleDropdown(null)"
-          :class="{ active: isActive('/data-explorer') }">
-          <div class="dropdown-link">
+        :class="{ active: isActive(['/data-explorer', '/heatmap']) }">
+          <div class="dropdown-link" @click="navigateToDataExplorer">
             <img src="@/assets/menu-map-icon.svg" alt="Map Icon" class="menu-icon" />
             Map
           </div>
@@ -66,17 +66,18 @@
         <!-- Profile Dropdown -->
         <div v-if="isAuth" class="dropdown" @mouseenter="toggleDropdown('profileDropdown')"
           @mouseleave="toggleDropdown(null)">
-          <div class="dropdown-link">
+          <div class="dropdown-link" @click="navigateToAccountSettings">
             <img src="@/assets/menu-account-icon.svg" class="profile-icon" alt="Profile Icon" />
             <img v-if="!isMobileMenuOpen" src="@/assets/down-arrow-icon.svg" alt="Down Arrow Icon"
               class="down-arrow-icon" />
             <div v-if="isMobileMenuOpen">Profile</div>
           </div>
           <div v-if="isDropdownOpen === 'profileDropdown'" class="dropdown-content dropdown-offset">
-            <router-link to="/profile/accountSettings">Contributor Profile</router-link>
-            <router-link to="/profile/userReports">User Report</router-link>
-            <router-link to="/profile/activeTokens">Create Token</router-link>
-            <router-link to="/profile/accountSettings">Update Profile</router-link>
+            <router-link to="/profile/account-settings">Update Profile</router-link>
+            <router-link to="/profile/active-tokens">Create Token</router-link>
+            <router-link to="/profile/user-reports">User Report</router-link>
+            <router-link to="/profile/your-contributions">Contributor Profile</router-link>
+            <router-link to="/profile/delete-account">Delete Profile</router-link>
             <a v-if="!isMobileMenuOpen" @click="logoutMethod"><img src="@/assets/menu-sign-out-icon.svg"
                 alt="Log In Icon" class="menu-icon" />Log Out</a>
           </div>
@@ -152,8 +153,17 @@ export default {
         this.$router.go();
       });
     },
-    isActive(route) {
-      return this.$route.path === route;
+    isActive(routes) {
+      if (Array.isArray(routes)) {
+        return routes.includes(this.$route.path);
+      }
+      return this.$route.path === routes;
+    },
+    navigateToDataExplorer() {
+      this.$router.push("/data-explorer");
+    },
+    navigateToAccountSettings() {
+      this.$router.push("/profile/account-settings");
     }
   },
   computed: {
@@ -189,7 +199,6 @@ export default {
 /* Navbar Brand */
 .navbar-brand {
   justify-content: left;
-
   display: flex;
   align-items: center;
   font-family: "Mukta", sans-serif;
@@ -472,10 +481,7 @@ export default {
   }
 
   .button-secondary:hover {
-    background: rgba(0,
-        88,
-        93,
-        0.1) !important;
+    background: rgba(0, 88, 93, 0.1) !important;
   }
 
   /* Dropdown Styles */
@@ -494,9 +500,11 @@ export default {
     display: none;
     position: absolute;
     right: 0;
+    top: 0;
     width: 15rem;
-    background-color: #bcccdb;
+    background-color: #ffffff;
     border-radius: 0 0 16px 16px;
+    border: 0.0025rem solid #6d6b7d;
     z-index: 999;
   }
 
@@ -505,9 +513,9 @@ export default {
     content: "*";
     position: absolute;
     top: -1.5rem;
-    left: -1rem;
-    right: -1rem;
-    bottom: -2.5rem;
+    left: -1.75rem;
+    right: -1.75rem;
+    bottom: -2.25rem;
     color: transparent;
   }
 
@@ -542,7 +550,7 @@ export default {
   }
 
   .dropdown-offset {
-    margin-right: 0.5rem !important;
+    margin-right: 1.75rem !important;
   }
 
   .dropdown-content a:last-child {

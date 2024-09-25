@@ -73,9 +73,10 @@ const router = new Router({
       }
     },
     {
-      path: '/profile/:activePage',
+      path: '/profile/:section',
       name: 'Profile',
       component: Profile,
+      props: true,
       beforeEnter: (to, from, next) => {
         // let hasToken = sessionStorage.getItem('userToken');
         // let isAuthenticated = store.state.isAuthenticated === true;
@@ -86,8 +87,7 @@ const router = new Router({
         } else {
           next('/login'); // Redirect to login if not authenticated
         }
-      },
-      props: { activePage: "accountSettings"}
+      }
     },
     {
       // Login page
