@@ -18,6 +18,8 @@ import Profile from './components/Pages/ProfilePage.vue';
 import Reports from './components/Pages/ReportsPage.vue';
 import Contributions from './components/Pages/ContributionPage'
 import Contribute from './components/Pages/ContributePage'
+import Upload from './components/Pages/UploadPage'
+import ContactUs from './components/Pages/ContactPage'
 import axios from 'axios'
 import Clipboard from 'v-clipboard'
 import 'bootstrap-css-only/css/bootstrap.min.css'
@@ -232,6 +234,18 @@ const router = new Router({
       path: '/contribute',
       name: 'Contribute',
       component: Contribute
+    },
+    {
+      //Upload page
+      path: '/upload',
+      name: 'Upload',
+      component: Upload
+    },
+    {
+      //Contact us page
+      path: '/contact-us',
+      name: 'ContactUs',
+      component: ContactUs
     },
   ]
 })
