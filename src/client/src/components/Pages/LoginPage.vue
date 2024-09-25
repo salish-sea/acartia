@@ -13,7 +13,7 @@
         <TextInput v-model.trim="loginData.password" label="Password" inputTypeProp="password" :hideShowButton="true"
           :isError="isError" />
 
-        <a id="ForgotPassword" class="link" href="/forgot-password">Forgot password?</a>
+        <router-link id="ForgotPassword" class="link" to="/forgot-password">Forgot password?</router-link> 
 
         <Button class="standard-btn" @click.native="loginMethod" :isLoading="isLoading" :formData="loginData">
           {{  isLoading ? "Loading..." : "Log in" }}
@@ -22,7 +22,7 @@
 
 
       <div id="NoAccount">
-        <p>Don't have an account? <a id="signup" href="/register">Sign up</a></p>
+        <p>Don't have an account? <router-link id="signup" to="/register">Sign up</router-link></p>
       </div>
 
       <div id="OrLoginWith">
@@ -82,7 +82,7 @@ export default {
 <style scoped>
 p {
   font-family: "Montserrat";
-  font-weight: 400;
+  font-weight: 300;
   margin-top: 0 !important;
   /* css in this project is cooked */
 }
@@ -90,6 +90,10 @@ p {
 hr {
   background-color: #6D6B7D;
   margin: 10;
+}
+
+form {
+  margin: 0;
 }
 
 .login--section {
@@ -135,7 +139,7 @@ hr {
 
 .header {
   font-family: "Mukta";
-  font-weight: 400;
+  font-weight: 500;
   font-size: 32px;
   line-height: 32px;
   color: #3D3951;
@@ -195,7 +199,6 @@ hr {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  ;
   margin-top: 16px;
 }
 </style>

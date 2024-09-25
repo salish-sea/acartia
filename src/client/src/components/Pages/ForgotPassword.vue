@@ -18,7 +18,7 @@
       {{ buttonText }}
     </Button>
 
-    <a class="link" href="/login">Return to login</a>
+    <router-link class="link" to="/login">Return to login</router-link>
   </section>
 </div>
 </template>
@@ -106,7 +106,7 @@ button {
 
 .header {
   font-family: "Mukta";
-  font-weight: 600;
+  font-weight: 500;
   font-size: 32px;
   line-height: 32px;
   color: #3D3951;
