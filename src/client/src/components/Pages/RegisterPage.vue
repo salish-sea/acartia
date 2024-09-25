@@ -125,8 +125,8 @@
 
 <script>
 import axios from 'axios';
-import TextInput from "../TextInput.vue"
-import ErrorMessage from "../ErrorMessage.vue"
+import TextInput from "../Form/TextInput.vue"
+import ErrorMessage from "../Form/ErrorMessage.vue"
 
 export default {
   name: 'Register',
