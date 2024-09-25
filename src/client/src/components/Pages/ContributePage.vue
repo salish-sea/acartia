@@ -7,13 +7,13 @@
     <div class="options">
         <mdb-row class="row">
             <a class="btn btn-primary" data-mdb-ripple-init href="mailto:info@acartia.io" role="button" id="btns">
-                
+                <img src="@/assets/right-icon.svg" alt="Right Icon" class="righticon" />
                 <img src="@/assets/htc-icon.svg" alt="Hand Icon" class="cont-icon" />
                 How to Contribute
                 <span>New to uploading data? Click here to learn how you can provide data.</span>
             </a>
             <a class="btn btn-primary" data-mdb-ripple-init href="mailto:info@acartia.io" role="button" id="btns">
-                
+                <img src="@/assets/right-icon.svg" alt="Right Icon" class="righticon" />
                 <img src="@/assets/git-icon.svg" alt="GitHub Icon" class="cont-icon" />
                 Github
                 <span>Integrate your application with Acartia.</span>
@@ -21,13 +21,13 @@
         </mdb-row>
         <mdb-row>
             <a class="btn btn-primary" data-mdb-ripple-init href="mailto:info@acartia.io" role="button" id="btns">
-                
+                <img src="@/assets/right-icon.svg" alt="Right Icon" class="righticon" />
                 <img src="@/assets/upload-icon.svg" alt="Upload Icon" class="cont-icon" />
                 Upload Sightings
                 <span>Upload your sightings here.</span>
             </a>
             <a class="btn btn-primary" data-mdb-ripple-init href="mailto:info@acartia.io" role="button" id="btns">
-                
+                <img src="@/assets/right-icon.svg" alt="Right Icon" class="righticon" />
                 <img src="@/assets/download-icon.svg" alt="Export Icon" class="cont-icon" />
                 Export data
                 <span>Download Acartia sightings data here.</span>
@@ -35,7 +35,7 @@
         </mdb-row>
         <mdb-row>
             <a class="btn btn-primary" data-mdb-ripple-init href="mailto:info@acartia.io" role="button" id="contact-btn">
-                
+                <img src="@/assets/right-icon.svg" alt="Right Icon" class="righticon" />
                 <img src="@/assets/mail-icon.svg" alt="Mail Icon" class="cont-icon" />
                 Contact us
                 <span>Get in touch with Acartia.</span>
@@ -118,7 +118,7 @@ export default {
 
 .righticon {
     float: right;
-    padding-top: 4px;
+    padding-top: 2px;
 }
 
 #btns {
