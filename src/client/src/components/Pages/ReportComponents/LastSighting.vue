@@ -68,15 +68,27 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  font-family: Mukta;
+  font-size: 1.5rem !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 105%;
+  text-align: center;
+}
+
+.sighting {
+  text-align: center;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+}
+
 .sighting-title {
+  overflow-x: visible;
   font-family: Montserrat;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
   line-height: 140%;
-}
-
-.sighting-text {
-  padding: 1.5rem;
 }
 </style>

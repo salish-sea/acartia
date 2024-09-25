@@ -40,10 +40,34 @@ export default {
     },
   },
 }
-
 </script>
 
 <style scoped>
+h2 {
+  font-family: Mukta;
+  font-size: 1.5rem !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 105%;
+  text-align: center;
+}
+
+dt {
+  text-align: center;
+  font-family: Mukta;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+dd {
+  font-family: Montserrat;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+}
+
 .space {
   margin: 1rem;
 }
@@ -55,14 +79,16 @@ export default {
   margin-bottom: 1rem;
 }
 
+
 .definition-item {
   display: flex;
+  padding: .7rem;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
 
-.r-contributors {
+.top-contributors {
   padding: 1rem;
 }
 </style>

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { getNDaysAgo } from './dateUtils.js'
 
 const ALL_SPECIES = "allSpecies"
 const ALL_CONTRIBUTORS = "allContributors"
@@ -114,14 +115,14 @@ export function transformApiDataToMappableData(currSights) {
   return dataPoints
 }
 
-export function filterSightingData(sightingData, filterObj) {
-  let startDate = filterObj.dateBegin
-  let endDate = filterObj.dateEnd
+function filterByDateRange(sightingData, filterObj) {
+  let startDate = filterObj.dateBegin || getNDaysAgo(1)
+  let endDate = filterObj.dateEnd || getNDaysAgo(1)
 
   let endIdx = sightingData.length - 1
   let startIdx = 0
 
-  //Sliding window; find last idx in date range
+  //Sliding window; find last valid idx in date range
   for (let i = endIdx; i >= 0; i--) {
     if (dayjs(sightingData[i].properties.created.slice(0, 10)).isSame(dayjs(endDate))) {
       endIdx = i
@@ -129,7 +130,7 @@ export function filterSightingData(sightingData, filterObj) {
     }
   }
 
-  //Sliding window; find first idx in date range
+  //Sliding window; start at final valid data point and iterate backwards to find the first idx in date range
   for (let i = endIdx; i >= 0; i--) {
     if (dayjs(sightingData[i].properties.created.slice(0, 10)).isBefore(dayjs(startDate))) {
       startIdx = i + 1
@@ -138,14 +139,44 @@ export function filterSightingData(sightingData, filterObj) {
   }
 
   sightingData = sightingData.slice(startIdx, endIdx)
+  return sightingData
+}
 
-  //Filter by verification i.e. if true, remove unverfied data
+function filterByDay(sightingData, filterObj) {
+  let startDate = filterObj.date
+  let endDate = filterObj.date
+
+  let endIdx = sightingData.length - 1
+  let startIdx = 0
+
+  //Sliding window; find last valid idx in date range
+  for (let i = endIdx; i >= 0; i--) {
+    if (dayjs(sightingData[i].properties.created.slice(0, 10)).isSame(dayjs(endDate))) {
+      endIdx = i
+      break
+    }
+  }
+
+  //Sliding window; start at final valid data point and iterate backwards to find the first idx in date range
+  for (let i = endIdx; i >= 0; i--) {
+    if (dayjs(sightingData[i].properties.created.slice(0, 10)).isBefore(dayjs(startDate))) {
+      startIdx = i + 1
+      break
+    }
+  }
+
+  sightingData = sightingData.slice(startIdx, endIdx)
+  return sightingData
+}
+
+function filterByVerificationStatus(sightingData, filterObj) {
   if (filterObj.verifiedOnly === true) {
     sightingData = sightingData.filter(sighting => sighting.properties.verified)
   }
+  return sightingData
+}
 
-
-  //Filter by Species
+function filterBySpecies(sightingData, filterObj) {
   if (filterObj.species != ALL_SPECIES) {
     sightingData = sightingData.filter(sighting => {
       if (sighting.properties.type == filterObj.species) {
@@ -155,8 +186,10 @@ export function filterSightingData(sightingData, filterObj) {
       }
     })
   }
+  return sightingData
+}
 
-  //Filter by Contributor (field is data_source_witness from api, becomes witness after mutation)
+function filterByContributor(sightingData, filterObj) {
   if (filterObj.contributor != ALL_CONTRIBUTORS) {
     sightingData = sightingData.filter(sighting => {
       if (sighting.properties.witness == filterObj.contributor) {
@@ -166,9 +199,27 @@ export function filterSightingData(sightingData, filterObj) {
       }
     })
   }
-
   return sightingData
 }
+
+
+export function filterSightingData(sightingData, filterObj) {
+  sightingData = filterByDateRange(sightingData, filterObj)
+  sightingData = filterByVerificationStatus(sightingData, filterObj)
+  sightingData = filterBySpecies(sightingData, filterObj)
+  sightingData = filterByContributor(sightingData, filterObj)
+  return sightingData
+}
+
+export function filterTableData(sightingData, filterObj) {
+  sightingData = filterByDay(sightingData, filterObj)
+  sightingData = filterBySpecies(sightingData, filterObj)
+  sightingData = filterByContributor(sightingData, filterObj)
+  return sightingData
+}
+
+
+
 
 export const legendColorMap = {
   "Atlantic White-sided Dolphin": "#FF5733",
@@ -321,7 +372,7 @@ text-align:left;
         letter-spacing: -0.28px;
     "><b>Submitter: </b><span style="font-weight: 400;">
 
-    ${sighting.witness}
+    ${sighting.entity}
 
     <span></span>
 
@@ -337,7 +388,7 @@ text-align:left;
         letter-spacing: -0.28px;
     "><b>Contributor: </b><span style="font-weight: 400;">
 
-    ${sighting.entity}
+    ${sighting.witness}
 
    <span></span>
 

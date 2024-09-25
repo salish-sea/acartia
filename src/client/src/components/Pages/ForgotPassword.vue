@@ -1,35 +1,99 @@
 <template>
-<div>
-  <header class="forgot-password-header">
-  </header>
-  <section class="forgot-password-section">
-    <h1 class="header">Forgot password?</h1>
-    <div class="description">
-      <p>Enter your email and we'll send you a link to reset your password.</p>
-    </div>
-    <TextInput v-model.trim="email" label="Email" inputType="text" :hideShowButton="false" :borderStyle="inputBorder"/>
-    <button class="standard-btn">Request a reset link</button>
-    <a class="link" href="/login">Return to login</a>
+  <div>
+    <header class="forgot-password-header">
+    </header>
+    <section class="forgot-password-section">
+      <h1 class="header">Forgot password?</h1>
+
+      <ErrorMessage v-if="isError">{{ errorMessage }}</ErrorMessage>
+
+      <div class="description">
+        <p>Enter your email and we'll send you a link to reset your password.</p>
+      </div>
+
+      <TextInput v-if="!isSubmitted" v-model.trim="loginData.email" label="Email" inputTypeProp="text"
+        :hideShowButton="false" :isError="isError" />
+
+    <Button @click.native="buttonAction" :isLoading="isLoading" :formData="this.loginData">
+      {{ buttonText }}
+    </Button>
+
+    <router-link class="link" to="/login">Return to login</router-link>
   </section>
 </div>
 </template>
 <script>
-import TextInput from '../TextInput.vue'
+import TextInput from '../Form/TextInput.vue'
+import ErrorMessage from '../Form/ErrorMessage.vue'
+import Button from '../Form/Button.vue'
 
 export default {
   name: "ForgotPassword",
   components: {
     TextInput,
+    ErrorMessage,
+    Button,
   },
   data() {
     return {
-      inputBorder: "1px solid #3D3951",
-      email: null,
+      loginData: { email: ""},
+      errorMessage: "",
+      isLoading: false,
+      isError: false,
+      isSubmitted: false,
+    }
+  },
+  methods: {
+    submitEmail() {
+      // TODO: Test this function?
+      function validateEmail(email) {
+        let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+      }
+
+      this.isLoading = true;
+
+      if (!validateEmail(this.loginData.email)) {
+        this.errorMessage = "Email is invalid";
+        this.isError = true;
+        this.isLoading = false;
+        return;
+      }
+
+      this.$store.dispatch('forgot_password', this.loginData)
+      .then( (message) => {
+        console.log(message);
+        this.isLoading = false;
+        this.isSubmitted = true;
+      })
+      .catch( (message) => {
+        console.log(message);
+        this.errorMessage = message;
+        this.isError = true;
+        this.isLoading = false;
+      });
+    },
+  },
+  computed: {
+    buttonText() {
+      let ret = "Request a reset link";
+      if (this.isLoading)
+        ret = "Loading...";
+      else if (this.isSubmitted)
+        ret = "Resend reset link";
+      return ret;
+    },
+    buttonAction() {
+      return this.isSubmitted ? () => this.isSubmitted = false : this.submitEmail;
     }
   }
 }
 </script>
 <style scoped>
+
+button {
+  margin-top: 40px;
+}
 
 .forgot-password-section {
   width: 327px;
@@ -42,10 +106,10 @@ export default {
 
 .header {
   font-family: "Mukta";
-  font-weight: 600;
+  font-weight: 500;
   font-size: 32px;
   line-height: 32px;
-  color: #3D3951; 
+  color: #3D3951;
   text-align: center;
   margin-top: 100px;
 }
@@ -58,24 +122,6 @@ export default {
   border-color: #3D3951;
 
   margin-top: 15px;
-}
-
-.standard-btn {
-  width: 327px;
-  height: 48px;
-  border-radius: 10px;
-  border-width: 0;
-  padding: 10px 24px 10px 24px;
-  box-shadow: none !important;
-  color: #6D6B7D;
-  background-color: #BFEBED;
-  text-transform: none;
-  font-family: "Montserrat";
-  font-weight: 400;
-  font-size: 16px;
-  outline: none !important;
-
-  margin-top: 40px;
 }
 
 .link {

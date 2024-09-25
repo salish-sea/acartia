@@ -1,42 +1,44 @@
 <template>
 
-
-  <div class="all-components-container">
-
+  <div>
     <LoadingSpinner v-if="isLoading" />
 
-    <div class="top-row">
-      <div class="component width-9 ">
-        <PrimaryChart />
-      </div>
-      <div class="component width-3 ">
-        <LastSighting />
-      </div>
-    </div>
+    <div v-else class="all-components-container">
 
-    <div class="middle-row ">
-      <div class="component width-4 ">
-        <TopContributors />
+      <div class="top-row">
+        <div class="component width-9 ">
+          <PrimaryChart />
+        </div>
+        <div class="component width-3 ">
+          <LastSighting />
+        </div>
       </div>
-      <div class="component width-4 ">
-        <Stats />
-      </div>
-      <div class="component width-4 ">
-        <SecondaryChart />
-      </div>
-    </div>
 
-    <div class="bottom-row ">
-      <div class="component width-12 ">
-        <TableSightings />
+      <div class="middle-row ">
+        <div class="component width-4 ">
+          <TopContributors />
+        </div>
+        <div class="component width-4 ">
+          <Stats />
+        </div>
+        <div class="component width-4 ">
+          <SecondaryChart />
+        </div>
       </div>
-    </div>
 
+      <div class="bottom-row ">
+        <div class="component width-12 ">
+          <TableSightings />
+        </div>
+      </div>
+
+    </div>
   </div>
+
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import PrimaryChart from './ReportComponents/PrimaryChart.vue';
 import LastSighting from './ReportComponents/LastSighting.vue';
 import TopContributors from './ReportComponents/TopContributors.vue';
@@ -63,18 +65,22 @@ export default {
     ...mapActions(['fill_store']),
   },
   computed: {
+    ...mapState({
+      isAuth: state => state.isAuthenticated
+    }),
     isLoading() {
       return this.$store.state.loading
+    },
+    lastSighting() {
+      return this.$store.state.lastSighting
     }
   },
   async created() {
     if (this.$store.state.sightings.length === 0) {
-      console.log("GETTING sighintgs because of report page")
       await this.fill_store()
     }
   },
 }
-
 </script>
 
 
@@ -87,7 +93,6 @@ export default {
 .top-row {
   display: flex;
   height: 50vh;
-  flex-wrap: nowrap;
   gap: 20px;
   margin-bottom: 20px;
 }
@@ -126,5 +131,37 @@ export default {
 
 .width-4 {
   width: 33%;
+}
+
+@media (max-width: 768px) {
+
+  .width-3,
+  .width-9,
+  .width-4,
+  .width-12 {
+    width: 100%;
+  }
+
+  .component {
+    background: white;
+    height: 100%;
+    border-radius: 20px;
+    padding: 10px;
+  }
+
+  .top-row,
+  .middle-row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: fit-content;
+  }
+
+  .middle-row {
+    display: flex;
+    height: auto;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
 }
 </style>

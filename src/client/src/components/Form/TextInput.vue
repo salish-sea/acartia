@@ -10,7 +10,7 @@
       v-on:input="$emit('input', $event.target.value)"
       :style="{ border: isError ? '2px solid #B22A2A' : '1px solid #3D3951' }"
     />
-      <img v-if="hideShowButton" width="25px" height="24px" class="hide" src="../assets/eye.svg" @click="togglePassword"/>
+      <img v-if="hideShowButton" width="25px" height="24px" class="hide" :src="require(`@/assets/${hidePasswordIcon}`)" @click="togglePassword"/>
   </div>
 </template>
 
@@ -37,6 +37,11 @@ export default {
       } else {
         this.inputType = "password";
       }
+    }
+  },
+  computed: {
+    hidePasswordIcon() {
+      return this.inputType === "password" ? "eye.svg" : "ToggledHidePassword.svg";
     }
   }
 }
@@ -82,6 +87,9 @@ export default {
   position: relative;
   top: -37px;
   left: 295px;
+  margin-bottom: -24px;
 }
+
+
 
 </style>

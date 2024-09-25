@@ -28,14 +28,23 @@ export default {
   },
   async mounted() {
     if (this.sightings.length === 0) {
-      console.log("empty sightings on the map page")
       await this.fill_store()
     }
-
     this.mapSightings()
   },
   methods: {
     ...mapActions(['fill_store']),
+    getActiveMapLayer() {
+      let activeComponent = this.getParent
+
+      if (activeComponent === "Visualiser") {
+        return "ssemmi-map-layer"
+      } else if (activeComponent === "Heatmap") {
+        return "ssemmi-heat-layer"
+      } else if (activeComponent === "Home") {
+        return "ssemmi-map-layer"
+      }
+    },
     mapSightings() {
       // Grab access token for Mapbox
       mapboxgl.accessToken = this.mapboxKey
@@ -65,6 +74,8 @@ export default {
 
       const currentPage = this.getParent;
 
+      this.$store.commit("setActiveMapLayer", this.getActiveMapLayer())
+
       // On load event
       map.on('load', function () {
         if (currentPage === 'Heatmap') {
@@ -77,66 +88,30 @@ export default {
             },
             minZoom: 0,
             paint: {
-              // increase weight as diameter breast height increases
-              'heatmap-weight': [
-                'interpolate',
-                ['linear'],
-                ['get', 'no_sighted'],
-                1,
-                2,
-                3,
-                4
-              ],
-              // Increase the heatmap color weight weight by zoom level
-              // heatmap-intensity is a multiplier on top of heatmap-weight
-              'heatmap-intensity': [
-                'interpolate',
-                ['linear'],
-                ['zoom'],
-                3,
-                1,
-                4,
-                3
-              ],
-              // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-              // Begin color ramp at 0-stop with a 0-transparancy color
-              // to create a blur-like effect.
               'heatmap-color': [
                 'interpolate',
                 ['linear'],
                 ['heatmap-density'],
-                0,
-                'rgba(33,102,172,.1)',
-                0.2,
-                'rgb(103,169,207)',
-                0.4,
-                'rgb(209,229,240)',
-                0.6,
-                'rgb(253,219,199)',
-                0.8,
-                'rgb(233,156,119)',
-                1,
-                'rgb(227,67,86)'
+                0, 'rgba(33,102,172,0)',
+                0.2, 'rgba(103,169,207,1)',
+                0.4, 'rgba(209,229,240,1)',
+                0.6, 'rgba(253,219,199,1)',
+                0.8, 'rgba(239,138,98,1)',
+                1, 'rgba(178,24,43,1)'
               ],
-              // Adjust the heatmap radius by zoom level
               'heatmap-radius': [
                 'interpolate',
                 ['linear'],
                 ['zoom'],
-                10,
-                20,
-                30,
-                50
+                0, 15,
+                15, 50
               ],
-              // Transition from heatmap to circle layer by zoom level
               'heatmap-opacity': [
                 'interpolate',
                 ['linear'],
                 ['zoom'],
-                6,
-                1,
-                9,
-                1
+                14, 1,
+                15, 0
               ]
             }
           }
@@ -197,20 +172,6 @@ export default {
     },
     getParent() {
       return this.$parent.$options.name
-    },
-    getActiveMapLayer() {
-      let activeComponent = this.getParent
-
-      if (activeComponent === "Visualiser") {
-        return "ssemmi-map-layer"
-      } else if (activeComponent === "Heatmap") {
-        return "ssemmi-heat-layer"
-      } else if (activeComponent === "Home") {
-        return "ssemmi-map-layer"
-      } else {
-        console.log("Map rendered on incorrect page")
-        return ""
-      }
     },
     filteredSightings() {
       return this.$store.getters.getFilteredSightings
