@@ -87,6 +87,9 @@ export default {
   position: relative;
   top: -37px;
   left: 295px;
+  margin-bottom: -24px;
 }
+
+
 
 </style>

@@ -168,10 +168,9 @@ hr {
 }
 
 #ForgotPassword {
-  margin-top: -14px !important;
+  margin-top: 10px; 
   margin-left: auto !important;
   display: block;
-  /* necessary when wrapped inside a form element apparently */
   text-align: right;
 }
 
