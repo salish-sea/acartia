@@ -36,6 +36,44 @@
         </button>
 
       </div>
+      <div class="table-input-container-mobile">
+    <button class="filter-down-btn">
+      Filter
+      <img src="../../../assets/arrow-down-white.svg" alt="filter icon" />
+    </button>
+    <button class="filter-down-up">
+      Filter
+      <img src="../../../assets/arrow-up-white.svg" alt="filter icon" />
+    </button>
+
+    <div class="filter-options">
+      <div class="date-content">
+        <input class="date-input" type="date" id="date" name="date" v-model="date">
+      </div>
+
+      <div class="species-content">
+        <select class="species-select" name="species" id="species" v-model="species">
+          <option value="allSpecies">All Species</option>
+          <option v-for="option in speciesOptions" :key="option" :value="option">{{ option }}</option>
+        </select>
+      </div>
+
+      <div class="contributor-content">
+        <select class="contributor-select" name="contributor" id="contributor" v-model="contributor">
+          <option value="allContributors">All Contributors</option>
+          <option v-for="option in contributorOptions" :key="option" :value="option">{{ option }}</option>
+        </select>
+      </div>
+
+      <!-- 필터 적용 버튼 -->
+      <button class="apply-btn" @click="applyTableFilters">
+        Filter
+        <img src="../../../assets/icon-filter.svg" alt="filter icon" />
+      </button>
+    </div>
+  </div>
+    
+
     </div>
 
 
@@ -74,17 +112,33 @@
 
     <!-- mobile table  -->
 
-    <table class="table table-mobile">
+    <table class="table-mobile">
+      <thead>
+        <tr>
+          <th>Sighting ID</th>
+          <th>Date</th>
+          <th>Contributor</th>
+          <th>Species</th>
+          <th>Location</th>
+          <th>Reports</th>
+        </tr>
+      </thead>
+      <tbody v-if="tableSightings.length == 0">
+        <tr>
+          <td>
+            No data available
+          </td>
+        </tr>
+      </tbody>
 
       <tbody>
         <tr v-for="(sighting, index) of tableSightings" :key="index">
           <td>
-            <p>{{ sighting.properties.created }} </p>
-            <p> {{ sighting.properties.entity }}</p>
-            <p> {{ sighting.properties.type }}</p>
-            <p> Lat: {{ sighting.geometry.coordinates[0] }} Long: {{ sighting.geometry.coordinates[1] }} </p>
-
-            <a href="#" class="text-primary">View Reports</a>
+            <p>Sighting ID: {{ sighting.properties.created }} </p>
+            <p>Date: {{ sighting.properties.entity }}</p>
+            <p>Species: {{ sighting.properties.type }}</p>
+            <p>Location: {{ sighting.geometry.coordinates[0] }} Long: {{ sighting.geometry.coordinates[1] }} </p>
+            <p>Reports: <a href="#" class="text-primary">View Reports</a></p>
           </td>
         </tr>
       </tbody>
@@ -340,31 +394,78 @@ a {
   display: none;
 }
 
+.filter-down-btn,.filter-down-up {
+  margin-bottom: 10px;
+  border-radius: 0.5rem;
+  background: #545F71;
+  padding: .6rem 1rem;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  color: #FFF;
+}
+
+.table-input-container-mobile {
+  display: none;
+
+}
+
+
+
 @media (max-width: 768px) {
+  .table-header-container {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
   .table-input-container {
-    flex-direction: column;
-    /* 모바일 뷰에서 세로로 정렬 */
-    width: 100%;
-    /* 전체 너비 사용 */
-    gap: 20px;
-    /* 각 필드 사이에 충분한 여백 추가 */
+    display: none;
   }
 
-  .date-content,
-  .species-content,
-  .contributor-content {
-    width: 100%;
-    /* 각 필드가 화면 전체 너비를 차지 */
-  }
-
-  .table-mobile {
+  .table-input-container-mobile {
     display: block;
     width: 100%;
-
   }
 
-  .table-mobile tr td {
-    width: 100%
+  .filter-down-btn {
+    display: block;
+    margin-bottom: 1rem; 
+  }
+
+  .filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 10px; 
+    align-items: center; 
+  }
+
+  .contributor-content,
+  .species-content,
+  .date-content {
+    width: 48%;
+    box-sizing: border-box;
+  }
+  .apply-btn {
+    margin: 0;
+    align-self: flex-start;
+  }
+  .table-mobile {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .table-mobile thead {
+    display: none;
+  }
+
+  .table-mobile td {
+    text-align: left;
+    display: block;
+    padding: 1rem ;
+    margin: .3rem 0;
+    box-sizing: border-box;
+    border: 1px solid #EDEDED;
   }
 
   .table-bordered {
