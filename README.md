@@ -6,11 +6,11 @@
 
 This is the public repository for the Acartia data cooperative. Acartia is a decentralised and communitarian project aimed at pooling community science data in support of (killer) whale conservation first and ecosystem monitoring second. We welcome your help designing and developing this open source code that demonstrates the ecological, scientific, and societal advantages of web3 technologies (see our [contributing guidance](https://github.com/salish-sea/acartia/blob/main/CONTRIBUTING.md#contributing-code)).
 
-**Phase 1 (2020-22)** developed a working prototype of [Acartia](https://acartia.io), a distributed open data cooperative sharing marine animal location data in real time across the range of the endangered orcas (from California to Alaska, USA). 
+**Phase 1 (2020-22)** Five partners developed a working prototype of [Acartia](https://acartia.io), a distributed open data cooperative sharing marine animal location data in real time across the range of the endangered orcas (from California to Alaska, USA). 
 
-**Phase 2 (2023-24)** aims to add features to the prototype and diversify both the data providers and end users in the U.S. 
+**Phase 2 (2023-25)** With new data providers, end users, and broader dev+UX/design team, we are adding features to the prototype and refining the data scheme to maximize cooperative conservation, open data sharing, and ecosystem insights. 
 
-**Phase 3 (>2024)** will aspire to share data across the US-Canada border and integrate with other applications to enhance regional ecosystem understanding and management for marine conservation.
+**Phase 3 (2026+)** will aspire to share data across all interested organizations on both sides of the US-Canada and First Nations borders and integrate with applications and models that enhance regional ecosystem understanding and management for marine conservation.
 
 For project context and updates, don't miss the [Acartia wiki](https://github.com/salish-sea/acartia/wiki). There you will also find additional information for design-UXers, open source developers, devops leads, and system administrators.
 
