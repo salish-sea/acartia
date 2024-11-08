@@ -28,6 +28,7 @@ const config = {
     apiRoot: process.env.API_ROOT || '',
     isSSL: process.env.IS_SSL || false,
     defaultEmail: 'no-reply@orcasound-api.com',
+    domain: "acartia.io",
     sendgridKey: requireProcessEnv('SENDGRID_KEY'),
     masterKey: requireProcessEnv('MASTER_KEY'),
     jwtSecret: requireProcessEnv('JWT_SECRET'),

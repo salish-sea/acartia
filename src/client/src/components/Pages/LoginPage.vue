@@ -1,168 +1,165 @@
 // LOGIN PAGE
 
 <template>
-<div class="login-container">
-  <div class="login">
-    <!-- Title and header on the UI -->
-    <header class="login--header">
-      <h1>Acartia</h1>
-      <span>LOGIN</span>
-    </header>
+  <div>
     <section class="login--section">
-      <!-- UI for passing login details -->
-      <form class='login--form' @submit.prevent="loginMethod">
-        <fieldset>
-          <input type="text" v-model.trim="loginData.email" placeholder='Email' name="email" required />
-        </fieldset>
-        <fieldset>
-          <input type="password" v-model.trim="loginData.password" placeholder='Password' name="password" required/>
-        </fieldset>
-        <fieldset>
-          <button type='submit' class='btn'>Submit</button>
-        </fieldset>
+      <h1 class="header">Welcome back!</h1>
+
+      <!-- TODO: the error message should be received from the backend instead of hardcoded -->
+      <ErrorMessage v-if="isError">The email and/or password you entered did not match our records.</ErrorMessage>
+
+      <form>
+        <TextInput v-model.trim="loginData.email" label="Email" :is-password-field="false" :isError="isError" />
+        <TextInput v-model.trim="loginData.password" label="Password" :is-password-field="true" :isError="isError" />
+        <router-link id="ForgotPassword" class="link" to="/forgot-password">Forgot password?</router-link>
+        <Button class="standard-btn" @click="loginMethod" :isLoading="isLoading" :formData="loginData">
+          {{ isLoading ? "Loading..." : "Log in" }}
+        </Button>
       </form>
-      <br />
-      <mdb-container>
-        <mdb-alert :color="logMsgColour" v-if="isLoggingIn">{{logMsgLogin}}</mdb-alert>
-      </mdb-container>
-      <!-- <h3 id="logForLogin" class="animated bounce infinite slower" v-if="isLoggingIn">{{logMsgLogin}}</h3> -->
+
+      <div id="NoAccount">
+        <p>Don't have an account? <router-link id="signup" to="/register">Sign up</router-link></p>
+      </div>
     </section>
   </div>
-</div>
 </template>
 
 <script>
-import { mdbContainer, mdbAlert } from 'mdbvue'
+
+import TextInput from "../Form/TextInput.vue"
+import ErrorMessage from "../Form/ErrorMessage.vue"
+import Button from "../Form/Button.vue"
 
 export default {
   name: 'Login',
   components: {
-    mdbContainer,
-    mdbAlert
+    TextInput,
+    ErrorMessage,
+    Button,
   },
   data() {
     return {
-      loginData: {},
-      isLoggingIn: false,
-      logMsgLogin: "",
-      logMsgColour: "secondary"
+      loginData: { email: "", password: "" },
+      isLoading: false,
+      isError: false,
     }
   },
   methods: {
     loginMethod() {
-      // Hide login message before clicking on submit login details
-      this.isLoggingIn = true
-      this.logMsgLogin = "Logging you in....."
-      this.logMsgColour = "secondary"
-
+      this.isLoading = true;
       this.$store.dispatch('auth_request', this.loginData)
-      .then( (loginMessage) => {
-        console.log(loginMessage)
-        // Will change the log upon submit for login to be successful
-        this.logMsgLogin = loginMessage
-        this.logMsgColour = "success"
-        // Redirect to page upon login --admins will be redirected to register
-        this.$router.replace({name: 'DataExplorer'})
-      })
-      .catch( (loginMessage) => {
-        console.log(loginMessage)
-        // Will change the log upon submit for login to be invalid
-        this.logMsgLogin = loginMessage
-        this.logMsgColour = "danger"
-      })
-    }
-  }
+        .then((loginMessage) => {
+          console.log(loginMessage);
+          this.isLoading = false;
+          this.$router.replace({ name: 'DataExplorer' });
+          this.$store.dispatch('createToast', { message: 'Login successful', status: 'success'});
+        })
+        .catch((loginMessage) => {
+          this.isError = true;
+          console.log(loginMessage);
+          this.inputBorder = "2px solid #B22A2A";
+          this.errorVisibility = "block";
+          this.isLoading = false;
+        })
+    },
+  },
 }
+
 </script>
 
 <style scoped>
-  * {
+p {
+  font-family: "Montserrat";
+  font-weight: 300;
+  margin-top: 0 !important;
+  /* css in this project is cooked */
+}
+
+hr {
+  background-color: #6D6B7D;
+  margin: 10;
+}
+
+form {
   margin: 0;
-  padding: 0;
-  font-family: 'Source Sans Pro', sans-serif;
-  line-height: 1.5;
 }
 
-body {
-  background: #607D8B;
+.login--section {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  flex-direction: column;
+  width: 327px;
 }
 
-body, input, button {
-  font-size: 1.2rem;
+.icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 9px;
 }
 
-fieldset {
-  border: none;
+.standard-btn {
+  width: 327px;
+  height: 48px;
+  border-radius: 10px;
+  border-width: 0;
+  padding: 10px 24px 10px 24px;
+  box-shadow: none !important;
+  color: #6D6B7D;
+  background-color: #BFEBED;
+  text-transform: none;
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-size: 16px;
+  outline: none !important;
+
+  margin-top: 40px;
 }
 
-.login-container {
-  background: none;
-  width: 400px;
-  top: 150px;
+.forgot-password-section {
+  width: 327px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: "Montserrat";
+}
+
+.header {
+  font-family: "Mukta";
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 32px;
+  color: #3D3951;
   text-align: center;
-  box-shadow: 0 1rem 1rem 0 rgba(0, 0, 0, .15);
-  position: relative;
-  margin: auto;
+  margin-top: 100px;
 }
 
-.login {
-  z-index: 1;
-  position: relative;
-  background: white;
-  padding: .75rem 1.5rem 1.5rem;
-  box-sizing: border-box;
+.link {
+  color: #007B83 !important;
+  font-family: "Montserrat";
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 22.4px;
+  margin-top: 16px;
 }
 
-.login--header {
-  margin-bottom: 1rem;
+#ForgotPassword {
+  margin-left: auto !important;
+  display: block;
+  text-align: right;
 }
 
-.login--header span {
-  font-size: 1rem;
+#signup {
+  margin-left: 12px;
+  font-weight: 300;
+  color: #007B83;
 }
 
-.btn {
-  background: white;
-  box-shadow: inset 0 0 2px 0 #EEEEEE;
-  outline: none;
-  border: 1px solid darkblue;
-  padding: .3rem 1rem .4rem;
-  cursor: pointer;
-  border-radius: .25rem;
-  margin-top: 1rem;
-  color: darkblue;
+#NoAccount {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 16px;
 }
-
-.btn:active {
-  box-shadow: inset 2px 2px 2px 0 #E0E0E0;
-}
-
-input {
-  width: 100%;
-  border: groove;
-  text-align: center;
-  outline: none;
-  padding: .5rem 1rem;
-  box-sizing: border-box;
-  background: none;
-}
-
-.line {
-  transform: translate(0, -1rem);
-  stroke-width: .5;
-}
-
-.line--default {
-  stroke: #ccc;
-  transition: all .2s ease-out;
-}
-
-input:focus + svg > .line--default {
-  stroke: #3F51B5;
-}
-
-input:focus:invalid + svg > .line--default {
-  stroke: #FF5722;
-}
-
 </style>

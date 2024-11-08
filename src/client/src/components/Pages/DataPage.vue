@@ -137,8 +137,7 @@ export default {
       formData.append('file', this.file)
 
       axios.post(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/sightings/import`, formData, request)
-        .then(impRes => {
-          console.log(`Imported ${impRes.data}`)
+        .then(() => {
           this.alert = {
             show: true,
             message: "Your records have been successfully imported",

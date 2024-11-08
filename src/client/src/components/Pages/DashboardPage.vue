@@ -10,24 +10,24 @@
           <mdb-card-body>
             <form>
               <div>
-                <avatar class="mx-auto" :username="profile.name"
-                        :src="profile.logoFile"
-                        :size="200"
-                        alt="Your logo"/>
-                <mdb-input label="Your name" group type="text" v-model="profile.name" validate error="wrong" success="right"/>
-                <mdb-input label="Your website" group type="url" v-model="profile.website" validate error="wrong" success="right"/>
+                <avatar class="mx-auto" :username="profile.name" :src="profile.logoFile" :size="200" alt="Your logo" />
+                <mdb-input label="Your name" group type="text" v-model="profile.name" validate error="wrong"
+                  success="right" />
+                <mdb-input label="Your website" group type="url" v-model="profile.website" validate error="wrong"
+                  success="right" />
                 <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupFileAddon01">Add logo</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Add logo</span>
+                  </div>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" @change="onFileChange" id="inputGroupFile01"
+                      aria-describedby="inputGroupFileAddon01">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file ...</label>
+                  </div>
                 </div>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" @change="onFileChange" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                  <label class="custom-file-label" for="inputGroupFile01">Choose file ...</label>
-                </div>
-              </div>
               </div>
               <div class="text-center mt-3">
-                <mdb-btn type="submit" @click="submitForm()">{{ (profile.name !== '' ? 'Update': 'Save') }}</mdb-btn>
+                <mdb-btn type="submit" @click="submitForm()">{{ (profile.name !== '' ? 'Update' : 'Save') }}</mdb-btn>
               </div>
             </form>
           </mdb-card-body>
@@ -37,14 +37,16 @@
     <div>
       <div class="table-heading">
         <h1 class="table-title">Your Active Tokens</h1>
-        <mdb-btn outline="black" id="token-table-btn-new" class="btn-right" @click.native="modal = true">Create Token</mdb-btn>
+        <mdb-btn outline="black" id="token-table-btn-new" class="btn-right" @click.native="modal = true">Create
+          Token</mdb-btn>
       </div>
       <mdb-modal :show="modal" @close="modal = false" centered>
         <mdb-modal-header>
           <mdb-modal-title>Create Token</mdb-modal-title>
         </mdb-modal-header>
         <mdb-modal-body class="grey-text">
-          <mdb-input label="Add a name for your token" group type="text" validate error="wrong" success="right" v-model="tokenName"/>
+          <mdb-input label="Add a name for your token" group type="text" validate error="wrong" success="right"
+            v-model="tokenName" />
         </mdb-modal-body>
         <mdb-modal-footer>
           <mdb-btn color="secondary" @click.native="modal = false">Cancel</mdb-btn>
@@ -67,7 +69,8 @@
               <td>{{ item.token }}</td>
               <td>{{ item.createdAt }}</td>
               <td><mdb-btn size="sm" to="/" v-clipboard="() => copyToken(item)" class="btn">Copy</mdb-btn>
-                <mdb-btn size="sm" to="/" @click="deleteToken(item)"  class="btn">Delete</mdb-btn></td>
+                <mdb-btn size="sm" to="/" @click="deleteToken(item)" class="btn">Delete</mdb-btn>
+              </td>
             </tr>
           </mdb-tbl-body>
         </mdb-tbl>
@@ -77,8 +80,10 @@
 </template>
 
 <script>
-import { mdbTbl, mdbTblHead, mdbTblBody, mdbBtn, mdbModal, mdbInput,
-  mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbCard, mdbCardBody } from 'mdbvue'
+import {
+  mdbTbl, mdbTblHead, mdbTblBody, mdbBtn, mdbModal, mdbInput,
+  mdbModalHeader, mdbModalTitle, mdbModalBody, mdbModalFooter, mdbCard, mdbCardBody
+} from 'mdbvue'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import Avatar from 'vue-avatar'
@@ -101,16 +106,16 @@ export default {
     Avatar
   },
   computed: {
-    getProfile: function() {
+    getProfile: function () {
       if (this.$store.state.profile) {
         return this.$store.state.profile
       } else {
         const { name, website, logo: logoFile } = this.$store.state.userDetails.user
-        return {name, website, logoFile }
+        return { name, website, logoFile }
       }
     }
   },
-  data () {
+  data() {
     return {
       userToken: '',
       modal: false,
@@ -159,7 +164,6 @@ export default {
       const reader = new FileReader();
       const vm = this;
       vm.profile.fileName = file.name
-      console.log(file)
       reader.onload = (e) => {
         vm.profile.logoFile = e.target.result
       }
@@ -168,8 +172,8 @@ export default {
     removeImage: function () {
       this.profile.file = '';
     },
-  // End code block
-    copyToken (item) {
+    // End code block
+    copyToken(item) {
       try {
         alert('Token copied!')
         return item.token
@@ -177,7 +181,7 @@ export default {
         alert('Sorry, unable to copy your token :(')
       }
     },
-    loadUserTokens () {
+    loadUserTokens() {
       this.$store.dispatch("get_user_tokens")
         .then(res => {
           let getList = JSON.parse(JSON.stringify(res.data))
@@ -194,7 +198,7 @@ export default {
           }
         })
     },
-    createToken () {
+    createToken() {
       // Hide login message before clicking on submit login details
       this.modal = false
 
@@ -206,7 +210,7 @@ export default {
           console.log(error)
         })
     },
-    deleteToken (item) {
+    deleteToken(item) {
       // Check for event error to prevent propagation
       event.preventDefault()
       const requestAuth = {
@@ -220,8 +224,7 @@ export default {
       axios.delete(`${process.env.VUE_APP_WEB_SERVER_URL}/v1/users/tokens/${item.id}`, requestAuth)
         // Redirect to requested page
         .then(regUser => {
-          console.log(`Deleted ${regUser.data}`)
-
+          console.log(regUser)
           this.loadUserTokens()
         })
         // Check for request errors
@@ -231,22 +234,21 @@ export default {
     },
     submitForm() {
       event.preventDefault()
-      console.log(this.profile)
       this.$store.dispatch('update_profile', this.profile)
     }
   },
-    mounted () {
-      this.loadUserTokens()
-      if (sessionStorage.userToken) {
-        this.userToken = sessionStorage.userToken
-      }
-      const existingProfile = this.getProfile
-      this.profile.name = existingProfile.name
-      this.profile.website = existingProfile.website
-      this.profile.logoFile = existingProfile.logoFile
-
+  mounted() {
+    this.loadUserTokens()
+    if (sessionStorage.userToken) {
+      this.userToken = sessionStorage.userToken
     }
+    const existingProfile = this.getProfile
+    this.profile.name = existingProfile.name
+    this.profile.website = existingProfile.website
+    this.profile.logoFile = existingProfile.logoFile
+
   }
+}
 
 </script>
 
@@ -259,16 +261,16 @@ export default {
 }
 
 .table-heading {
-    padding: 5%;
+  padding: 5%;
 }
 
 .contrib-heading {
-  display:flex;
+  display: flex;
   padding: 5% 5% 0;
 }
 
 .table-title {
-    float: left;
+  float: left;
 }
 
 .btn-right {
@@ -284,6 +286,6 @@ export default {
 }
 
 #token-table-btn-new {
-    float: right;
+  float: right;
 }
 </style>

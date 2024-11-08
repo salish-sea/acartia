@@ -5,12 +5,16 @@ import { csLoadSpreadsheet } from './partner-data/citizen-science-api'
 import { omLoadSpreadsheet } from './partner-data/orca-map-api'
 import user from './user'
 import auth from './auth'
+import emailServer from './email-server'
 import passwordReset from './password-reset'
 import dataIngestion from './data-ingestion'
 import cors from 'cors'
 import { token } from '../services/passport/index'
 import cron from 'node-cron'
 import app from '../app'
+import sgMail from '@sendgrid/mail'
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const router = new Router()
 
@@ -50,13 +54,14 @@ router.use('/docs', express.static('src/docs'))
 
 //  CORS Whitelist prod and local frontend URLs for the application
 const corsWhitelist = {
-  origin: ['https://acartia.io', 'http://localhost:8082']
+  origin: ['https://acartia.io', 'http://localhost:8080']
 }
 
 router.use('/v1/users', cors(corsWhitelist), user)
 router.use('/v1/auth', cors(corsWhitelist), auth)
 router.use('/v1/password-resets', cors(corsWhitelist), passwordReset)
 router.use('/v1/sightings', cors(corsWhitelist), dataIngestion)
+router.use('/v1/email', cors(corsWhitelist), emailServer)
 
 router.get('/v1/import',
   token({ required: true, roles: ['admin'] }),
