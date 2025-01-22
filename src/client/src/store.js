@@ -23,7 +23,7 @@ const store = createStore(
       error: null,
 
       //Map state
-      mapFilters: generateInitFilterState(7, 1),
+      mapFilters: generateInitFilterState({startNDaysAgo : 6, endNDaysAgo : 0}),
       mapOptions: {
         contributors: [],
         species: [],
@@ -36,7 +36,7 @@ const store = createStore(
       hydrophonesVisibility: 'none',
 
       // Table view state
-      tableFilters: generateInitFilterState(1, 1),
+      tableFilters: generateInitFilterState({startNDaysAgo : 0, endNDaysAgo : 0}),
       tableSightings: [],
 
       // Notifications
@@ -135,7 +135,7 @@ const store = createStore(
         }
       },
       resetMapFilters(state) {
-        state.mapFilters = generateInitFilterState(7, 1)
+        state.mapFilters = generateInitFilterState({startNDaysAgo : 6, endNDaysAgo : 0})
         state.filteredSightings = filterSightingData(state.sightings, state.mapFilters)
 
         //Rerender map
