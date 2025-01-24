@@ -235,7 +235,12 @@ export default {
     },
     speciesLegendOptions: {
       get() {
-        return this.$store.getters.getSpeciesLegendOptions
+        // Sort alphabetically to group different spellings of species field
+        // eg. "Killer Whale" and "killer whale" and "killer whale sighting"
+        // this is a temporary hack until the database schema is revised (species enumerated types?)
+        let legendOptions = this.$store.getters.getSpeciesLegendOptions;
+        let legendOptionsSorted = legendOptions.sort()
+        return legendOptionsSorted;
       },
     },
     species: {
