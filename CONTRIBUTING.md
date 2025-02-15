@@ -14,6 +14,30 @@ The fastest way to experiment with Acartia data is to `GET` data via the "curren
 
 The current endpoint returns the last week of marine animal locations from the entire [geographic domain of Acartia](https://github.com/salish-sea/acartia/wiki/1.-Context-for-SSEMMI-&-Acartia#spatial-boundaries-related-to-acartia) (all species; visual _and_ acoustic observations; all providers; all trust levels; etc.)
 
+Upon successful query of the API, you should get a response with the following fields:
+
+```
+"type", a text string with the marine species observed (or ecotype, in the phase one data scheme)
+"created", the date and time of the observation (in this format "2025-02-14 21:49:00" -- which uses the UTC time zone!) 
+"profile", the name of the Acartia user's profile that created the data record (used with data_source_id to generate ssemmi_id)
+"trusted", a binary integer indicated trust level (in the phase one data scheme, 1=trusted and 0=untrusted)
+"entry_id", an alphanumeric identifier ensuring that the observation has a unique id within the Acartia data cooperative
+"latitude", the observation latitude in decimal format, e.g. 49.21641
+"longitude", the observation longitude in decimal format, e.g. -123.79883
+"photo_url", an optional URL for linking to media associated with the observation (only photos in the 2024 data scheme)
+"signature", two strings (r and s) for signing the record
+"ssemmi_id", a unique ID for the record from the persective of the contributing profile, e.g. SPOTTER 216161 indicates the 216,161th contribution from the spotter profile (useful for curating the record if there are later changes at the source)
+"no_sighted", the number of individuals observed
+"submitter_did", an alphanumeric string acting as a digital identifier for the contributor
+"data_source_id", an integer that integrements upon each new observation (used with profile name to generate ssemmi_id)
+"data_source_name", the digital source of the contribution (e.g. another database or API)
+"ssemmi_date_added", the date and time that the record was added to the database (possibly long after the observation) in this format -- "Fri Feb 14 2025 23:25:20 GMT+0000 (Coordinated Universal Time)"
+"data_source_entity", the organization assosicated with the contribution
+"data_source_witness", the trusted entity or tool that was used to submit the observation
+"data_source_comments" free text with any comments regarding the observation (in the 2024 data scheme, there is a convention of using square brackets to indicate the source organization (if any) and trailing parenthetical names of observers, identifiers, or other curators, e.g. [Orca Network] J pod, northbound, fast, wide spread (Susan Berta)
+```
+        
+
 See the Acartia wiki section on [Open source code for retrieving and parsing "current" Acartia data](https://github.com/salish-sea/acartia/wiki/3.-Dev-resources#open-source-repos-and-sample-code).
 
 
@@ -67,13 +91,13 @@ axios.get('https://acartia.io/v1/sightings', requestAuth)
 })
 ```    
 
-5. Finally, there is the structure of the data. When you send data to the [Sightings API](DOCS.md#markdown-header-sightings),
+5. Finally, there is the structure of the data. When you **send** data to the [Sightings API](DOCS.md#markdown-header-sightings),
 only data that fits in this format will be stored. The format is shown below:
 
    >- **data_source_name:** The name of the data entry
    >- **data_source_entity:** Your organization 
    >- **data_source_id:** the ID of the record in your system
-   >- **created:** The date and time when the observation occurred (in time zone local to the reported position)
+   >- **created:** The date and time when the observation occurred
    >- **photo_url:** The URL of the photo sighting
    >- **no_sighted:** The number of whales sighted
    >- **latitude:** Latitude of the sighting (decimal degrees)
