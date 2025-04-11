@@ -10,18 +10,19 @@ This is the public repository for the Acartia data cooperative. Acartia is a dec
 
 **Phase 2 (2023-24)** aims to add features to the prototype and diversify both the data providers and end users in the U.S. 
 
-**Phase 3 (>2024)** will aspire to share data across the US-Canada border and integrate with other applications to enhance regional ecosystem understanding and management for marine conservation.
+**Phase 3 (2025+)** aspires to share data across the US-Canada border and integrate with other applications to enhance regional ecosystem understanding and management for marine conservation.
 
 For project context and updates, don't miss the [Acartia wiki](https://github.com/salish-sea/acartia/wiki). There you will also find additional information for design-UXers, open source developers, devops leads, and system administrators.
+
+**NOTE:** development of the Acartia data cooperative is active here, building on a 2023 fork of the [initial repository developed by TypeHuman](https://github.com/Typehuman/SSEMMI). For project context and updates, don't miss the [Acartia wiki](https://github.com/salish-sea/acartia/wiki). There you will also find additional information for design-UXers, open source developers, devops leads, and system administrators.
+
 
 ## SSEMMI
 **Salish Sea Ecosystem Monitoring and Modeling Infrastructure**
 
 Acartia is part of a transboundary (U.S./Canada) effort to build open infrastructure to understand, monitor, model, and conserve the marine ecosystem known as the Salish Sea. SSEMMI was initially proposed by members of the Puget Sound Ecosystem Monitoring Program's Marine Mammal Work Group ([PSEMP](https://https://www.psp.wa.gov/PSEMP-overview.php)/[MMWG](https://psemp.net/mmwg)).
 
-**NOTE:** development is active on a 2023 fork of this repo at the **[Acartia repository](https://github.com/salish-sea/acartia)**. For project context and updates, don't miss the [Acartia wiki](https://github.com/Typehuman/SSEMMI/wiki). There you will also find additional information for design-UXers, open source developers, devops leads, and system administrators.
-
-<br>
+You can peruse and add to the software repositories which are part of this Salish Sea infrastructure within the [salish-sea organization on Github](https://github.com/salish-sea).
 
 ## Installation and running locally 
   
