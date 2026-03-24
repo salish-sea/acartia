@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import acartia.models.Sighting;
-import acartia.models.Species;
 
 @Component
 @AllArgsConstructor
@@ -21,8 +20,6 @@ public class SightingsMapper {
      * @return The db entity object.
      */
     public Sighting map(acartia.api.model.Sighting sighting) {
-        Species species = speciesMapper.map(sighting.getType());
-
         return Sighting.builder()
                 .ssemmiId(sighting.getSsemmiId())
                 .dataSourceName(sighting.getDataSourceName())
@@ -32,7 +29,7 @@ public class SightingsMapper {
                 .noSighted(sighting.getNoSighted())
                 .latitude(sighting.getLatitude())
                 .longitude(sighting.getLongitude())
-                .species(species)
+                .species(speciesMapper.map(sighting.getType()))
                 .trusted(sighting.getTrusted())
                 .dataSourceComments(sighting.getDataSourceComments().orElse(null))
                 .build();

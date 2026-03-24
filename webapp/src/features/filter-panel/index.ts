@@ -5,4 +5,4 @@ export * from "./components/filter-sightings-card";
 export * from "./components/filter-toggle-button";
 export * from "./components/species-legend-card";
 export * from "./types/date-range";
-export * from "./utils/getFilterOptions";
+export * from "./utils/get-filter-options";

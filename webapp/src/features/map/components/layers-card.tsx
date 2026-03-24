@@ -1,16 +1,8 @@
 import { useState } from "react";
-import {
-  Box,
-  ButtonBase,
-  Divider,
-  Fab,
-  IconButton,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { ButtonBase, Divider, Fab, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import { Close, LayersOutlined } from "@mui/icons-material";
-import { MapControl } from "./map-control";
+import type { MapLayer, OverlayConfigItem } from "@/features/map";
+import { MapControl } from "@/features/map";
 
 // For marker layers
 // https://react-leaflet.js.org/docs/example-layers-control/
@@ -76,12 +68,12 @@ type ExpandedProps = {
   /**
    * List of maps.
    */
-  maps: Array<{ tiles: string; thumbnail: string; label: string }>;
+  maps: Array<MapLayer>;
 
   /**
    * The index of the currently selected map.
    */
-  selected: number;
+  selected: MapLayer;
 
   /**
    * Callback to close the layers card.
@@ -92,8 +84,32 @@ type ExpandedProps = {
    * Set the map tile layer.
    */
   onLayersChange: (index: number) => void;
+
+  /**
+   * List of map overlays to render.
+   */
+  overlays: Array<OverlayConfigItem>;
+
+  /**
+   * List of map overlays that are currently selected / active.
+   */
+  activeOverlays: Array<OverlayConfigItem>;
+
+  /**
+   * Callback to toggle a map overlay on or off.
+   */
+  onToggleOverlay: (overlay: OverlayConfigItem) => void;
 };
-function Expanded({ maps, selected, onClose, onLayersChange }: Readonly<ExpandedProps>) {
+
+function Expanded({
+  maps,
+  selected,
+  onClose,
+  onLayersChange,
+  overlays,
+  activeOverlays,
+  onToggleOverlay,
+}: Readonly<ExpandedProps>) {
   return (
     <Stack
       gap={2.5}
@@ -110,13 +126,15 @@ function Expanded({ maps, selected, onClose, onLayersChange }: Readonly<Expanded
 
       <Divider />
 
-      <Typography variant="body1">Map Type</Typography>
+      <Typography variant="body1" fontWeight={600}>
+        Map Type
+      </Typography>
       <Stack direction="row" justifyContent="space-between">
         {maps.map((map, index) => (
           <MapLayerButton
             key={map.label}
             src={map.thumbnail}
-            isSelected={index === selected}
+            isSelected={map.tiles === selected.tiles}
             onClick={() => onLayersChange(index)}
             label={map.label}
           />
@@ -125,14 +143,17 @@ function Expanded({ maps, selected, onClose, onLayersChange }: Readonly<Expanded
 
       <Divider />
 
-      <Typography variant="body1">Map Overlays</Typography>
+      <Typography variant="body1" fontWeight={600}>
+        Map Overlays
+      </Typography>
       <Stack direction="row" justifyContent="space-between">
-        {maps.map((map) => (
+        {overlays.map((overlay) => (
           <MapLayerButton
-            key={map.label}
-            src={map.thumbnail}
-            label={map.label}
-            onClick={() => {}}
+            key={overlay.label}
+            src={overlay.thumbnail}
+            isSelected={activeOverlays.some((o) => o.label === overlay.label)}
+            label={overlay.label}
+            onClick={() => onToggleOverlay(overlay)}
           />
         ))}
       </Stack>
@@ -157,6 +178,9 @@ type CollapsedDesktopProps = {
   color: string;
 };
 
+/**
+ * "Collapsed" view of the layers card button we show on desktop screens.
+ */
 function CollapsedDesktop({ src, onOpen, color }: Readonly<CollapsedDesktopProps>) {
   return (
     <ButtonBase
@@ -187,6 +211,9 @@ type CollapsedMobileProps = {
   onOpen: () => void;
 };
 
+/**
+ * "Collapsed" view of the layers card button we show on mobile screens.
+ */
 function CollapsedMobile({ onOpen }: Readonly<CollapsedMobileProps>) {
   return (
     <Fab size="small" onClick={onOpen} sx={{ boxShadow: "none", display: { md: "none" } }}>
@@ -210,7 +237,7 @@ type LayersCardProps = {
   /**
    * Index of the currently selected map tile layer.
    */
-  selected: number;
+  selected: MapLayer;
 
   /**
    * Set the map tile layer.
@@ -220,35 +247,56 @@ type LayersCardProps = {
   /**
    * List of maps.
    */
-  maps: Array<{ tiles: string; thumbnail: string; label: string; contrastColor: string }>;
+  maps: Array<MapLayer>;
+
+  /**
+   * List of map overlays.
+   */
+  overlays: Array<OverlayConfigItem>;
+
+  /**
+   * List of map overlays that are currently selected / active.
+   */
+  activeOverlays: Array<OverlayConfigItem>;
+
+  /**
+   * Callback to toggle a map overlay on or off.
+   */
+  onToggleOverlay: (overlay: OverlayConfigItem) => void;
 };
 
 /**
  * A component for controlling map layers.
  */
-export function LayersCard({ selected, maps, onLayersChange }: Readonly<LayersCardProps>) {
-  const thumbnailUrl = maps[(selected + 1) % maps.length]!.thumbnail;
-  const thumbnailTextColor = maps[(selected + 1) % maps.length]!.contrastColor;
+export function LayersCard({
+  selected,
+  maps,
+  onLayersChange,
+  overlays,
+  activeOverlays,
+  onToggleOverlay,
+}: Readonly<LayersCardProps>) {
   const [expanded, setExpanded] = useState<boolean>(false);
 
   return (
-    <MapControl position="bottomleft">
-      <Box sx={{ marginBottom: 3, marginLeft: 3 }}>
-        {expanded ? (
-          <Expanded
-            maps={maps}
-            selected={selected}
-            onClose={() => setExpanded(false)}
-            onLayersChange={onLayersChange}
-          />
-        ) : (
-          <Collapsed
-            src={thumbnailUrl}
-            onOpen={() => setExpanded(true)}
-            color={thumbnailTextColor}
-          />
-        )}
-      </Box>
+    <MapControl position="bottomleft" sx={{ marginBottom: 3, marginLeft: 3 }}>
+      {expanded ? (
+        <Expanded
+          selected={selected}
+          maps={maps}
+          onClose={() => setExpanded(false)}
+          onLayersChange={onLayersChange}
+          overlays={overlays}
+          activeOverlays={activeOverlays}
+          onToggleOverlay={onToggleOverlay}
+        />
+      ) : (
+        <Collapsed
+          src={selected.thumbnail}
+          onOpen={() => setExpanded(true)}
+          color={selected.contrastColor}
+        />
+      )}
     </MapControl>
   );
 }
