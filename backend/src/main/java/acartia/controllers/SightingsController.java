@@ -28,8 +28,8 @@ public class SightingsController implements SightingsApi {
             Optional<List<String>> species, Optional<List<String>> contributors, Optional<Boolean> trusted) {
 
         return ResponseEntity.ok(sightings.findAll(SightingsFilter.builder()
-                .startDate(startDate.orElse(LocalDate.now()))
-                .endDate(endDate.orElse(LocalDate.now().minusWeeks(1)))
+                .startDate(startDate.orElse(LocalDate.now().minusWeeks(1)))
+                .endDate(endDate.orElse(LocalDate.now()))
                 .species(species.orElse(List.of()))
                 .contributors(contributors.orElse(List.of()))
                 .trusted(trusted.orElse(true))
