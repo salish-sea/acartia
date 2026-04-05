@@ -1,0 +1,39 @@
+get:
+  summary: Get sightings
+  operationId: getSightings
+  parameters:
+    - in: query
+      name: startDate
+      schema:
+        type: string
+        format: date
+    - in: query
+      name: endDate
+      schema:
+        type: string
+        format: date
+    - in: query
+      name: species
+      schema:
+        type: array
+        items:
+          type: string
+    - in: query
+      name: contributors
+      schema:
+        type: array
+        items:
+          type: string
+    - in: query
+      name: trusted
+      schema:
+        type: boolean
+
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../models/sighting.yml"

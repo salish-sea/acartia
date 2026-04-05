@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: acartia
+  datasource:
+    url: jdbc:tc:postgresql:9.6.8:///acartia
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    root: INFO
+
+server:
+  servlet:
+    context-path: /api/v1
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /dev
+      prefix: stdout
+      suffix: ""
+      file-date-format: ""
+      pattern: common
+      rotate: false
+
+acartia:
+  legacy:
+    base-url: https://acartia.io/api/v1

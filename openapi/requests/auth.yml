@@ -1,0 +1,19 @@
+post:
+  summary: Sign in
+  operationId: signIn
+
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            access_token:
+              type: string
+  responses:
+    "201":
+      content:
+        application/json:
+          schema:
+            $ref: "../models/auth-response.yaml"

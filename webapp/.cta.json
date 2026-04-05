@@ -1,0 +1,13 @@
+{
+  "framework": "react",
+  "typescript": true,
+  "projectName": "acartia-webapp",
+  "mode": "code-router",
+  "tailwind": false,
+  "packageManager": "npm",
+  "toolchain": "eslint+prettier",
+  "variableValues": {},
+  "git": true,
+  "version": 1,
+  "existingAddOns": []
+}
