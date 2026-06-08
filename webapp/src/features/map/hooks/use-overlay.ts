@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { OverlayMap } from "@/features/map";
+import type { OverlayMap } from "@/features/map/types/overlay";
 
 type Overlay = {
   /**

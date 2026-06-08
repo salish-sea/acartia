@@ -13,6 +13,7 @@ cassettes
 data
 orbitdb
 google-creds.json
+*.d.ts
 
 target/
 pom.xml.tag

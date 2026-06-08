@@ -1,43 +1,48 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Button, FormControl, Stack, TextField, Typography } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
+import { Alert, Button, FormControl, Stack, TextField, Typography } from "@mui/material";
 import type { SyntheticEvent } from "react";
 import { Link } from "@/components/link";
 import { PasswordField } from "@/components/password-field";
-import { api } from "@/lib/api/api";
-import { useAuth } from "@/hooks/use-auth-store";
+import { api } from "@/lib/api";
 
 /**
  * The form for logging in.
  */
 export function LoginForm() {
-  const { mutate, isPending } = api.useMutation("post", "/auth", {
-    onSuccess: ({ token, user }) => login({ token, user }),
-  });
+  const { mutate: login, error, isPending, isError } = api.useMutation("post", "/auth/login");
   const navigate = useNavigate({ from: "/login" });
-  const { login } = useAuth();
+  const queryClient = useQueryClient();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const canSubmit = username.trim() !== "" && password.trim() !== "";
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
-    mutate(
+    login(
+      { body: { username, password } },
       {
-        headers: { Authorization: `Basic ${btoa(`${username}:${password}`)}` },
-        body: { access_token: import.meta.env.VITE_APP_MASTER_KEY },
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["get", "/user"] });
+          navigate({ to: "/" });
+        },
       },
-      { onSuccess: () => navigate({ to: "/" }) },
     );
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack gap={4} sx={{ mt: "150px", mx: 2 }}>
+      <Stack gap={4} sx={{ mt: "150px", mx: 2, width: 330 }}>
         <Typography variant="h2" align="center">
           Welcome back!
         </Typography>
         <Stack width="100%" gap={4}>
+          {isError && (
+            <Alert variant="filled" severity="error">
+              {error.message}
+            </Alert>
+          )}
           <FormControl>
             <TextField
               size="small"
@@ -45,6 +50,7 @@ export function LoginForm() {
               onChange={(e) => setUsername(e.target.value)}
               label="Email"
               fullWidth
+              error={isError}
               slotProps={{ inputLabel: { shrink: true } }}
             />
           </FormControl>
@@ -54,6 +60,7 @@ export function LoginForm() {
               label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={isError}
               fullWidth
             />
           </FormControl>

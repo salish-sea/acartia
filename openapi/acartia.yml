@@ -7,7 +7,11 @@ servers:
   - url: /api/v1
 
 paths:
-  /auth:
-    $ref: "./requests/auth.yml"
+  /auth/login:
+    $ref: "./requests/login.yml"
+  /auth/register:
+    $ref: "./requests/register.yml"
   /sightings:
     $ref: "./requests/sightings.yml"
+  /user:
+    $ref: "./requests/current-user.yml"

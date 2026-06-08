@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { OverlayConfigItem } from "@/features/map";
+import type { OverlayConfigItem } from "@/features/map/types/overlay";
 import { useConfig } from "@/hooks/use-config";
 
 type Return = {

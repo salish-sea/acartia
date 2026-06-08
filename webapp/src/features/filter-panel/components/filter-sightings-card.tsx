@@ -14,7 +14,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import type { DateRange } from "@/features/filter-panel";
 import { DateRangeCalendar, getFilterOptions } from "@/features/filter-panel";
-import { api } from "@/lib/api/api";
+import { api } from "@/lib/api";
 
 type Filters = {
   species: Array<string>;

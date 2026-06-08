@@ -33,7 +33,7 @@ import { ListItemButtonLink } from "@/components/list-item-button-link";
 import { Link } from "@/components/link";
 import { Menu as MenuIcon } from "@/components/icons/menu";
 import { PlaceholderLogo } from "@/components/icons/placeholder-logo";
-import { useAuth } from "@/hooks/use-auth-store";
+import { useAuthentication } from "@/hooks/use-authentication";
 
 const NavLink = styled(Link, { shouldForwardProp: (prop) => prop !== "active" })<{
   active: boolean;
@@ -70,7 +70,7 @@ const navItems = [
  */
 export function Navbar() {
   const pathname = useLocation({ select: (location) => location.pathname });
-  const { user } = useAuth();
+  const { data: user, isLoading } = useAuthentication();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const toggleDrawer = () => setDrawerOpen((prev) => !prev);

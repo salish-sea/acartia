@@ -1,6 +1,6 @@
 import { useSearch } from "@tanstack/react-router";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { api } from "@/lib/api/api";
+import { api } from "@/lib/api";
 import {
   LayersCard,
   Overlay,
@@ -10,6 +10,11 @@ import {
   useMapOverlays,
   useResizeMap,
 } from "@/features/map";
+
+/**
+ * TODO - Maybe we should return dummy list from useOverlays, should probably do suspense query or something for the Layers card?
+ * Instead of calling useMapOverlays here perhaps we should move it to be called inside that component.
+ */
 
 /**
  * Displays a leaflet map.

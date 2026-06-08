@@ -15,3 +15,12 @@ create table if not exists sightings (
     trusted boolean not null,
     data_source_comments text
 );
+
+create table if not exists users (
+    id bigint generated always as identity primary key,
+    email text not null, -- TODO should ignore case, should also have unique constraint
+    password text not null,
+    name text not null,
+    website text,
+    is_approved boolean not null
+);

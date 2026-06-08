@@ -63,6 +63,10 @@ export const appTheme = createTheme({
       main: "#2CC396",
       dark: "#239C78",
     },
+    error: {
+      main: "#B22A2A",
+      light: "#F9CDCD",
+    },
   },
   typography: {
     h1: {
@@ -102,6 +106,23 @@ export const appTheme = createTheme({
     },
   },
   components: {
+    MuiAlert: {
+      defaultProps: {
+        icon: false,
+        // "standard" or whatever is weird.
+        variant: "filled",
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          fontWeight: 400,
+        },
+        filledError: ({ theme }) => ({
+          color: theme.palette.error.main,
+          backgroundColor: theme.palette.error.light,
+        }),
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         root: {
@@ -173,7 +194,7 @@ export const appTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          borderRadius: "10px",
+          borderRadius: 10,
           textTransform: "none",
           variants: [
             {

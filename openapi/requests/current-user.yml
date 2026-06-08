@@ -1,0 +1,10 @@
+get:
+  summary: Get the current / logged in user
+  operationId: getCurrentUser
+
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: "../models/user.yml"
