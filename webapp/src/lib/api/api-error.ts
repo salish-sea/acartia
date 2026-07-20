@@ -24,7 +24,6 @@ export class ApiError extends Error {
    * @returns The parsed {@link ApiError} object
    */
   static fromResponse(body: unknown, status: number) {
-    ApiErrorSchema.parse(body);
     const parsed = ApiErrorSchema.safeParse(body);
 
     if (parsed.success) {

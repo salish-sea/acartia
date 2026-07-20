@@ -67,6 +67,10 @@ export const appTheme = createTheme({
       main: "#B22A2A",
       light: "#F9CDCD",
     },
+    action: {
+      // This is for the profile page, not sure if this is the right place for this color.
+      active: "#080D260D",
+    },
   },
   typography: {
     h1: {
@@ -141,10 +145,23 @@ export const appTheme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: ({ theme }) => ({
+          fontSize: "16px",
+          margin: 0,
+          fontWeight: 400,
           color: theme.palette.text.primary,
           "&.Mui-focused": {
             color: theme.palette.text.primary,
           },
+        }),
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: () => ({
+          fontWeight: 500,
+          fontSize: "12px",
+          marginLeft: "4px",
+          marginBottom: "4px",
         }),
       },
     },
@@ -176,13 +193,6 @@ export const appTheme = createTheme({
           "& .MuiPickersOutlinedInput-notchedOutline": {
             borderColor: theme.palette.text.primary,
           },
-          // TODO these don't work, might have to do default props
-          // "&:hover .MuiOutlinedInput-notchedOutline": {
-          //   borderWidth: "2px",
-          // },
-          // "&.Mui-focused .MuiPickersOutlinedInput-notchedOutline": {
-          //   borderColor: theme.palette.text.primary,
-          // },
         }),
       },
     },

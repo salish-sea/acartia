@@ -13,5 +13,5 @@ paths:
     $ref: "./requests/register.yml"
   /sightings:
     $ref: "./requests/sightings.yml"
-  /user:
-    $ref: "./requests/current-user.yml"
+  /profile:
+    $ref: "./requests/profile.yml"

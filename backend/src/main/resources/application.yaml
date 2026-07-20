@@ -11,6 +11,10 @@ spring:
       ddl-auto: none
     open-in-view: false
 
+  jackson:
+    # For future reference: https://fasterxml.github.io/jackson-annotations/javadoc/2.7/com/fasterxml/jackson/annotation/JsonInclude.Include.html
+    default-property-inclusion: non_absent
+
 logging:
   level:
     root: INFO

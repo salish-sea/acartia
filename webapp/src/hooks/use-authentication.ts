@@ -8,5 +8,5 @@ import { api } from "@/lib/api";
  * @returns The currently logged in user.
  */
 export function useAuthentication(): UseQueryResult<User, ApiError> {
-  return api.useQuery("get", "/user", {}, { staleTime: Infinity });
+  return api.useQuery("get", "/profile", {}, { staleTime: Infinity });
 }

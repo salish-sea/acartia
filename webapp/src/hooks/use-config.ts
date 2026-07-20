@@ -12,7 +12,7 @@ export function useConfig(): Config {
   return useSuspenseQuery<Config, Error>({
     queryKey: ["config"],
     queryFn: async () => {
-      const response = await fetch("/public/config.json");
+      const response = await fetch("/config.json");
       const text = await response.text();
       return JSON.parse(text.replaceAll("<mapboxkey>", mapboxkey));
     },

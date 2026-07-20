@@ -23,8 +23,8 @@ export function LoginForm() {
     login(
       { body: { username, password } },
       {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["get", "/user"] });
+        onSuccess: async () => {
+          await queryClient.invalidateQueries({ queryKey: ["get", "/profile"] });
           navigate({ to: "/" });
         },
       },

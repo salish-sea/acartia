@@ -12,13 +12,12 @@ import org.springframework.web.client.RestClient;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import acartia.mappers.SightingsMapper;
-import acartia.mappers.SpeciesMapper;
-import acartia.models.Sighting;
-import acartia.models.Species;
-import acartia.repositories.Sightings;
-import acartia.repositories.SpeciesList;
+import acartia.sightings.Sighting;
+import acartia.sightings.Sightings;
+import acartia.sightings.SightingsMapper;
+import acartia.sightings.Species;
+import acartia.sightings.SpeciesList;
+import acartia.sightings.SpeciesMapper;
 
 @Slf4j
 @Component

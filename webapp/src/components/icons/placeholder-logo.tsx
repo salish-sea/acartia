@@ -1,8 +1,9 @@
 import { SvgIcon } from "@mui/material";
+import type { SvgIconProps } from "@mui/material";
 
-export function PlaceholderLogo() {
+export function PlaceholderLogo(props: Readonly<SvgIconProps>) {
   return (
-    <SvgIcon>
+    <SvgIcon {...props}>
       <svg
         width="34"
         height="34"
