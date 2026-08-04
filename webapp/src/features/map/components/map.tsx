@@ -1,15 +1,16 @@
 import { useSearch } from "@tanstack/react-router";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { api } from "@/lib/api";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import {
   LayersCard,
   Overlay,
+  SightingDetailsPopup,
   ZoomControls,
   mapIcon,
   useMapLayers,
   useMapOverlays,
   useResizeMap,
 } from "@/features/map";
+import { api } from "@/lib/api";
 
 /**
  * TODO - Maybe we should return dummy list from useOverlays, should probably do suspense query or something for the Layers card?
@@ -47,9 +48,7 @@ export function Map() {
           position={[sighting.latitude, sighting.longitude]}
           icon={mapIcon(sighting.type)}
         >
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
+          <SightingDetailsPopup sighting={sighting} />
         </Marker>
       ))}
       <LayersCard

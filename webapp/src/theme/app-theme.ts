@@ -54,6 +54,14 @@ export const appTheme = createTheme({
       darker: "#00AFBA",
       darkest: "#007B83",
     },
+    secondary: {
+      lighter: "#F2F2FF",
+      light: "#DEDEFE",
+      main: "#BEBEFF",
+      dark: "#9D9DFE",
+      darker: "#7C7CFE",
+      darkest: "6363CB",
+    },
     text: {
       primary: "#3D3951",
       secondary: "#6D6B7D",
