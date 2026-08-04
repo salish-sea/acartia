@@ -28,6 +28,7 @@ public class SightingsMapper {
                 .latitude(sighting.getLatitude())
                 .longitude(sighting.getLongitude())
                 .species(speciesMapper.map(sighting.getType()))
+                .rawSpecies(sighting.getType())
                 .trusted(sighting.getTrusted())
                 .dataSourceComments(sighting.getDataSourceComments().orElse(null))
                 .build();
@@ -41,6 +42,7 @@ public class SightingsMapper {
      * @return The db entity object.
      */
     public acartia.api.model.Sighting map(Sighting sighting) {
+        String type = sighting.getSpecies() == null ? sighting.getRawSpecies() : sighting.getSpecies().getName();
         return acartia.api.model.Sighting.builder()
                 .ssemmiId(sighting.getSsemmiId())
                 .dataSourceName(sighting.getDataSourceName())
@@ -50,7 +52,7 @@ public class SightingsMapper {
                 .noSighted(sighting.getNoSighted())
                 .latitude(sighting.getLatitude())
                 .longitude(sighting.getLongitude())
-                .type(sighting.getSpecies().getName())
+                .type(type)
                 .trusted(sighting.getTrusted())
                 .dataSourceComments(sighting.getDataSourceComments())
                 .build();

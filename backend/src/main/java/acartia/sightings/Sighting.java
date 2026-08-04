@@ -42,6 +42,8 @@ public class Sighting {
     @JoinColumn(name = "species")
     private Species species;
 
+    private String rawSpecies;
+
     private Boolean trusted;
 
     private String dataSourceComments;

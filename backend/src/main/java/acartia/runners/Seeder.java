@@ -51,8 +51,12 @@ public class Seeder implements ApplicationRunner {
                 .retrieve()
                 .body(parameterizedTypeReference);
 
+        // TODO: Don't do this in the real migration - there should be an admin page
+        // that controls this :)
         log.info("Mapping types to species columns");
-        Set<Species> seededSpecies = legacySightings.stream().map(s -> s.getType()).map(speciesMapper::map)
+        Set<Species> seededSpecies = legacySightings.stream()
+                .map(acartia.api.model.Sighting::getType)
+                .map(speciesMapper::map)
                 .collect(Collectors.toSet());
         species.saveAll(seededSpecies);
 
