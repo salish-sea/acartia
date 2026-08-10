@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpeciesMapper {
 
-    public Species map(String type) {
-        String name = switch (type == null ? "" : type.toLowerCase().strip()) {
+    public String getName(String type) {
+        return switch (type == null ? "" : type.toLowerCase().strip()) {
             case "orca", "orca sighting:", "orca (ballena asesina)",
                     "killer whale", "killer whale sighting:",
                     "killer whale (orca)", "killer whale (orca) sighting:" ->
@@ -74,7 +74,10 @@ public class SpeciesMapper {
                 "other";
             default -> "other"; // pass through unknown types as-is
         };
+    }
 
+    public Species map(String type) {
+        String name = getName(type);
         return Species.builder().name(name).build();
     }
 }

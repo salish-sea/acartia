@@ -58,11 +58,12 @@ public class Seeder implements ApplicationRunner {
                 .map(acartia.api.model.Sighting::getType)
                 .map(speciesMapper::map)
                 .collect(Collectors.toSet());
-        species.saveAll(seededSpecies);
+
+        species.saveAllAndFlush(seededSpecies);
 
         log.info("Seeding database");
         List<Sighting> seededSightings = legacySightings.stream().map(sightingsMapper::map).toList();
-        sightings.saveAll(seededSightings);
+        sightings.saveAllAndFlush(seededSightings);
         log.info("Successfully seeded database");
     }
 }

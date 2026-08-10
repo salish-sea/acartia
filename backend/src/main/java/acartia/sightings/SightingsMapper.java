@@ -10,6 +10,8 @@ public class SightingsMapper {
 
     private final SpeciesMapper speciesMapper;
 
+    private final SpeciesList speciesList;
+
     /**
      * Map {@link acartia.api.model.Sighting} java entity to {@link Sighting} DTO
      * object
@@ -18,6 +20,7 @@ public class SightingsMapper {
      * @return The db entity object.
      */
     public Sighting map(acartia.api.model.Sighting sighting) {
+        Species species = speciesList.findByName(speciesMapper.getName(sighting.getType())).orElseThrow();
         return Sighting.builder()
                 .ssemmiId(sighting.getSsemmiId())
                 .dataSourceName(sighting.getDataSourceName())
@@ -27,7 +30,7 @@ public class SightingsMapper {
                 .noSighted(sighting.getNoSighted())
                 .latitude(sighting.getLatitude())
                 .longitude(sighting.getLongitude())
-                .species(speciesMapper.map(sighting.getType()))
+                .species(species)
                 .rawSpecies(sighting.getType())
                 .trusted(sighting.getTrusted())
                 .dataSourceComments(sighting.getDataSourceComments().orElse(null))

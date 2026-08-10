@@ -39,7 +39,7 @@ public class Sighting {
     private BigDecimal longitude;
 
     @ManyToOne
-    @JoinColumn(name = "species")
+    @JoinColumn(name = "species_id")
     private Species species;
 
     private String rawSpecies;
