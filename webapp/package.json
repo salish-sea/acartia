@@ -10,7 +10,7 @@
     "lint": "eslint",
     "format": "prettier",
     "check": "prettier --write . && eslint --fix",
-    "generate": "npx openapi-typescript ../openapi/acartia.yml -o ./src/lib/api/v1.d.ts"
+    "generate": "npx openapi-typescript ../openapi.yml -o ./src/lib/api/v1.d.ts"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
