@@ -1,10 +1,9 @@
 import { Outlet, createRoute, notFound, useLocation } from "@tanstack/react-router";
 import { Box, styled } from "@mui/material";
 import { rootRoute } from "@/app/routes/__root";
-import { ProfileMenu, ProfileMenuDrawer } from "@/features/profile";
+import { BackButtonMobile, ProfileMenu, ProfileMenuDrawer } from "@/features/profile";
 import { api } from "@/lib/api";
 import { ApiError } from "@/lib/api/api-error";
-import { BackButtonMobile } from "@/features/profile/components/BackButtonMobile";
 
 const PageLayout = styled(Box)(() => ({
   display: "flex",

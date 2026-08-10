@@ -5,7 +5,7 @@ import type { Middleware } from "openapi-fetch";
 import type { paths } from "@/lib/api/v1";
 import { ApiError } from "@/lib/api/api-error";
 
-const fetchClient = createFetchClient<paths>({ baseUrl: import.meta.env.VITE_BASE_URL });
+export const fetchClient = createFetchClient<paths>({ baseUrl: import.meta.env.VITE_BASE_URL });
 
 const middleware: Middleware = {
   /**

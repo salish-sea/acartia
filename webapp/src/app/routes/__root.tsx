@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import type { QueryClient } from "@tanstack/react-query";
 import { indexRoute } from "@/app/routes";
 import { loginRoute } from "@/app/routes/login";
+import { logoutRoute } from "@/app/routes/logout";
 import { signupRoute } from "@/app/routes/signup";
 import { profileLayoutRoute } from "@/app/routes/profile/route";
 import { accountSettingsRoute } from "@/app/routes/profile/account-settings";
@@ -24,6 +25,7 @@ export const rootRoute = createRootRouteWithContext<{ queryClient: QueryClient }
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
+  logoutRoute,
   signupRoute,
   profileRoute,
   profileLayoutRoute.addChildren([accountSettingsRoute, deleteAccountRoute]),

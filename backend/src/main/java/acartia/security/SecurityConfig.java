@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .securityContext(context -> context.requireExplicitSave(true))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/sightings", "/profile").permitAll()
+                        .requestMatchers("/auth/login", "/auth/logout", "/auth/register", "/sightings", "/profile")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .build();
     }

@@ -105,6 +105,9 @@ export function ProfileMenu({ user, value }: Readonly<Props>) {
           label={<SettingsTabLabel value="Sign Out" />}
           icon={<Logout sx={{ fontSize: "large", color: "text.primary", ml: "4px" }} />}
           iconPosition="start"
+          to="/logout"
+          value="/logout"
+          preload={false}
         />
       </SettingsTabs>
     </>

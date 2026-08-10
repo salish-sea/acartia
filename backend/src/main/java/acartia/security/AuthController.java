@@ -9,6 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 
@@ -35,10 +36,12 @@ public class AuthController implements AuthApi {
 
     private final HttpServletResponse response;
 
+    private final UserProfileService userService;
+
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
             .getContextHolderStrategy();
 
-    private final UserProfileService userService;
+    private final SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
     @Override
     public ResponseEntity<Void> signIn(SignInRequest signInRequest) {
@@ -55,6 +58,12 @@ public class AuthController implements AuthApi {
             throw new UnauthorizedException("The email and/or password you entered did not match our records");
         }
 
+    }
+
+    @Override
+    public ResponseEntity<Void> signOut() {
+        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        return ResponseEntity.ok().build();
     }
 
     @Override

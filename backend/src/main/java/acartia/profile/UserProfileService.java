@@ -61,24 +61,9 @@ public class UserProfileService {
 
     /**
      * TODO TOM DO THESE THINGS IT IS IMPORTANT
-     * [x] - Make the profile page responsive. On mobile the menu should hide &
-     * instead be replaced by a "back" button that links to root /profile
-     * [ ] - Make the profile base layout route a "pathless route"
-     * [ ] - Should look like this
-     * routes/
-     * └── profile/
-     * ├── index.tsx // /profile (no layout)
-     * └── _profile/
-     * ├── route.tsx // pathless layout
-     * ├── settings.tsx // /profile/settings
-     * ├── security.tsx // /profile/security
-     * └── billing.tsx // /profile/billing
      * [ ] - "DELETE YOUR ACCOUNT" text is not responsive.
      * route. This route is only accessible from mobile and is useful because we
      * cant show the usual side-nav.
-     * [ ] - Migration stuff
-     * [ ] - Other misc cleanup & chores. You probably don't need to do these before
-     * first deployment.
      */
 
     /**

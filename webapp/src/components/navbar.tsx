@@ -174,7 +174,7 @@ export function Navbar() {
                 </NavListItem>
                 <Divider />
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
-                  <ListItemButtonNavLink to="/signup" active={pathname === "/signup"}>
+                  <ListItemButtonNavLink to="/logout" active={false}>
                     <ListItemIcon sx={{ color: "#00585d", minWidth: "30px" }}>
                       <Logout fontSize="small" />
                     </ListItemIcon>
