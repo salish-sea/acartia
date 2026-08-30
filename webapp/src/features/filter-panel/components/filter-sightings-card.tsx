@@ -12,6 +12,7 @@ import {
 import { ExpandMoreRounded } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import type { DateRange } from "@/features/filter-panel";
 import { DateRangeCalendar, getFilterOptions } from "@/features/filter-panel";
 import { api } from "@/lib/api";
@@ -37,7 +38,14 @@ export function FilterSightingsCard() {
   const navigate = useNavigate({ from: "/" });
   const query = useSearch({ from: "/" });
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
-  const [filters, setFilters] = useState<Filters>(defaultFilters);
+  const { species = [], contributors = [], trusted = true, startDate, endDate } = query;
+  const [filters, setFilters] = useState<Filters>({
+    species: species,
+    contributors: contributors,
+    trusted: trusted,
+    startDate: startDate ? dayjs(query.startDate) : null,
+    endDate: endDate ? dayjs(query.endDate) : null,
+  });
 
   const { data: options, isLoading } = api.useQuery(
     "get",
@@ -58,15 +66,14 @@ export function FilterSightingsCard() {
   };
 
   const handleSubmit = () => {
-    const { startDate, endDate, species, contributors, trusted } = filters;
     navigate({
       to: "/",
       search: {
-        startDate: startDate?.format("YYYY-MM-DD"),
-        endDate: endDate?.format("YYYY-MM-DD"),
-        ...(species.length > 0 && { species }),
-        ...(contributors.length > 0 && { contributors }),
-        ...(trusted === false && { trusted }),
+        startDate: filters.startDate?.format("YYYY-MM-DD"),
+        endDate: filters.endDate?.format("YYYY-MM-DD"),
+        ...(filters.species.length > 0 && { species: filters.species }),
+        ...(filters.contributors.length > 0 && { contributors: filters.contributors }),
+        ...(filters.trusted === false && { trusted: filters.trusted }),
       },
     });
   };
