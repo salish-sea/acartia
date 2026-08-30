@@ -4,6 +4,6 @@
 
 import type { components } from "@/lib/api/v1";
 
-export type ApiError = components["schemas"]["api-error"];
-export type Sighting = components["schemas"]["sighting"];
-export type User = components["schemas"]["user"];
+export type ApiError = components["schemas"]["ApiError"];
+export type Sighting = components["schemas"]["Sighting"];
+export type User = components["schemas"]["User"];

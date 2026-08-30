@@ -11,6 +11,7 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
+  Skeleton,
   Stack,
   Toolbar,
   Typography,
@@ -28,6 +29,7 @@ import {
   PersonAddAlt1Outlined,
 } from "@mui/icons-material";
 import type { MouseEvent } from "react";
+import type { User } from "@/types/api";
 import { ButtonLink } from "@/components/button-link";
 import { ListItemButtonLink } from "@/components/list-item-button-link";
 import { Link } from "@/components/link";
@@ -105,36 +107,7 @@ export function Navbar() {
             </Typography>
           </Stack>
 
-          <Stack
-            direction="row"
-            gap="24px"
-            sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
-          >
-            {navItems.map(({ to, label }) => (
-              <NavLink key={to} to={to} active={pathname === to} underline="none">
-                {label}
-              </NavLink>
-            ))}
-          </Stack>
-
-          <Stack
-            direction="row"
-            gap="20px"
-            sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
-          >
-            {user ? (
-              <ProfileMenu />
-            ) : (
-              <>
-                <ButtonLink to="/login" variant="contained" sx={{ width: 120 }}>
-                  Log in
-                </ButtonLink>
-                <ButtonLink to="/signup" variant="outlined" sx={{ width: 120 }}>
-                  Sign up
-                </ButtonLink>
-              </>
-            )}
-          </Stack>
+          {isLoading ? <NavbarLinksSkeleton /> : <NavbarLinks user={user} pathname={pathname} />}
 
           <IconButton size="large" onClick={toggleDrawer} sx={{ display: { md: "none" } }}>
             <MenuIcon />
@@ -206,6 +179,58 @@ export function Navbar() {
         </Box>
       </Drawer>
     </>
+  );
+}
+
+type Props = {
+  /**
+   * The signed-in user, is undefined if the user is not signed in, used to conditionally render stuff.
+   */
+  user: User | undefined;
+
+  /**
+   * The pathname, for links and stuff.
+   */
+  pathname: string;
+};
+
+function NavbarLinks({ user, pathname }: Readonly<Props>) {
+  return (
+    <>
+      <Stack direction="row" gap="24px" sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+        {navItems.map(({ to, label }) => (
+          <NavLink key={to} to={to} active={pathname === to} underline="none">
+            {label}
+          </NavLink>
+        ))}
+      </Stack>
+
+      <Stack direction="row" gap="20px" sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+        {user ? (
+          <ProfileMenu />
+        ) : (
+          <>
+            <ButtonLink to="/login" variant="contained" sx={{ width: 120 }}>
+              Log in
+            </ButtonLink>
+            <ButtonLink to="/signup" variant="outlined" sx={{ width: 120 }}>
+              Sign up
+            </ButtonLink>
+          </>
+        )}
+      </Stack>
+    </>
+  );
+}
+
+function NavbarLinksSkeleton() {
+  return (
+    <Stack direction="row" gap="24px">
+      <Skeleton width={54} height={36} />
+      <Skeleton width={48} />
+      <Skeleton width={48} />
+      <Skeleton width={48} />
+    </Stack>
   );
 }
 
