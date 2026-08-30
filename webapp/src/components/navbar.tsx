@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "@tanstack/react-router";
+import { createLink, useLocation } from "@tanstack/react-router";
 import {
   AppBar,
   Box,
@@ -54,6 +54,8 @@ const ListItemButtonNavLink = styled(ListItemButtonLink, {
   ...(active && { backgroundColor: alpha(theme.palette.text.contrast, 0.05) }),
   fontWeight: active ? 600 : 400,
 }));
+
+const MenuItemLink = createLink(MenuItem);
 
 const NavListItem = styled(ListItem)(() => ({
   padding: 0,
@@ -259,16 +261,14 @@ function ProfileMenu() {
         onClose={handleClose}
         slotProps={{ paper: { sx: { backgroundColor: "primary.lightest" } } }}
       >
-        <MenuItem>Update Profile</MenuItem>
-        <MenuItem>Create Token</MenuItem>
-        <MenuItem>Contributor Profile</MenuItem>
-        <MenuItem>Delete Profile</MenuItem>
-        <MenuItem>
+        <MenuItemLink to="/profile/account-settings">Update Profile</MenuItemLink>
+        <MenuItemLink to="/profile/delete-account">Delete Profile</MenuItemLink>
+        <MenuItemLink to="/logout">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Log Out
-        </MenuItem>
+        </MenuItemLink>
       </Menu>
     </>
   );
