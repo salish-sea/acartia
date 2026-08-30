@@ -134,6 +134,7 @@ export function FilterSightingsCard() {
             open={calendarOpen}
             value={{ startDate: filters.startDate, endDate: filters.endDate }}
             onChange={handleDateChange}
+            onClose={() => setCalendarOpen(false)}
           />
         </LocalizationProvider>
       </Stack>
