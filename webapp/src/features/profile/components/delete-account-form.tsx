@@ -18,8 +18,8 @@ export function DeleteAccountForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack gap={8} alignItems="center" sx={{ mt: "150px" }}>
-        <Stack alignItems="center" gap={3} sx={{ width: "660px" }}>
+      <Stack gap={8} alignItems="center" sx={{ mt: "150px", mx: 3 }}>
+        <Stack alignItems="center" gap={3} sx={{ maxWidth: "660px" }}>
           <Typography variant="h2">Delete your account?</Typography>
           <Typography variant="body1" fontFamily="Inter">
             You will lose all your data by deleting your account, and your contributions will be
