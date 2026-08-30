@@ -204,6 +204,7 @@ export function FilterSightingsCard() {
         <Button
           variant="contained"
           onClick={handleSubmit}
+          loading={isLoading}
           sx={{ maxWidth: "150px", color: "white" }}
         >
           Apply Filters
