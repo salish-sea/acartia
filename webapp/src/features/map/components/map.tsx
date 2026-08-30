@@ -1,15 +1,21 @@
 import { useSearch } from "@tanstack/react-router";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { api } from "@/lib/api/api";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import {
   LayersCard,
   Overlay,
+  SightingDetailsPopup,
   ZoomControls,
   mapIcon,
   useMapLayers,
   useMapOverlays,
   useResizeMap,
 } from "@/features/map";
+import { api } from "@/lib/api";
+
+/**
+ * TODO - Maybe we should return dummy list from useOverlays, should probably do suspense query or something for the Layers card?
+ * Instead of calling useMapOverlays here perhaps we should move it to be called inside that component.
+ */
 
 /**
  * Displays a leaflet map.
@@ -42,9 +48,7 @@ export function Map() {
           position={[sighting.latitude, sighting.longitude]}
           icon={mapIcon(sighting.type)}
         >
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
+          <SightingDetailsPopup sighting={sighting} />
         </Marker>
       ))}
       <LayersCard

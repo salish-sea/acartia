@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "@tanstack/react-router";
+import { createLink, useLocation } from "@tanstack/react-router";
 import {
   AppBar,
   Box,
@@ -11,6 +11,7 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
+  Skeleton,
   Stack,
   Toolbar,
   Typography,
@@ -28,12 +29,13 @@ import {
   PersonAddAlt1Outlined,
 } from "@mui/icons-material";
 import type { MouseEvent } from "react";
+import type { User } from "@/types/api";
 import { ButtonLink } from "@/components/button-link";
 import { ListItemButtonLink } from "@/components/list-item-button-link";
 import { Link } from "@/components/link";
 import { Menu as MenuIcon } from "@/components/icons/menu";
 import { PlaceholderLogo } from "@/components/icons/placeholder-logo";
-import { useAuth } from "@/hooks/use-auth-store";
+import { useAuthentication } from "@/hooks/use-authentication";
 
 const NavLink = styled(Link, { shouldForwardProp: (prop) => prop !== "active" })<{
   active: boolean;
@@ -53,6 +55,8 @@ const ListItemButtonNavLink = styled(ListItemButtonLink, {
   fontWeight: active ? 600 : 400,
 }));
 
+const MenuItemLink = createLink(MenuItem);
+
 const NavListItem = styled(ListItem)(() => ({
   padding: 0,
   minHeight: "52px",
@@ -70,7 +74,7 @@ const navItems = [
  */
 export function Navbar() {
   const pathname = useLocation({ select: (location) => location.pathname });
-  const { user } = useAuth();
+  const { data: user, isLoading } = useAuthentication();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const toggleDrawer = () => setDrawerOpen((prev) => !prev);
@@ -105,36 +109,7 @@ export function Navbar() {
             </Typography>
           </Stack>
 
-          <Stack
-            direction="row"
-            gap="24px"
-            sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
-          >
-            {navItems.map(({ to, label }) => (
-              <NavLink key={to} to={to} active={pathname === to} underline="none">
-                {label}
-              </NavLink>
-            ))}
-          </Stack>
-
-          <Stack
-            direction="row"
-            gap="20px"
-            sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
-          >
-            {user ? (
-              <ProfileMenu />
-            ) : (
-              <>
-                <ButtonLink to="/login" variant="contained" sx={{ width: 120 }}>
-                  Log in
-                </ButtonLink>
-                <ButtonLink to="/signup" variant="outlined" sx={{ width: 120 }}>
-                  Sign up
-                </ButtonLink>
-              </>
-            )}
-          </Stack>
+          {isLoading ? <NavbarLinksSkeleton /> : <NavbarLinks user={user} pathname={pathname} />}
 
           <IconButton size="large" onClick={toggleDrawer} sx={{ display: { md: "none" } }}>
             <MenuIcon />
@@ -174,7 +149,7 @@ export function Navbar() {
                 </NavListItem>
                 <Divider />
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
-                  <ListItemButtonNavLink to="/signup" active={pathname === "/signup"}>
+                  <ListItemButtonNavLink to="/logout" active={false}>
                     <ListItemIcon sx={{ color: "#00585d", minWidth: "30px" }}>
                       <Logout fontSize="small" />
                     </ListItemIcon>
@@ -209,6 +184,58 @@ export function Navbar() {
   );
 }
 
+type Props = {
+  /**
+   * The signed-in user, is undefined if the user is not signed in, used to conditionally render stuff.
+   */
+  user: User | undefined;
+
+  /**
+   * The pathname, for links and stuff.
+   */
+  pathname: string;
+};
+
+function NavbarLinks({ user, pathname }: Readonly<Props>) {
+  return (
+    <>
+      <Stack direction="row" gap="24px" sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+        {navItems.map(({ to, label }) => (
+          <NavLink key={to} to={to} active={pathname === to} underline="none">
+            {label}
+          </NavLink>
+        ))}
+      </Stack>
+
+      <Stack direction="row" gap="20px" sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+        {user ? (
+          <ProfileMenu />
+        ) : (
+          <>
+            <ButtonLink to="/login" variant="contained" sx={{ width: 120 }}>
+              Log in
+            </ButtonLink>
+            <ButtonLink to="/signup" variant="outlined" sx={{ width: 120 }}>
+              Sign up
+            </ButtonLink>
+          </>
+        )}
+      </Stack>
+    </>
+  );
+}
+
+function NavbarLinksSkeleton() {
+  return (
+    <Stack direction="row" gap="24px">
+      <Skeleton width={54} height={36} />
+      <Skeleton width={48} />
+      <Skeleton width={48} />
+      <Skeleton width={48} />
+    </Stack>
+  );
+}
+
 /**
  * Profile menu, displayed when the user is logged in.
  * TODO: Make links work.
@@ -234,16 +261,14 @@ function ProfileMenu() {
         onClose={handleClose}
         slotProps={{ paper: { sx: { backgroundColor: "primary.lightest" } } }}
       >
-        <MenuItem>Update Profile</MenuItem>
-        <MenuItem>Create Token</MenuItem>
-        <MenuItem>Contributor Profile</MenuItem>
-        <MenuItem>Delete Profile</MenuItem>
-        <MenuItem>
+        <MenuItemLink to="/profile/account-settings">Update Profile</MenuItemLink>
+        <MenuItemLink to="/profile/delete-account">Delete Profile</MenuItemLink>
+        <MenuItemLink to="/logout">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Log Out
-        </MenuItem>
+        </MenuItemLink>
       </Menu>
     </>
   );

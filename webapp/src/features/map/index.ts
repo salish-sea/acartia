@@ -2,6 +2,7 @@ export * from "./components/layers-card";
 export * from "./components/map";
 export * from "./components/map-control";
 export * from "./components/overlay";
+export * from "./components/sighting-details-popup";
 export * from "./components/zoom-controls";
 export * from "./hooks/use-map-layers";
 export * from "./hooks/use-map-overlays";

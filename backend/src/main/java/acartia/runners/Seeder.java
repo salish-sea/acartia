@@ -12,13 +12,12 @@ import org.springframework.web.client.RestClient;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import acartia.mappers.SightingsMapper;
-import acartia.mappers.SpeciesMapper;
-import acartia.models.Sighting;
-import acartia.models.Species;
-import acartia.repositories.Sightings;
-import acartia.repositories.SpeciesList;
+import acartia.sightings.Sighting;
+import acartia.sightings.Sightings;
+import acartia.sightings.SightingsMapper;
+import acartia.sightings.Species;
+import acartia.sightings.SpeciesList;
+import acartia.sightings.SpeciesMapper;
 
 @Slf4j
 @Component
@@ -52,14 +51,19 @@ public class Seeder implements ApplicationRunner {
                 .retrieve()
                 .body(parameterizedTypeReference);
 
+        // TODO: Don't do this in the real migration - there should be an admin page
+        // that controls this :)
         log.info("Mapping types to species columns");
-        Set<Species> seededSpecies = legacySightings.stream().map(s -> s.getType()).map(speciesMapper::map)
+        Set<Species> seededSpecies = legacySightings.stream()
+                .map(acartia.api.model.Sighting::getType)
+                .map(speciesMapper::map)
                 .collect(Collectors.toSet());
-        species.saveAll(seededSpecies);
+
+        species.saveAllAndFlush(seededSpecies);
 
         log.info("Seeding database");
         List<Sighting> seededSightings = legacySightings.stream().map(sightingsMapper::map).toList();
-        sightings.saveAll(seededSightings);
+        sightings.saveAllAndFlush(seededSightings);
         log.info("Successfully seeded database");
     }
 }

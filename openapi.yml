@@ -1,0 +1,289 @@
+openapi: 3.0.4
+info:
+  title: Acartia API
+  version: "1.0"
+
+servers:
+  - url: /api/v1
+
+paths:
+  /auth/login:
+    post:
+      summary: Sign in
+      operationId: signIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Sign in successful
+        "401":
+          description: Wrong username or password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /auth/logout:
+    post:
+      summary: Sign out
+      operationId: signOut
+      responses:
+        "200":
+          description: Sign out successful
+        "400":
+          description: Not signed-in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /auth/register:
+    post:
+      summary: Sign up
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "201":
+          description: Successfully registered user.
+        "400":
+          description: Email already exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /sightings:
+    get:
+      summary: Get sightings
+      operationId: getSightings
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: species
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: contributors
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: trusted
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: The requested sightings.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sighting"
+
+  /profile:
+    get:
+      summary: Get the current / logged in users details
+      operationId: getCurrentUser
+      responses:
+        "200":
+          description: "The logged in users profile"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      summary: Update the current users profile details.
+      operationId: updateUserDetails
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                website:
+                  type: string
+      responses:
+        "200":
+          description: Successfully updated user profile.
+        "400":
+          description: Name or email cannot be empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    delete:
+      summary: Delete the current users profile.
+      operationId: deleteProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Successfully deleted user profile.
+        "400":
+          description: Name or email cannot be empty
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+components:
+  schemas:
+    ApiError:
+      type: object
+      required:
+        - status
+        - error
+        - message
+      properties:
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - role
+        - isApproved
+        - email
+        - createdAt
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          $ref: "#/components/schemas/Role"
+        isApproved:
+          type: boolean
+        email:
+          type: string
+        website:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    Sighting:
+      type: object
+      required:
+        - ssemmi_id
+        - data_source_name
+        - data_source_entity
+        - data_source_id
+        - created
+        - no_sighted
+        - latitude
+        - longitude
+        - type
+        - data_source_witness
+        - trusted
+      # This is incomplete
+      properties:
+        ssemmi_id:
+          type: string
+        data_source_name:
+          type: string
+        data_source_entity:
+          type: string
+        data_source_id:
+          type: integer
+        created:
+          type: string
+          format: date-time
+        photo_url:
+          type: string
+        no_sighted:
+          type: integer
+        latitude:
+          type: number
+        longitude:
+          type: number
+        type:
+          type: string
+        data_source_witness:
+          type: string
+        trusted:
+          type: boolean
+        data_source_comments:
+          type: string
+
+    Role:
+      type: string
+      enum:
+        - admin
+        - user

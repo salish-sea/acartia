@@ -54,6 +54,14 @@ export const appTheme = createTheme({
       darker: "#00AFBA",
       darkest: "#007B83",
     },
+    secondary: {
+      lighter: "#F2F2FF",
+      light: "#DEDEFE",
+      main: "#BEBEFF",
+      dark: "#9D9DFE",
+      darker: "#7C7CFE",
+      darkest: "6363CB",
+    },
     text: {
       primary: "#3D3951",
       secondary: "#6D6B7D",
@@ -62,6 +70,14 @@ export const appTheme = createTheme({
     success: {
       main: "#2CC396",
       dark: "#239C78",
+    },
+    error: {
+      main: "#B22A2A",
+      light: "#F9CDCD",
+    },
+    action: {
+      // This is for the profile page, not sure if this is the right place for this color.
+      active: "#080D260D",
     },
   },
   typography: {
@@ -102,6 +118,23 @@ export const appTheme = createTheme({
     },
   },
   components: {
+    MuiAlert: {
+      defaultProps: {
+        icon: false,
+        // "standard" or whatever is weird.
+        variant: "filled",
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          fontWeight: 400,
+        },
+        filledError: ({ theme }) => ({
+          color: theme.palette.error.main,
+          backgroundColor: theme.palette.error.light,
+        }),
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         root: {
@@ -120,10 +153,23 @@ export const appTheme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: ({ theme }) => ({
+          fontSize: "16px",
+          margin: 0,
+          fontWeight: 400,
           color: theme.palette.text.primary,
           "&.Mui-focused": {
             color: theme.palette.text.primary,
           },
+        }),
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: () => ({
+          fontWeight: 500,
+          fontSize: "12px",
+          marginLeft: "4px",
+          marginBottom: "4px",
         }),
       },
     },
@@ -155,13 +201,6 @@ export const appTheme = createTheme({
           "& .MuiPickersOutlinedInput-notchedOutline": {
             borderColor: theme.palette.text.primary,
           },
-          // TODO these don't work, might have to do default props
-          // "&:hover .MuiOutlinedInput-notchedOutline": {
-          //   borderWidth: "2px",
-          // },
-          // "&.Mui-focused .MuiPickersOutlinedInput-notchedOutline": {
-          //   borderColor: theme.palette.text.primary,
-          // },
         }),
       },
     },
@@ -173,7 +212,7 @@ export const appTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          borderRadius: "10px",
+          borderRadius: 10,
           textTransform: "none",
           variants: [
             {

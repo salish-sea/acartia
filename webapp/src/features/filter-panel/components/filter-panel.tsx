@@ -57,7 +57,7 @@ export function FilterPanel() {
         <OpenPanel>
           <FilterToggleButtonMobile open={open} onClick={handleToggleOpen} />
           <SpeciesLegendCard />
-          <Divider variant="middle" />
+          <Divider variant="middle" sx={{ mx: "36px" }} />
           <FilterSightingsCard />
         </OpenPanel>
       ) : (

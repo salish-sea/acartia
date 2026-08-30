@@ -1,8 +1,9 @@
 import { SvgIcon } from "@mui/material";
+import type { SvgIconProps } from "@mui/material";
 
-export function Menu() {
+export function Menu(props: Readonly<SvgIconProps>) {
   return (
-    <SvgIcon>
+    <SvgIcon {...props}>
       <svg
         width="34"
         height="26"

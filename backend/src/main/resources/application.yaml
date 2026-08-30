@@ -2,13 +2,18 @@ spring:
   application:
     name: acartia
   datasource:
-    url: jdbc:tc:postgresql:9.6.8:///acartia
+    url: jdbc:tc:postgresql:15.5:///acartia
   sql:
     init:
       mode: always
   jpa:
     hibernate:
       ddl-auto: none
+    open-in-view: false
+
+  jackson:
+    # For future reference: https://fasterxml.github.io/jackson-annotations/javadoc/2.7/com/fasterxml/jackson/annotation/JsonInclude.Include.html
+    default-property-inclusion: non_absent
 
 logging:
   level:
