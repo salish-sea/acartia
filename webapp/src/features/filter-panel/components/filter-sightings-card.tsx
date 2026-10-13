@@ -5,6 +5,7 @@ import {
   Button,
   Divider,
   FormLabel,
+  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -207,7 +208,11 @@ export function FilterSightingsCard() {
       </Stack>
       <Divider variant="fullWidth" />
       <Stack gap={1.5} alignItems="end">
-        <Typography variant="body2">Show X results</Typography>
+        {isLoading ? (
+          <Skeleton width={150} />
+        ) : (
+          <Typography variant="body2">Showing {options?.resultCount} results</Typography>
+        )}
         <Button
           variant="contained"
           onClick={handleSubmit}
