@@ -27,3 +27,5 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 .project
 .classpath
+
+ACARTIA_DEPLOYMENT.md

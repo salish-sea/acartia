@@ -5,7 +5,13 @@ import type { Middleware } from "openapi-fetch";
 import type { paths } from "@/lib/api/v1";
 import { ApiError } from "@/lib/api/api-error";
 
-export const fetchClient = createFetchClient<paths>({ baseUrl: import.meta.env.VITE_BASE_URL });
+/*
+ * Configure fetch client. NOTE: 'same-origin' is the default.
+ */
+export const fetchClient = createFetchClient<paths>({
+  baseUrl: import.meta.env.VITE_BASE_URL,
+  credentials: "same-origin",
+});
 
 const middleware: Middleware = {
   /**
@@ -29,5 +35,4 @@ const middleware: Middleware = {
 fetchClient.use(middleware);
 
 export const api = createClient(fetchClient);
-
 export const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });

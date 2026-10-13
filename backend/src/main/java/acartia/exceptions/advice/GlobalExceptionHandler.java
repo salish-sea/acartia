@@ -15,7 +15,7 @@ import acartia.exceptions.UnauthorizedException;
 class GlobalExceptionHandler {
 
     /**
-     * Returns "bad request" http response for {@link EmailAlreadyExistsException}.
+     * @return "bad request" http response for {@link EmailAlreadyExistsException}.
      */
     @ExceptionHandler(value = { EmailAlreadyExistsException.class, IllegalStateException.class })
     public ResponseEntity<ApiError> badRequest(Exception exception) {
@@ -24,7 +24,7 @@ class GlobalExceptionHandler {
     }
 
     /**
-     * Returns "unauthorized" http response for {@link AuthenticationException}.
+     * @return "unauthorized" http response for {@link AuthenticationException}.
      */
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> unauthorized(Exception exception) {
@@ -33,7 +33,7 @@ class GlobalExceptionHandler {
     }
 
     /**
-     * Returns "not found" http response for {@link NotFoundException}.
+     * @return "not found" http response for {@link NotFoundException}.
      */
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> notFound(Exception exception) {

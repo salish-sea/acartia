@@ -181,7 +181,7 @@ export function FilterSightingsCard() {
         </FormLabel>
         <Autocomplete
           value={filters.contributors}
-          onChange={(_e, contributors) => setFilters((prev) => ({ ...prev, contributors }))}
+          onChange={(_e, value) => setFilters((prev) => ({ ...prev, contributors: value }))}
           options={Array.from(options?.contributorOptions ?? [])}
           loading={isLoading}
           multiple

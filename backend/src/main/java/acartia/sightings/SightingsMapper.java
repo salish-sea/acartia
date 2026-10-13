@@ -10,7 +10,7 @@ public class SightingsMapper {
 
     private final SpeciesMapper speciesMapper;
 
-    private final SpeciesList speciesList;
+    private final SpeciesRepository speciesList;
 
     /**
      * Map {@link acartia.api.model.Sighting} java entity to {@link Sighting} DTO

@@ -120,6 +120,34 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Sighting"
+    post:
+      summary: Upload sightings
+      operationId: uploadSightings
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: A CSV file
+            encoding:
+              file:
+                contentType: text/csv
+      responses:
+        "200":
+          description: Upload successful.
+        "400":
+          description: Upload failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
 
   /profile:
     get:
@@ -241,6 +269,7 @@ components:
     Sighting:
       type: object
       required:
+        - entry_id
         - ssemmi_id
         - data_source_name
         - data_source_entity
@@ -254,6 +283,8 @@ components:
         - trusted
       # This is incomplete
       properties:
+        entry_id:
+          type: string
         ssemmi_id:
           type: string
         data_source_name:

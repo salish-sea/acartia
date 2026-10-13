@@ -22,11 +22,15 @@ import lombok.NoArgsConstructor;
 public class Sighting {
 
     @Id
+    private String entryId;
+
     private String ssemmiId;
 
     private String dataSourceName;
 
     private String dataSourceEntity;
+
+    private String dataSourceWitness;
 
     private Integer dataSourceId;
 
@@ -47,4 +51,6 @@ public class Sighting {
     private Boolean trusted;
 
     private String dataSourceComments;
+
+    private String photoUrl;
 }

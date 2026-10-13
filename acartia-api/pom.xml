@@ -90,7 +90,8 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/../openapi.yml</inputSpec>
+                            <inputSpec
+                            >${project.basedir}/../openapi.yml</inputSpec>
                             <generatorName>spring</generatorName>
                             <generateApis>true</generateApis>
                             <generateModels>true</generateModels>
