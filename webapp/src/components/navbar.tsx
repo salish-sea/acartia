@@ -59,7 +59,13 @@ const ListItemButtonNavLink = styled(ListItemButtonLink, {
   },
 }));
 
-const MenuItemLink = createLink(MenuItem);
+const MenuItemLink = styled(createLink(MenuItem), {
+  shouldForwardProp: (prop) => prop !== "active",
+})<{ active: boolean }>(({ active, theme }) => ({
+  ...(active && { backgroundColor: alpha(theme.palette.text.contrast, 0.05) }),
+  fontWeight: active ? 600 : 400,
+  color: theme.palette.text.contrast,
+}));
 
 const NavListItem = styled(ListItem)(() => ({
   padding: 0,
@@ -212,7 +218,7 @@ function NavbarLinks({ user, pathname }: Readonly<Props>) {
 
       <Stack direction="row" gap="20px" sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
         {user ? (
-          <ProfileMenu />
+          <ProfileMenu pathname={pathname} />
         ) : (
           <>
             <ButtonLink to="/login" variant="contained" sx={{ width: 120 }}>
@@ -246,7 +252,7 @@ function NavbarLinksSkeleton() {
  *
  * @returns
  */
-function ProfileMenu() {
+function ProfileMenu({ pathname }: Readonly<Pick<Props, "pathname">>) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -262,11 +268,18 @@ function ProfileMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        slotProps={{ paper: { sx: { backgroundColor: "primary.lightest" } } }}
+        slotProps={{ paper: { sx: { backgroundColor: "primary.lightest", width: "160px" } } }}
       >
-        <MenuItemLink to="/profile/account-settings">Update Profile</MenuItemLink>
-        <MenuItemLink to="/profile/delete-account">Delete Profile</MenuItemLink>
-        <MenuItemLink to="/logout">
+        <MenuItemLink
+          to="/profile/account-settings"
+          active={pathname === "/profile/account-settings"}
+        >
+          Update Profile
+        </MenuItemLink>
+        <MenuItemLink to="/profile/delete-account" active={pathname === "/profile/delete-account"}>
+          Delete Profile
+        </MenuItemLink>
+        <MenuItemLink to="/logout" active={false} preload={false}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
