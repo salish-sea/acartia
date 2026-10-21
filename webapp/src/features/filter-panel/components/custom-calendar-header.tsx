@@ -20,10 +20,9 @@ export function CustomCalendarHeader({
   const handleViewChange = () => {
     if (!onViewChange) return;
     const currentView = views.indexOf(view);
-    if (currentView === 0) {
-      onViewChange(views[1]);
-    } else {
-      onViewChange(views[0]);
+    const nextView = views[currentView === 0 ? 1 : 0];
+    if (nextView !== undefined) {
+      onViewChange(nextView);
     }
   };
 

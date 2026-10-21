@@ -61,13 +61,29 @@ const CalendarButton = styled(Button)(() => ({
   width: "40px",
 }));
 
-type DateRangeCalendarProps = {
+type Props = {
+  /**
+   * Whether this calendar is open.
+   */
   open: boolean;
+
+  /**
+   * The date-range value to display on this calendar.
+   */
   value: DateRange;
+
+  /**
+   * Callback to update the date-range value.
+   */
   onChange: (dateRange: DateRange | ((prev: DateRange) => DateRange)) => void;
+
+  /**
+   * Callback to close the calendar.
+   */
+  onClose: () => void;
 };
 
-export function DateRangeCalendar({ open, value, onChange }: Readonly<DateRangeCalendarProps>) {
+export function DateRangeCalendar({ open, value, onChange, onClose }: Readonly<Props>) {
   const [focusedInput, setFocusedInput] = useState<"start" | "end">("start");
   const memoDateRange = useMemo(() => value, [value]);
 
@@ -115,6 +131,14 @@ export function DateRangeCalendar({ open, value, onChange }: Readonly<DateRangeC
     }
   };
 
+  const handleClear = () => onChange({ startDate: null, endDate: null });
+
+  // I'm not certain this is the correct behavior for 'cancel'.
+  const handleCancel = () => {
+    handleClear();
+    onClose();
+  };
+
   if (!open) return;
 
   return (
@@ -149,10 +173,10 @@ export function DateRangeCalendar({ open, value, onChange }: Readonly<DateRangeC
         />
       </PickersDayContext.Provider>
       <Stack direction="row" justifyContent="space-between" height="55px" sx={{ px: 1 }}>
-        <CalendarButton>Clear</CalendarButton>
+        <CalendarButton onClick={handleClear}>Clear</CalendarButton>
         <Box>
-          <CalendarButton>Cancel</CalendarButton>
-          <CalendarButton>OK</CalendarButton>
+          <CalendarButton onClick={handleCancel}>Cancel</CalendarButton>
+          <CalendarButton onClick={onClose}>OK</CalendarButton>
         </Box>
       </Stack>
     </Paper>

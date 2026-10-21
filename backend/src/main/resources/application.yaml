@@ -1,20 +1,33 @@
 spring:
+  config:
+    import: "optional:file:.env[.properties]"
   application:
     name: acartia
   datasource:
-    url: jdbc:tc:postgresql:9.6.8:///acartia
+    url: ${ACARTIA_DATABASE_URL}
+    username: ${ACARTIA_DATABASE_USERNAME}
+    password: ${ACARTIA_DATABASE_PASSWORD}
   sql:
     init:
       mode: always
   jpa:
     hibernate:
       ddl-auto: none
+      default_schema: app
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: acartia
+  jackson:
+    # For future reference: https://fasterxml.github.io/jackson-annotations/javadoc/2.7/com/fasterxml/jackson/annotation/JsonInclude.Include.html
+    default-property-inclusion: non_absent
 
 logging:
   level:
     root: INFO
 
 server:
+  port: 8080
   servlet:
     context-path: /api/v1
   tomcat:
@@ -30,3 +43,12 @@ server:
 acartia:
   legacy:
     base-url: https://acartia.io/api/v1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: testcontainers
+
+  datasource:
+    url: jdbc:tc:postgresql:15.5:///acartia

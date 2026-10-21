@@ -1,7 +1,7 @@
 import { Marker } from "react-leaflet";
 import L from "leaflet";
-import { useOverlay } from "../hooks/use-overlay";
-import type { OverlayConfigItem } from "../types/overlay";
+import type { OverlayConfigItem } from "@/features/map";
+import { useOverlay } from "@/features/map";
 
 type Props = Pick<OverlayConfigItem, "url" | "iconUrl" | "map" | "request">;
 

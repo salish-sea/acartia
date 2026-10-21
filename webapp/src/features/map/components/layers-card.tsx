@@ -6,7 +6,7 @@ import { MapControl } from "@/features/map";
 
 // For marker layers
 // https://react-leaflet.js.org/docs/example-layers-control/
-// TODO: Consider style components for some of this isntead of sx??
+// TODO: Consider style components for some of this instead of sx??
 type MapLayerButtonProps = {
   /**
    * Denotes if this option is selected.

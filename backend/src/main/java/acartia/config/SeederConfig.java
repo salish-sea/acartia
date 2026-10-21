@@ -57,7 +57,7 @@ public class SeederConfig {
 
         @Override
         public OffsetDateTime deserialize(JsonParser p, DeserializationContext ctxt) {
-            String value = p.getText();
+            String value = p.getString();
             try {
                 return OffsetDateTime.parse(value);
             } catch (DateTimeParseException e) {

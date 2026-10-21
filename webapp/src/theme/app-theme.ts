@@ -25,6 +25,7 @@ declare module "@mui/material/styles" {
   }
 
   interface TypeText {
+    tertiary: string;
     contrast: string;
   }
 
@@ -54,14 +55,31 @@ export const appTheme = createTheme({
       darker: "#00AFBA",
       darkest: "#007B83",
     },
+    secondary: {
+      lighter: "#F2F2FF",
+      light: "#DEDEFE",
+      main: "#BEBEFF",
+      dark: "#9D9DFE",
+      darker: "#7C7CFE",
+      darkest: "6363CB",
+    },
     text: {
       primary: "#3D3951",
       secondary: "#6D6B7D",
+      tertiary: "#545F71", // This is for the About page, not sure if it's intentionally different.
       contrast: "#00585D",
     },
     success: {
       main: "#2CC396",
       dark: "#239C78",
+    },
+    error: {
+      main: "#B22A2A",
+      light: "#F9CDCD",
+    },
+    action: {
+      // This is for the profile page, not sure if this is the right place for this color.
+      active: "#080D260D",
     },
   },
   typography: {
@@ -102,6 +120,41 @@ export const appTheme = createTheme({
     },
   },
   components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          borderRadius: "0 !important",
+          borderColor: "#DDE1E6", // Not in the theme, this color doesn't appear anywhere else...
+          borderStyle: "solid",
+          borderWidth: "1px",
+          // Disable margin while accordion is expanded.
+          "&.Mui-expanded": {
+            margin: 0,
+          },
+          // get rid of default dividers.
+          "&:before": {
+            display: "none",
+          },
+        },
+      },
+    },
+    MuiAlert: {
+      defaultProps: {
+        icon: false,
+        // "standard" or whatever is weird.
+        variant: "filled",
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          fontWeight: 400,
+        },
+        filledError: ({ theme }) => ({
+          color: theme.palette.error.main,
+          backgroundColor: theme.palette.error.light,
+        }),
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         root: {
@@ -120,10 +173,23 @@ export const appTheme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: ({ theme }) => ({
+          fontSize: "16px",
+          margin: 0,
+          fontWeight: 400,
           color: theme.palette.text.primary,
           "&.Mui-focused": {
             color: theme.palette.text.primary,
           },
+        }),
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: () => ({
+          fontWeight: 500,
+          fontSize: "12px",
+          marginLeft: "4px",
+          marginBottom: "4px",
         }),
       },
     },
@@ -155,13 +221,6 @@ export const appTheme = createTheme({
           "& .MuiPickersOutlinedInput-notchedOutline": {
             borderColor: theme.palette.text.primary,
           },
-          // TODO these don't work, might have to do default props
-          // "&:hover .MuiOutlinedInput-notchedOutline": {
-          //   borderWidth: "2px",
-          // },
-          // "&.Mui-focused .MuiPickersOutlinedInput-notchedOutline": {
-          //   borderColor: theme.palette.text.primary,
-          // },
         }),
       },
     },
@@ -173,7 +232,7 @@ export const appTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          borderRadius: "10px",
+          borderRadius: 10,
           textTransform: "none",
           variants: [
             {

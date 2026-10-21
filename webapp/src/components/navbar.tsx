@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "@tanstack/react-router";
+import { createLink, useLocation } from "@tanstack/react-router";
 import {
   AppBar,
   Box,
@@ -9,8 +9,10 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
+  Skeleton,
   Stack,
   Toolbar,
   Typography,
@@ -22,18 +24,19 @@ import {
   // AssessmentOutlined,
   ExpandMore,
   // GroupOutlined,
-  // HelpOutlineRounded,
+  HelpOutlineRounded,
   Language,
   Logout,
   PersonAddAlt1Outlined,
 } from "@mui/icons-material";
 import type { MouseEvent } from "react";
+import type { User } from "@/types/api";
 import { ButtonLink } from "@/components/button-link";
 import { ListItemButtonLink } from "@/components/list-item-button-link";
 import { Link } from "@/components/link";
 import { Menu as MenuIcon } from "@/components/icons/menu";
 import { PlaceholderLogo } from "@/components/icons/placeholder-logo";
-import { useAuth } from "@/hooks/use-auth-store";
+import { useAuthentication } from "@/hooks/use-authentication";
 
 const NavLink = styled(Link, { shouldForwardProp: (prop) => prop !== "active" })<{
   active: boolean;
@@ -50,7 +53,18 @@ const ListItemButtonNavLink = styled(ListItemButtonLink, {
   active: boolean;
 }>(({ active, theme }) => ({
   ...(active && { backgroundColor: alpha(theme.palette.text.contrast, 0.05) }),
+  "& .MuiTypography-root": {
+    fontWeight: active ? 600 : 400,
+    color: theme.palette.text.contrast,
+  },
+}));
+
+const MenuItemLink = styled(createLink(MenuItem), {
+  shouldForwardProp: (prop) => prop !== "active",
+})<{ active: boolean }>(({ active, theme }) => ({
+  ...(active && { backgroundColor: alpha(theme.palette.text.contrast, 0.05) }),
   fontWeight: active ? 600 : 400,
+  color: theme.palette.text.contrast,
 }));
 
 const NavListItem = styled(ListItem)(() => ({
@@ -60,7 +74,7 @@ const NavListItem = styled(ListItem)(() => ({
 
 const navItems = [
   { to: "/", label: "Map", icon: <Language fontSize="small" /> },
-  // { to: "/about", label: "About", icon: <HelpOutlineRounded fontSize="small" /> },
+  { to: "/about", label: "About", icon: <HelpOutlineRounded fontSize="small" /> },
   // { to: "/partners", label: "Partners", icon: <GroupOutlined fontSize="small" /> },
   // { to: "/reports", label: "Reports", icon: <AssessmentOutlined fontSize="small" /> },
 ];
@@ -70,7 +84,7 @@ const navItems = [
  */
 export function Navbar() {
   const pathname = useLocation({ select: (location) => location.pathname });
-  const { user } = useAuth();
+  const { data: user, isLoading } = useAuthentication();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const toggleDrawer = () => setDrawerOpen((prev) => !prev);
@@ -78,7 +92,7 @@ export function Navbar() {
   return (
     <>
       <AppBar
-        position="fixed"
+        position="static"
         elevation={0}
         sx={{
           backgroundColor: "primary.lighter",
@@ -105,36 +119,7 @@ export function Navbar() {
             </Typography>
           </Stack>
 
-          <Stack
-            direction="row"
-            gap="24px"
-            sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
-          >
-            {navItems.map(({ to, label }) => (
-              <NavLink key={to} to={to} active={pathname === to} underline="none">
-                {label}
-              </NavLink>
-            ))}
-          </Stack>
-
-          <Stack
-            direction="row"
-            gap="20px"
-            sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
-          >
-            {user ? (
-              <ProfileMenu />
-            ) : (
-              <>
-                <ButtonLink to="/login" variant="contained" sx={{ width: 120 }}>
-                  Log in
-                </ButtonLink>
-                <ButtonLink to="/signup" variant="outlined" sx={{ width: 120 }}>
-                  Sign up
-                </ButtonLink>
-              </>
-            )}
-          </Stack>
+          {isLoading ? <NavbarLinksSkeleton /> : <NavbarLinks user={user} pathname={pathname} />}
 
           <IconButton size="large" onClick={toggleDrawer} sx={{ display: { md: "none" } }}>
             <MenuIcon />
@@ -157,28 +142,27 @@ export function Navbar() {
                   <ListItemIcon sx={{ color: "text.contrast", minWidth: "30px" }}>
                     {icon}
                   </ListItemIcon>
-                  {label}
+                  <ListItemText>{label}</ListItemText>
                 </ListItemButtonNavLink>
               </NavListItem>
             ))}
-            {/* TODO: same here */}
             {user ? (
               <>
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
-                  <ListItemButtonNavLink to="/" active={pathname === "/login"}>
+                  <ListItemButtonNavLink to="/profile" active={pathname === "/login"}>
                     <ListItemIcon sx={{ color: "text.contrast", minWidth: "30px" }}>
                       <AccountCircleOutlined fontSize="small" />
                     </ListItemIcon>
-                    Profile
+                    <ListItemText>Profile</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
                 <Divider />
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
-                  <ListItemButtonNavLink to="/signup" active={pathname === "/signup"}>
+                  <ListItemButtonNavLink to="/logout" preload={false} active={false}>
                     <ListItemIcon sx={{ color: "#00585d", minWidth: "30px" }}>
                       <Logout fontSize="small" />
                     </ListItemIcon>
-                    Log Out
+                    <ListItemText>Log Out</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
               </>
@@ -189,7 +173,7 @@ export function Navbar() {
                     <ListItemIcon sx={{ color: "text.contrast", minWidth: "30px" }}>
                       <AccountCircleOutlined fontSize="small" />
                     </ListItemIcon>
-                    Log In
+                    <ListItemText>Log In</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
@@ -197,7 +181,7 @@ export function Navbar() {
                     <ListItemIcon sx={{ color: "#00585d", minWidth: "30px" }}>
                       <PersonAddAlt1Outlined fontSize="small" />
                     </ListItemIcon>
-                    Sign Up
+                    <ListItemText sx={{ color: "red" }}>Sign Up</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
               </>
@@ -209,6 +193,58 @@ export function Navbar() {
   );
 }
 
+type Props = {
+  /**
+   * The signed-in user, is undefined if the user is not signed in, used to conditionally render stuff.
+   */
+  user: User | undefined;
+
+  /**
+   * The pathname, for links and stuff.
+   */
+  pathname: string;
+};
+
+function NavbarLinks({ user, pathname }: Readonly<Props>) {
+  return (
+    <>
+      <Stack direction="row" gap="24px" sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+        {navItems.map(({ to, label }) => (
+          <NavLink key={to} to={to} active={pathname === to} underline="none">
+            {label}
+          </NavLink>
+        ))}
+      </Stack>
+
+      <Stack direction="row" gap="20px" sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+        {user ? (
+          <ProfileMenu pathname={pathname} />
+        ) : (
+          <>
+            <ButtonLink to="/login" variant="contained" sx={{ width: 120 }}>
+              Log in
+            </ButtonLink>
+            <ButtonLink to="/signup" variant="outlined" sx={{ width: 120 }}>
+              Sign up
+            </ButtonLink>
+          </>
+        )}
+      </Stack>
+    </>
+  );
+}
+
+function NavbarLinksSkeleton() {
+  return (
+    <Stack direction="row" gap="24px" sx={{ display: { sm: "none", md: "flex" } }}>
+      <Skeleton width={54} height={36} />
+      <Skeleton width={48} />
+      <Skeleton width={48} />
+      <Skeleton width={48} />
+    </Stack>
+  );
+}
+
 /**
  * Profile menu, displayed when the user is logged in.
  * TODO: Make links work.
@@ -216,7 +252,7 @@ export function Navbar() {
  *
  * @returns
  */
-function ProfileMenu() {
+function ProfileMenu({ pathname }: Readonly<Pick<Props, "pathname">>) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
@@ -232,18 +268,23 @@ function ProfileMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        slotProps={{ paper: { sx: { backgroundColor: "primary.lightest" } } }}
+        slotProps={{ paper: { sx: { backgroundColor: "primary.lightest", width: "160px" } } }}
       >
-        <MenuItem>Update Profile</MenuItem>
-        <MenuItem>Create Token</MenuItem>
-        <MenuItem>Contributor Profile</MenuItem>
-        <MenuItem>Delete Profile</MenuItem>
-        <MenuItem>
+        <MenuItemLink
+          to="/profile/account-settings"
+          active={pathname === "/profile/account-settings"}
+        >
+          Update Profile
+        </MenuItemLink>
+        <MenuItemLink to="/profile/delete-account" active={pathname === "/profile/delete-account"}>
+          Delete Profile
+        </MenuItemLink>
+        <MenuItemLink to="/logout" active={false} preload={false}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Log Out
-        </MenuItem>
+        </MenuItemLink>
       </Menu>
     </>
   );

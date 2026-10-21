@@ -1,6 +1,6 @@
 import type { Sighting } from "@/types/api";
 
-type Return = { speciesOptions: Set<string>; contributorOptions: Set<string> };
+type Return = { speciesOptions: Set<string>; contributorOptions: Set<string>; resultCount: number };
 
 /**
  * Get species and contributor options from filter panel from list of sightings.
@@ -20,5 +20,6 @@ type Return = { speciesOptions: Set<string>; contributorOptions: Set<string> };
 export function getFilterOptions(sightings: Array<Sighting>): Return {
   const speciesOptions = new Set(sightings.map((sighting) => sighting.type));
   const contributorOptions = new Set(sightings.map((sighting) => sighting.data_source_name));
-  return { speciesOptions, contributorOptions };
+  const resultCount = sightings.length;
+  return { speciesOptions, contributorOptions, resultCount };
 }
