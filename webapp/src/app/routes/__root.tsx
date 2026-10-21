@@ -1,8 +1,8 @@
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Box } from "@mui/material";
 import type { QueryClient } from "@tanstack/react-query";
 import { indexRoute } from "@/app/routes";
+import { aboutRoute } from "@/app/routes/about";
 import { loginRoute } from "@/app/routes/login";
 import { logoutRoute } from "@/app/routes/logout";
 import { signupRoute } from "@/app/routes/signup";
@@ -17,16 +17,16 @@ export const rootRoute = createRootRouteWithContext<{ queryClient: QueryClient }
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Navbar />
       <Outlet />
-      {/* <TanStackRouterDevtools /> */}
     </Box>
   ),
 });
 
 export const routeTree = rootRoute.addChildren([
+  aboutRoute,
   indexRoute,
   loginRoute,
   logoutRoute,
-  signupRoute,
   profileRoute,
   profileLayoutRoute.addChildren([accountSettingsRoute, deleteAccountRoute]),
+  signupRoute,
 ]);

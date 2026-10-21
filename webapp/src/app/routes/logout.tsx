@@ -12,7 +12,8 @@ export const logoutRoute = createRoute({
   path: "/logout",
   component: () => <Navigate to="/" />,
   beforeLoad: async ({ context: { queryClient } }) => {
-    const profile: User | undefined = queryClient.getQueryData(["get", "/profile"]);
+    // the empty object is part of the query key...
+    const profile: User | undefined = queryClient.getQueryData(["get", "/profile", {}]);
 
     // You are not allowed to log-out if you aren't logged in xD.
     if (!profile) {

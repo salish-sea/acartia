@@ -25,6 +25,7 @@ declare module "@mui/material/styles" {
   }
 
   interface TypeText {
+    tertiary: string;
     contrast: string;
   }
 
@@ -65,6 +66,7 @@ export const appTheme = createTheme({
     text: {
       primary: "#3D3951",
       secondary: "#6D6B7D",
+      tertiary: "#545F71", // This is for the About page, not sure if it's intentionally different.
       contrast: "#00585D",
     },
     success: {
@@ -118,6 +120,24 @@ export const appTheme = createTheme({
     },
   },
   components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          borderRadius: "0 !important",
+          borderColor: "#DDE1E6", // Not in the theme, this color doesn't appear anywhere else...
+          borderStyle: "solid",
+          borderWidth: "1px",
+          // Disable margin while accordion is expanded.
+          "&.Mui-expanded": {
+            margin: 0,
+          },
+          // get rid of default dividers.
+          "&:before": {
+            display: "none",
+          },
+        },
+      },
+    },
     MuiAlert: {
       defaultProps: {
         icon: false,

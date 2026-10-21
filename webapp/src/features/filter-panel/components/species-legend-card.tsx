@@ -34,9 +34,11 @@ export function SpeciesLegendCard() {
       onChange={() => setExpanded(!expanded)}
       disableGutters
       sx={{
-        paddingX: "36px",
-        paddingY: "24px",
+        px: 4.5,
+        pt: 3,
+        pb: 1,
         backgroundColor: "transparent",
+        border: "none",
         ":before": { backgroundColor: "transparent" },
       }}
     >

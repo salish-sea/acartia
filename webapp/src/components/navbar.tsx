@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
   Skeleton,
@@ -23,7 +24,7 @@ import {
   // AssessmentOutlined,
   ExpandMore,
   // GroupOutlined,
-  // HelpOutlineRounded,
+  HelpOutlineRounded,
   Language,
   Logout,
   PersonAddAlt1Outlined,
@@ -52,7 +53,10 @@ const ListItemButtonNavLink = styled(ListItemButtonLink, {
   active: boolean;
 }>(({ active, theme }) => ({
   ...(active && { backgroundColor: alpha(theme.palette.text.contrast, 0.05) }),
-  fontWeight: active ? 600 : 400,
+  "& .MuiTypography-root": {
+    fontWeight: active ? 600 : 400,
+    color: theme.palette.text.contrast,
+  },
 }));
 
 const MenuItemLink = createLink(MenuItem);
@@ -64,7 +68,7 @@ const NavListItem = styled(ListItem)(() => ({
 
 const navItems = [
   { to: "/", label: "Map", icon: <Language fontSize="small" /> },
-  // { to: "/about", label: "About", icon: <HelpOutlineRounded fontSize="small" /> },
+  { to: "/about", label: "About", icon: <HelpOutlineRounded fontSize="small" /> },
   // { to: "/partners", label: "Partners", icon: <GroupOutlined fontSize="small" /> },
   // { to: "/reports", label: "Reports", icon: <AssessmentOutlined fontSize="small" /> },
 ];
@@ -82,7 +86,7 @@ export function Navbar() {
   return (
     <>
       <AppBar
-        position="fixed"
+        position="static"
         elevation={0}
         sx={{
           backgroundColor: "primary.lighter",
@@ -132,28 +136,27 @@ export function Navbar() {
                   <ListItemIcon sx={{ color: "text.contrast", minWidth: "30px" }}>
                     {icon}
                   </ListItemIcon>
-                  {label}
+                  <ListItemText>{label}</ListItemText>
                 </ListItemButtonNavLink>
               </NavListItem>
             ))}
-            {/* TODO: same here */}
             {user ? (
               <>
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
-                  <ListItemButtonNavLink to="/" active={pathname === "/login"}>
+                  <ListItemButtonNavLink to="/profile" active={pathname === "/login"}>
                     <ListItemIcon sx={{ color: "text.contrast", minWidth: "30px" }}>
                       <AccountCircleOutlined fontSize="small" />
                     </ListItemIcon>
-                    Profile
+                    <ListItemText>Profile</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
                 <Divider />
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
-                  <ListItemButtonNavLink to="/logout" active={false}>
+                  <ListItemButtonNavLink to="/logout" preload={false} active={false}>
                     <ListItemIcon sx={{ color: "#00585d", minWidth: "30px" }}>
                       <Logout fontSize="small" />
                     </ListItemIcon>
-                    Log Out
+                    <ListItemText>Log Out</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
               </>
@@ -164,7 +167,7 @@ export function Navbar() {
                     <ListItemIcon sx={{ color: "text.contrast", minWidth: "30px" }}>
                       <AccountCircleOutlined fontSize="small" />
                     </ListItemIcon>
-                    Log In
+                    <ListItemText>Log In</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
                 <NavListItem sx={{ px: 0, color: "text.contrast" }}>
@@ -172,7 +175,7 @@ export function Navbar() {
                     <ListItemIcon sx={{ color: "#00585d", minWidth: "30px" }}>
                       <PersonAddAlt1Outlined fontSize="small" />
                     </ListItemIcon>
-                    Sign Up
+                    <ListItemText sx={{ color: "red" }}>Sign Up</ListItemText>
                   </ListItemButtonNavLink>
                 </NavListItem>
               </>
@@ -227,7 +230,7 @@ function NavbarLinks({ user, pathname }: Readonly<Props>) {
 
 function NavbarLinksSkeleton() {
   return (
-    <Stack direction="row" gap="24px">
+    <Stack direction="row" gap="24px" sx={{ display: { sm: "none", md: "flex" } }}>
       <Skeleton width={54} height={36} />
       <Skeleton width={48} />
       <Skeleton width={48} />

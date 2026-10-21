@@ -32,13 +32,11 @@ const OpenPanel = styled(Box)(({ theme }) => ({
   height: "100%",
   position: "fixed",
   zIndex: 2000,
-  top: 64, // Navbar height, surely better way to do this.
   overflowY: "auto",
   [theme.breakpoints.up("md")]: {
     position: "static",
     flex: "0 0 417px",
     zIndex: "auto",
-    paddingTop: "64px", // Navbar height, surely better way to do this.
     height: "auto",
   },
 }));
